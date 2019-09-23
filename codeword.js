@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var cors = require('cors');
 var register= require('./DB_Operations/register');
-const path = require('path');
 require('./config/database');
 //const formidable = require('express-formidable');
 var userRouter = require('./routes/user.route');
