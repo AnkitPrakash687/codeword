@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cors = require('cors');
 var register= require('./DB_Operations/register');
+const path = require('path');
 require('./config/database');
 //const formidable = require('express-formidable');
 var userRouter = require('./routes/user.route');
@@ -27,6 +28,13 @@ app.set('view engine', 'html');
 
 //app.use(tokencheck.tokencheck);
 app.use(express.json());
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
 
 app.post("/register",function(request,response){
     console.log("-----------------Register---------------");
