@@ -41,9 +41,6 @@
   },
   "description": "[Template for a Project Charter](https://profcase.github.io/project-charter-template) document used to formalize project understanding.",
   "main": "codeword.js",
-  "devDependencies": {
-    "@angular-devkit/build-angular": "^0.13.1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chvnaveenkumar/CodeWord.git"
