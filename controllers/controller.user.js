@@ -42,6 +42,7 @@ module.exports.signUp = signUp;
 
 var signIn = (req,res) => {
     console.log('signIn working')
+    console.log(req.session.id)
     var body = _.pick(req.body,['email','password']);
     console.log(body.email+"Controller user signin");
     UserModel.findOne({email_id: body.email}, function (err, User) {
