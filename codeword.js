@@ -20,20 +20,20 @@ app.use(cors());
 // app.use(formidable());
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views/dist/codeword'));
-app.use(express.static(path.join(__dirname, 'views/dist/codeword')));
+app.set('views', path.join(__dirname, 'client/build'));
+app.use(express.static(path.join(__dirname, 'client/build')));
 app.engine("html", require('ejs').renderFile)
 app.set('view engine', 'html');
 
 //app.use(tokencheck.tokencheck);
 app.use(express.json());
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-  });
+// // Serve static files from the React app
+// app.use(express.static(path.join(__dirname, 'client/build')));
+// // The "catchall" handler: for any request that doesn't
+// // match one above, send back React's index.html file.
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname+'/client/build/index.html'));
+//   });
 
 app.post("/register",function(request,response){
     console.log("-----------------Register---------------");

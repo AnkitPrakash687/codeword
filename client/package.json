@@ -27,14 +27,13 @@
     "underscore": "^1.9.1",
     "validator": "^11.0.0"
   },
-  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/codeword/api/v1/",
   "eslintConfig": {
     "extends": "react-app"
   },
