@@ -11,6 +11,7 @@ import { green, lightGreen, grey } from '@material-ui/core/colors';
 import {Redirect} from 'react-router-dom'
 import history from '../history'
 import API from '../utils/API'
+import logo from '../static/images/logo_2.png'
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -99,12 +100,29 @@ export default function MyAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>       
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="caption" className={classes.title}>
             <Link underline="none" href='/'>
-            <TitleButton onClick={handleRedirect }>
-            CODEWORD
-            </TitleButton>
+          {
+            window.innerWidth > 400?
+            <img onClick={handleRedirect}
+            className={classes.media}
+            style={{
+              width:'20%',
+              height: 'auto'
+            }}
+            src={logo}
+          />:
+          <img onClick={handleRedirect}
+          className={classes.media}
+          style={{
+            width:'80%',
+            height: 'auto'
+          }}
+          src={logo}
+        />
+          }
             </Link>
+      
           </Typography>
           {token != null && isInstructor &&
           <Button 

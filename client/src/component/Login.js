@@ -3,6 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import {CardMedia} from '@material-ui/core'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
@@ -24,32 +25,47 @@ import App from '../App';
 import { AppBar } from '@material-ui/core';
 import MyAppBar from '../component/MyAppBar'
 import {green, grey, lightGreen} from '@material-ui/core/colors'
+import logo from '../static/images/logo_1.png'
 const useStyles = theme => ({
   '@global': {
     body: {
       backgroundColor: theme.palette.common.white,
     },
   },
-  root: {
-    padding: theme.spacing(3, 2),
+  root:{
+    background: green[500]
+  },
+  paper: {
+    padding: theme.spacing(1, 2, 1, 2),
+    margin: theme.spacing(0,0,0,1),
     margin: theme,
     borderStyle:"solid",
     border: 2,
-    borderColor: lightGreen[300],
-    background: lightGreen[100]
-  },
-  paper: {
+    borderColor: lightGreen[100],
+    background: grey[100],
+    borderRadius: 10,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  media:{
+    height: "auto",
+    width: '70%'
+  },
+  title:{
+    padding: theme.spacing(1),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: green[500],
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    width: '100%', 
+    padding: theme.spacing(2),
+
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -145,20 +161,23 @@ class SignIn extends Component {
     }
 
     return (
-      <div>
-        <MyAppBar/>
+      <div className={classes.root}>
+         
       <Grid container
         spacing={0}
         alignItems="center"
         justify="center"
         style={{ minHeight: '100vh' }}>
         <Container component="main" maxWidth="xs">
+         
+          <Paper className={classes.paper}>
           <CssBaseline />
-          <Paper className={classes.root}>
-            <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-              </Avatar>
+          <div className={classes.title}>
+          <img 
+            className={classes.media}
+            src={logo}
+          />
+          </div>
               <Typography component="h1" variant="h5">
                 Sign in
         </Typography>
@@ -169,11 +188,15 @@ class SignIn extends Component {
                   required
                   fullWidth
                   id="email"
+                  margin="dense"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
                   autoFocus
                   value={this.state.email}
+                  style={{
+                    marginBottom:'1rem'
+                  }}
                   onChange={handleChange('email')}
                 />
                 <TextField
@@ -181,6 +204,7 @@ class SignIn extends Component {
                   margin="normal"
                   required
                   fullWidth
+                  margin="dense"
                   name="password"
                   label="Password"
                   type="password"
@@ -206,7 +230,9 @@ class SignIn extends Component {
                   </Typography>
                   
           </Button>
-                <Grid container>
+               
+              </form>
+              <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
                       Forgot password?
@@ -218,10 +244,8 @@ class SignIn extends Component {
                     </Link>
                   </Grid>
                 </Grid>
-              </form>
-            </div>
           </Paper>
-
+         
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
