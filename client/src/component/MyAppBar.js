@@ -103,7 +103,7 @@ export default function MyAppBar(props) {
           <Typography variant="caption" className={classes.title}>
             <Link underline="none" href='/'>
           {
-            window.innerWidth > 400?
+            window.innerWidth > 500?
             <img onClick={handleRedirect}
             className={classes.media}
             style={{
