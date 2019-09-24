@@ -119,7 +119,7 @@ export default function CourseCard(props) {
               
                     <Grid  container className={classes.appBar}>
                         <AppBar position="static" className={classes.appBar}>
-                            { window.innerWidth > 400?
+                            { window.innerWidth > 500?
                             <LightTooltip title={props.courseName}  enterDelay={500} placement="top-start">
                             <Typography noWrap variant="body1" className={classes.title}>
                                 {props.courseName}
