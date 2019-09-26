@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, red, grey } from '@material-ui/core/colors';
 import {
-    Paper, Grid, Button, FormControl, InputLabel,
+    Paper, Grid, Button, FormControl, InputLabel, Tooltip,
     MenuItem, OutlinedInput, Select, Box, Snackbar, IconButton, Chip, Slide,
     Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Divider
 } from '@material-ui/core';
@@ -127,6 +127,7 @@ export default function AddCourse(props) {
         filename: '',
         selectedFile: null,
     })
+    const [wrongFileExtn, setWrongFileExtn] = useState(false)
     React.useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
@@ -208,7 +209,15 @@ export default function AddCourse(props) {
     }
 
     useEffect(()=>{
+        console.log('filename')
+        console.log(file.filename)
+        var fileSplits = file.filename.split('.')
+        var fileExtn = fileSplits[fileSplits.length-1]
+
+        
         if(file.selectedFile !== null){
+            if(fileExtn === 'csv'){
+                setWrongFileExtn(false)
         Papa.parse(file.selectedFile, {
             complete: function (results) {
                 console.log(results)
@@ -249,8 +258,11 @@ export default function AddCourse(props) {
 
             }
         })
+    }else{
+        setWrongFileExtn(true)
     }
-    }, [file])
+    }
+    }, [file, wrongFileExtn])
     const handleFileChange = (event) => {
         if (fileLabel.current.files[0] && fileLabel.current.files[0].name) {
             setFile({ filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });  
@@ -262,9 +274,16 @@ export default function AddCourse(props) {
         setState({ ...state, [name]: date });
     }
 
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
+    const handleAddCourse = () =>{
+        //event.preventDefault()
+        if(invalidRecord.duplicateEmails.length > 0 || invalidRecord.invalidRecords.length > 0){
+            setOpenReport(true)
+        }else{
+            handleSubmit()
+        }
+    }
+    const handleSubmit = () => {
+        
         const headers = {
           
             'token': sessionStorage.getItem('token')
@@ -286,17 +305,6 @@ export default function AddCourse(props) {
             }
             console.log('********ADD COURSE*********')
             console.log(data)
-            // var formData = new FormData()
-            // formData.append('file', state.selectedFile)
-            // _.each(data, (value, key) => {
-            //     console.log(key + " " + value)
-            //     formData.append(key, value)
-            // })
-            // for(var i in codeword){
-            //     if(state.values == codeword[i].codewordSetName){
-            //         formData.append('codewords', codeword[i].codewords)
-            //     }
-            // }
 
             API.post('dashboard/addnewCourse', data, { headers: headers }).then(response => {
                 console.log('👉 Returned data in :', response);
@@ -343,7 +351,9 @@ export default function AddCourse(props) {
        
     }
     const checkInput = (name, email) =>{
-
+        if(!name || !email || name == '' || email == ''){
+            return false
+        }
         var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         if((name.length > 50 || name.length < 1) && !emailRegex.test(email)){
             return false
@@ -403,6 +413,7 @@ export default function AddCourse(props) {
 
   
     const handleReportClose = () => {
+        handleSubmit()
         setOpenReport(false)
     }
     return (
@@ -451,7 +462,9 @@ export default function AddCourse(props) {
                                     <CloudUploadIcon className={classes.rightIcon} />
                                 </Button>
                             </Grid>
-                            {students.validRecords.length > 0 ?
+
+                            {
+                               !wrongFileExtn && students.validRecords.length > 0 ?
                         <Chip
                             label={'Valid Records: ' + students.validRecords.length}
                             size="small"
@@ -460,7 +473,8 @@ export default function AddCourse(props) {
                             variant="outlined"
                         /> : false
                     }
-                    {invalidRecord.duplicateEmails.length > 0 ?
+                    {!wrongFileExtn && invalidRecord.duplicateEmails.length > 0 ?
+                    
                         <Chip
                             label={'Duplicate Records: ' + invalidRecord.duplicateEmails.length}
                             size="small"
@@ -469,12 +483,29 @@ export default function AddCourse(props) {
                             variant="outlined"
                         /> : false
                     }
-                    {invalidRecord.invalidRecords.length > 0 ?
+                    {!wrongFileExtn && invalidRecord.invalidRecords.length > 0 ?
                         <Chip
                             label={'Invalid Records: ' + invalidRecord.invalidRecords.length}
                             size="small"
                             className={classes.chip}
                             color="primary"
+                            variant="outlined"
+                        /> : false
+                    }
+                      {
+                          wrongFileExtn ?  <Chip
+                          label={'Wrong File Extension. Only csv file is allowed'}
+                          size="small"
+                          className={classes.chip}
+                          color="secondary"
+                          variant="outlined"
+                      /> :
+                          students.validRecords.length < 1 && invalidRecord.invalidRecords.length > 0 ?
+                        <Chip
+                            label={'No valid records found'}
+                            size="small"
+                            className={classes.chip}
+                            color="secondary"
                             variant="outlined"
                         /> : false
                     }
@@ -572,11 +603,13 @@ export default function AddCourse(props) {
           </Button>
 
                     <Button
-                        type="submit"
+                        
                         variant="contained"
                         color="primary"
                         size="small"
+                        onClick = {handleAddCourse}
                         className={classes.submit}
+                        disabled = {wrongFileExtn}
                     >
                         Add
           </Button>
