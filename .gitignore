@@ -1,33 +1,33 @@
 node_modules/
-frontend/node_modules
+client/node_modules
 .vscode
 .idea
 .env
 logs/
 
-frontend/package-lock.json
+client/package-lock.json
 package-lock.json
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-frontend/node_modules
-frontend/package-lock.json
-frontend/.pnp
-frontend/.pnp.js
+client/node_modules
+client/package-lock.json
+client/.pnp
+client/.pnp.js
 
 # testing
-frontend/coverage
+client/coverage
 
 # production
-frontend/build
+client/build
 
 # misc
-frontend/.DS_Store
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
+client/.DS_Store
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
 
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
