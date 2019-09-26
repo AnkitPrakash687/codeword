@@ -15,14 +15,14 @@ var CourseModel = mongoose.model('courseModel', {
       {
       name: {type: String},
       email:{type:String, unique:true},
-      isRevealed:{type: Boolean},
-      codeword:{type: String}
+      isRevealed:{type: Boolean, default: false},
+      codeword:{type: String, default: ''}
       }
    ],
    codewordSet:{
-      codewordSetName:{type:String},
+      codewordSetName:{type:String, default:''},
       codewords:[
-         {type: String, min:3}
+         {type: String, min:3, default:[]}
       ]
    },
    isAssigned:{

@@ -6,8 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, red, grey } from '@material-ui/core/colors';
 import {
     Paper, Grid, Button, FormControl, InputLabel,
-    MenuItem, OutlinedInput, Select, Box, Snackbar, IconButton, Chip, 
-    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText
+    MenuItem, OutlinedInput, Select, Box, Snackbar, IconButton, Chip, Slide,
+    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Divider
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom'
 import API from '../../utils/API'
@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1)
     },
     chip: {
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(1),
         marginRight: theme.spacing(1)
     },
     submit: {
@@ -95,6 +95,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function AddCourse(props) {
+
+    const Transition = React.forwardRef(function Transition(props, ref) {
+        return <Slide direction="up" ref={ref} {...props} />;
+      });
     const classes = useStyles();
     const [state, setState] = useState({
         role: '',
@@ -107,8 +111,6 @@ export default function AddCourse(props) {
         selectedDate: '',
         values: '',
         studentFilename: '',
-        filename: '',
-        selectedFile: null,
         status: false,
         error: false,
         message: '',
@@ -118,6 +120,13 @@ export default function AddCourse(props) {
     const inputLabel = React.useRef(null);
     const fileLabel = React.useRef(null)
     const [labelWidth, setLabelWidth] = React.useState(0);
+    const [students, setStudents] = useState({
+        validRecords: []
+    })
+    const [file, setFile] = useState({
+        filename: '',
+        selectedFile: null,
+    })
     React.useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
@@ -125,13 +134,17 @@ export default function AddCourse(props) {
     const [codeword, setCodeword] = useState([{
         codewordSetName: '',
         count: 0,
-        codewords:[]
+        codewords: []
     }])
-    const [invalidRecord, setInvalidRecord] = useState(false)
+    const [invalidRecord, setInvalidRecord] = useState({
+        invalidRecords: [],
+        duplicateEmails: []
+    })
+    const [openReport, setOpenReport] = useState(false)
     const [studentCount, setStudentCount] = useState('empty')
     const [codewordCount, SetCodewordCount] = useState('empty')
     const [publishedCodewordset, SetPublishedCodewordset] = useState([{
-        codeWordSetName:''
+        codeWordSetName: ''
     }])
     useEffect(() => {
         console.log('getdata')
@@ -153,15 +166,15 @@ export default function AddCourse(props) {
                     })
                 )
                 console.log('*******published codewordset')
-                console.log(response.data.data.filter((item)=>{
-                    if(item.isPublished){
+                console.log(response.data.data.filter((item) => {
+                    if (item.isPublished) {
                         return item
                     }
                 }
                 ))
-               SetPublishedCodewordset(response.data.data.filter((item)=>{
-                    if(item.isPublished){
-                        return {codewordSetName: item.codewordSetName, count: item.codewords.length}
+                SetPublishedCodewordset(response.data.data.filter((item) => {
+                    if (item.isPublished) {
+                        return { codewordSetName: item.codewordSetName, count: item.codewords.length }
                     }
                 }
                 ))
@@ -170,6 +183,8 @@ export default function AddCourse(props) {
         })
 
     }, [])
+
+
 
     const handleChange = name => (event, isChecked) => {
         //console.log({[name]: event.target.value})
@@ -181,31 +196,65 @@ export default function AddCourse(props) {
                     return item.count
                 }
             })
-            
-            if(count.length > 0){
+
+            if (count.length > 0) {
                 SetCodewordCount(count[0].count)
-            }else{
+            } else {
                 SetCodewordCount('empty')
             }
-          
+
         }
 
     }
+
+    useEffect(()=>{
+        if(file.selectedFile !== null){
+        Papa.parse(file.selectedFile, {
+            complete: function (results) {
+                console.log(results)
+             
+                var invalidRecords = []
+                var validRecords = results.data.filter((item)=>{
+                    if(checkInput(item[0], item[1])){
+                        return {
+                            name: item[0],
+                            email: item[1]
+                        }
+                    }else{
+                        invalidRecords.push({
+                            name: item[0],
+                            email: item[1]
+                        })
+                    }
+                })
+                console.log(validRecords)
+                let duplicateEmails = validRecords.filter((obj, pos, arr) => {
+                    return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) !== pos;
+                });
+                console.log(duplicateEmails)
+                let removeDuplicateEmails = validRecords.filter((obj, pos, arr) => {
+                    return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) !== pos;
+                });
+              console.log(removeDuplicateEmails)
+                setStudents({
+                    validRecords: removeDuplicateEmails
+                }) 
+                
+                setInvalidRecord({
+                  
+                            invalidRecords: invalidRecords,
+                            duplicateEmails: duplicateEmails
+                        }
+                )
+
+            }
+        })
+    }
+    }, [file])
     const handleFileChange = (event) => {
         if (fileLabel.current.files[0] && fileLabel.current.files[0].name) {
-            setState({ ...state, filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });
-            Papa.parse(event.target.files[0], {
-                complete: function (results) {
-                    console.log(results)
-                    var students = results.data.filter((item) => {
-                        if (item[0] != '') {
-                            return item
-                        }
-                    })
-                    setStudentCount(students.length)
-                }
-            })
-
+            setFile({ filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });  
+            
         }
     }
 
@@ -213,84 +262,99 @@ export default function AddCourse(props) {
         setState({ ...state, [name]: date });
     }
 
+
     const handleSubmit = (event) => {
         event.preventDefault()
         const headers = {
-            "Content-Type": "multipart/form-data",
+          
             'token': sessionStorage.getItem('token')
         };
-        var data = {
-            courseNameKey: state.courseName,
-            startDate: state.startDate,
-            endDate: state.endDate,
-            preSurveyURL: state.startSurvey,
-            postSurveyURL: state.endSurvey,
-            codeWordSetName: state.values,
 
-        }
-        console.log(data)
-        var formData = new FormData()
-        formData.append('file', state.selectedFile)
-        _.each(data, (value, key) => {
-            console.log(key + " " + value)
-            formData.append(key, value)
-        })
-        for(var i in codeword){
-            if(state.values == codeword[i].codewordSetName){
-                formData.append('codewords', codeword[i].codewords)
-            }
-        }
-        
-
-        API.post('dashboard/addnewCourse', formData, { headers: headers }).then(response => {
-            console.log('👉 Returned data in :', response);
-            if (response.data.code == 200) {
-                
-                if(response.data.length > 0){
-                    setInvalidRecord(true)
-                    setState({...state, reRender:true})
-                }else{
-                setState({
-                    status: true,
-                    message: response.data.message,
-                    reRender: true
-                })
-            }
-            } else {
-                console.log('error')
-                setState({
-                    courseName: state.courseName,
-                    startDate: state.startDate,
-                    endDate: state.endDate,
-                    status: true,
-                    error: true,
-                    message: response.data.message,
-                })
+        var codewords = codeword.filter((item) => {
+            if (state.values == item.codewordSetName) {
+                return item.codewords
             }
         })
-            .catch(error => {
-                console.log(error)
-                console.log('error')
-                setState({
-                    courseName: state.courseName,
-                    startDate: state.startDate,
-                    endDate: state.endDate,
-                    status: true,
-                    error: true,
-                    message: error.message
-                })
+            var data = {
+                courseNameKey: state.courseName,
+                startDate: state.startDate,
+                endDate: state.endDate,
+                preSurveyURL: state.startSurvey,
+                postSurveyURL: state.endSurvey,
+                codewordSet: codewords,
+                students: students.validRecords
+            }
+            console.log('********ADD COURSE*********')
+            console.log(data)
+            // var formData = new FormData()
+            // formData.append('file', state.selectedFile)
+            // _.each(data, (value, key) => {
+            //     console.log(key + " " + value)
+            //     formData.append(key, value)
+            // })
+            // for(var i in codeword){
+            //     if(state.values == codeword[i].codewordSetName){
+            //         formData.append('codewords', codeword[i].codewords)
+            //     }
+            // }
+
+            API.post('dashboard/addnewCourse', data, { headers: headers }).then(response => {
+                console.log('👉 Returned data in :', response);
+                if (response.data.code == 200) {
+                   // setOpenReport(true)
+                    if (response.data.length > 0) {
+                      
+                        setState({ ...state, reRender: true })
+                    } else {
+                        setState({
+                            status: true,
+                            message: response.data.message,
+                            reRender: true
+                        })
+                    }
+                } else {
+                    console.log('error')
+                    setState({
+                        courseName: state.courseName,
+                        startDate: state.startDate,
+                        endDate: state.endDate,
+                        status: true,
+                        error: true,
+                        message: response.data.message,
+                    })
+                }
             })
-            ;
-
-
+                .catch(error => {
+                    console.log(error)
+                    console.log('error')
+                    setState({
+                        courseName: state.courseName,
+                        startDate: state.startDate,
+                        endDate: state.endDate,
+                        status: true,
+                        error: true,
+                        message: error.message
+                    })
+                });
 
     }
 
+    const getFileData = async (file) =>{
+       
+    }
+    const checkInput = (name, email) =>{
+
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        if((name.length > 50 || name.length < 1) && !emailRegex.test(email)){
+            return false
+        }
+        return true
+    }
     const handleClose = () => {
-        console.log(studentCount + '  '+codewordCount)
-        console.log(((parseFloat(studentCount)-parseFloat(codewordCount))/parseFloat(codewordCount)))
+        console.log(studentCount + '  ' + codewordCount)
+        console.log(((parseFloat(studentCount) - parseFloat(codewordCount)) / parseFloat(codewordCount)))
         props.onClose()
-    
+
     }
 
     const handleMessageClose = () => {
@@ -312,34 +376,34 @@ export default function AddCourse(props) {
         onClose: PropTypes.func.isRequired
     };
 
-    
+
     function countAlert(props) {
-        const { message, open, handleClose} = props
-        return(
-        <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-    >
-        <DialogTitle id="alert-dialog-title">{"Warning"}</DialogTitle>
-        <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {message}
-        </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={handleClose} color="primary" autoFocus>
-                OK
+        const { message, open, handleClose } = props
+        return (
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Warning"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {message}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary" autoFocus>
+                        OK
             </Button>
-        </DialogActions>
-    </Dialog>
+                </DialogActions>
+            </Dialog>
         )
     }
 
-    const [alertOpen, setAlertOpen] = useState(true)
-    const handleAlertClose = () =>{
-        setAlertOpen(false)
+  
+    const handleReportClose = () => {
+        setOpenReport(false)
     }
     return (
         <Container component="main" maxWidth="sm">
@@ -378,7 +442,7 @@ export default function AddCourse(props) {
                                     name="filename"
                                     disabled="true"
                                     margin="dense"
-                                    value={state.filename}
+                                    value={file.filename}
                                 />
                             </Grid>
                             <Grid item xs={4} sm={4} md={4} lg={4}>
@@ -387,6 +451,33 @@ export default function AddCourse(props) {
                                     <CloudUploadIcon className={classes.rightIcon} />
                                 </Button>
                             </Grid>
+                            {students.validRecords.length > 0 ?
+                        <Chip
+                            label={'Valid Records: ' + students.validRecords.length}
+                            size="small"
+                            className={classes.chip}
+                            color="primary"
+                            variant="outlined"
+                        /> : false
+                    }
+                    {invalidRecord.duplicateEmails.length > 0 ?
+                        <Chip
+                            label={'Duplicate Records: ' + invalidRecord.duplicateEmails.length}
+                            size="small"
+                            className={classes.chip}
+                            color="primary"
+                            variant="outlined"
+                        /> : false
+                    }
+                    {invalidRecord.invalidRecords.length > 0 ?
+                        <Chip
+                            label={'Invalid Records: ' + invalidRecord.invalidRecords.length}
+                            size="small"
+                            className={classes.chip}
+                            color="primary"
+                            variant="outlined"
+                        /> : false
+                    }
                         </Grid>
 
                     </label>
@@ -440,8 +531,8 @@ export default function AddCourse(props) {
                                 <em>None</em>
                             </MenuItem>
                             {publishedCodewordset.map((codewordSet) => {
-                                return <MenuItem value={codewordSet.codewordSetName}>{codewordSet.codewordSetName 
-                                    +' ('+ codewordSet.count + ')'}</MenuItem>
+                                return <MenuItem value={codewordSet.codewordSetName}>{codewordSet.codewordSetName
+                                    + ' (' + codewordSet.count + ')'}</MenuItem>
                             })}
                         </Select>
                     </FormControl>
@@ -469,28 +560,11 @@ export default function AddCourse(props) {
                     />
                 </div>
                 <Box display="flex" justifyContent="flex-end">
-                    {studentCount != 'empty' ?
-                        <Chip
-                            label={'No. of Students: ' + studentCount}
-                            size="small"
-                            className={classes.chip}
-                            color="primary"
-                            variant="outlined"
-                        /> : false
-                    }
-                    {codewordCount != 'empty' ?
-                        <Chip
-                            label={'No. of Codewords: ' + codewordCount}
-                            size="small"
-                            className={classes.chip}
-                            color="primary"
-                            variant="outlined"
-                        /> : false
-                    }
+                  
                     <Button
                         variant="contained"
                         color="primary"
-                        size="large"
+                        size="small"
                         className={classes.cancel}
                         onClick={handleClose}
                     >
@@ -501,7 +575,7 @@ export default function AddCourse(props) {
                         type="submit"
                         variant="contained"
                         color="primary"
-                        size="large"
+                        size="small"
                         className={classes.submit}
                     >
                         Add
@@ -561,6 +635,57 @@ export default function AddCourse(props) {
             <countAlert open={true} handleClose={handleClose('alertOpen')} message="Student count exceeds codeword count"></countAlert>:false
             }
           */}
+
+      <Dialog
+           fullWidth={true} 
+           closeAfterTransition={true}
+        open={openReport}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
+        <Divider />
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Duplicate Records: {invalidRecord.duplicateEmails.length}
+            </DialogContentText>
+            <Grid container >
+           { invalidRecord.duplicateEmails.map((item)=>{
+                   return  <Typography component="div">
+                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                        {item}
+                    </Box>
+                </Typography>
+                })
+            }
+          </Grid>
+    
+          <DialogContentText id="alert-dialog-slide-description">
+            Invalid records: {invalidRecord.invalidRecords.length}
+            </DialogContentText>
+            <Grid container >
+            {
+                invalidRecord.invalidRecords.map((item)=>{
+                   return <Typography component="div">
+                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                        {item.email} - {item.name}
+                    </Box>
+                </Typography>
+                })
+            }
+            </Grid>
+           
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button onClick={handleReportClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
         </Container>
     );
 }

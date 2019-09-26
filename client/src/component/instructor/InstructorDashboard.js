@@ -121,10 +121,6 @@ export default function InstructorDashboard() {
             setRender(!render)
             onClose();
         }
-
-        function handleListItemClick(value) {
-            onClose(value);
-        }
         
         return (
 
@@ -148,8 +144,9 @@ export default function InstructorDashboard() {
         setOpen(true)
     }
 
-    const handleClose = value => {
+    const handleClose = value => { 
         setOpen(false)
+        setRender(!render)
     };
 
     const [courseData, setCourseData] = useState([{}])
@@ -296,8 +293,14 @@ export default function InstructorDashboard() {
                 <AddIcon />
             </Fab>
             </LightTooltip>
-                <SimpleDialog open={open} onClose={handleClose} render={render} />
+                {/* <SimpleDialog closeAfterTransition={true} open={open} onClose={handleClose} render={render} /> */}
 
+                <Dialog fullWidth={true} disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
+                 <div>
+                 <DialogTitle id="simple-dialog-title">Add Course</DialogTitle>
+                <AddCourse onClose={handleClose}></AddCourse>
+                </div>         
+            </Dialog>
                 {loading?     <Grid container
             spacing={0}
             alignItems="center"
