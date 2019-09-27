@@ -198,10 +198,21 @@ module.exports.reset = reset
 
 
 const checkUsers = (req,res) =>{
-    var body = _.pick(req.body,['studentEmails']);
+    //var body = _.pick(req.body,['email']);
     console.log('***********DATA************')
-    console.log(body.studentEmails)
-    
+    UserModel.find({role: {$in: ['student', 'instructor']}}, (error, users)=>{
+        if(error){
+            return res.json({ code: 400, message: error}); 
+        }
+        console.log('***********Check Users*********')
+        if(users){
+            var data = users.map((item)=>{
+                return item.email_id
+            })
+            return res.json({ code: 200, data, message: 'User available'});
+        }
+        return res.json({ code: 400, message: 'User not present'}); 
+    })
 
 }
 

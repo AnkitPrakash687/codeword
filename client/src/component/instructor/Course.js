@@ -167,7 +167,25 @@ export default function Course(props) {
         columns: [
             { title: 'Name', field: 'name' },
             { title: 'Email', field: 'email' },
-            { title: 'Registered', field: 'register' }
+            { title: 'Registered', field: 'registered', editable: 'never',
+            render: rowData => {
+                if(rowData && rowData.registered){
+                    return <Typography component="div">
+                        <Box color="green" fontWeight="bold">
+                            Yes
+                        </Box>
+                    </Typography>
+                }
+                else{
+                    return (<Typography component="div">
+                    <Box color="red" fontWeight="bold">
+                        No
+                    </Box>
+                </Typography>)
+                }
+          }
+         }
+
         ],
         data: [],
     })
@@ -177,11 +195,20 @@ export default function Course(props) {
     const [cannotAssignError, setCannotAssignError] = useState(false)
     const [deleteConfirmation, setDeleteConfirmation] = useState()
     const [loading, setLoading] = useState(false)
+    //const [users, setUsers] = useState()
     useEffect(() => {
         setLoading(true)
         const headers = {
             'token': sessionStorage.getItem('token')
         };
+        var users = []
+        API.get('dashboard/checkUsers', { headers: headers }).then(response => {
+            if(response.data.code == 200){
+                
+                users = response.data.data
+                return true
+            }
+        }).then(response =>{
         API.get('dashboard/getcourse/' + state.id, { headers: headers }).then(response => {
             console.log('👉 Returned data in :', response);
 
@@ -189,15 +216,12 @@ export default function Course(props) {
                 console.log(response.data)
                 var course = response.data.data
                 var studentList = course.students.map((student) => {
-                    return { name: student.name, email: student.email }
+                    
+                    return { name: student.name, email: student.email, registered: users.includes(student.email) }
                 })
 
                 setTable({
-                    columns: [
-                        { title: 'Name', field: 'name' },
-                        { title: 'Email', field: 'email' },
-                        { title: 'Registered', field: 'register' }
-                    ],
+                   ...table,
                     data: studentList
                 })
                 var ack = course.students.reduce((acc, item) => {
@@ -230,23 +254,25 @@ export default function Course(props) {
                 setLoading(false)
             }
         })
-            .catch(error => {
+    })  .catch(error => {
                 console.log(error)
             })
     }, [render])
 
 
-    useEffect(()=>{
-        var data = {
-            studentEmails: table.data.map((item)=>{ return item.email})
-        }
-        const headers = {
-            'token': sessionStorage.getItem('token')
-        };
-        API.post('dashboard/checkUsers/' , data, { headers: headers }).then(response => {
-
-        })
-    }, [table])
+    // useEffect(()=>{
+    
+    //     const headers = {
+    //         'token': sessionStorage.getItem('token')
+    //     };
+    //     API.get('dashboard/checkUsers', { headers: headers }).then(response => {
+    //         if(response.data.code == 200){
+    //             setUsers(response.data.data)
+    //             console.log('**users**')
+    //             console.log(response.data.data)
+    //         }
+    //     })
+    // }, [])
     const [redirect, setRedirect] = useState(false);
     const handleCardClick = () => {
         console.log('click working')
@@ -270,13 +296,7 @@ export default function Course(props) {
     }
     const addCourseRow = (resolve, newData) => {
 
-        if(state.codewordCount < table.data.length){
-            setSnack({
-                message: 'Select larger codeword set',
-                open: true
-            })
-            resolve()
-        }else{
+       
         var data = {
             id: state.id,
             email: newData.email,
@@ -297,7 +317,7 @@ export default function Course(props) {
                 data.push(newData);
                 setTable({ ...table, data });
                 console.log('render' + render)
-               // setRender(!render)
+                setRender(!render)
                 resolve()
             } else {
                 setSnack({
@@ -307,7 +327,7 @@ export default function Course(props) {
                 resolve()
             }
         })
-    }
+    
 }
 
     const updateCourseRow = (resolve, newData, oldData) => {
@@ -389,9 +409,18 @@ export default function Course(props) {
     }
     const handleAssign = value => {
         console.log(state.codewordset)
-        if (state.codewordset == 'Not Assigned' || state.codewordset == '' || !state.codewordset) {
+        
+      
+       if (state.codewordset == 'Not Assigned' || state.codewordset == '' || !state.codewordset) {
             setCannotAssignError(true)
-        } else {
+        } else if(state.codewordCount < table.data.length){
+            setSnack({
+                message: 'Select larger codeword set',
+                open: true
+            })
+           
+        } 
+        else {
             var studentEmails = table.data.map((item) => {
                 return item.email
             })

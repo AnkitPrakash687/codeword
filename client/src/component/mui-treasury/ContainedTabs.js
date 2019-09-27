@@ -77,7 +77,8 @@ import { breakpoints } from '@material-ui/system';
         border: 2,
         borderColor: green[500],
         color: grey[800],
-        fontSize: 15,
+        fontSize: 18,
+        fontWeight: 'bold',
         '& + $root:before': {
           opacity: 0,
         },
