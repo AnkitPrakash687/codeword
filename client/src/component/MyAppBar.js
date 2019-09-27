@@ -43,7 +43,7 @@ export default function MyAppBar(props) {
     },
   }))(Button);
   const classes = useStyles();
-
+  const [disableStudentView, setDisableStudentView] = useState(props.disableStudentView ? true:false)
   const [logout, setLogout] = useState(false)
   const [studentView, setStudentView] = useState(false)
   const [token, setToken] = useState(sessionStorage.getItem('token'))
@@ -60,7 +60,6 @@ export default function MyAppBar(props) {
     setRedirect(true)
   }
  const handleStudentView = () =>{
- 
    setStudentView(true)
  }
 
@@ -124,7 +123,7 @@ export default function MyAppBar(props) {
             </Link>
       
           </Typography>
-          {token != null && isInstructor &&
+          {token != null && isInstructor && !disableStudentView &&
           <Button 
           color="inherit"
           onClick={handleStudentView}

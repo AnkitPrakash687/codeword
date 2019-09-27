@@ -179,7 +179,7 @@ export default function StudentDashboard() {
 
     return (
         <div>
-            <MyAppBar/>
+            <MyAppBar disableStudentView={true}/>
          <div className={classes.root}>
              {loading? <Grid container
             spacing={0}
