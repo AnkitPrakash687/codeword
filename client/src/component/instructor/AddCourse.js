@@ -274,16 +274,9 @@ export default function AddCourse(props) {
         setState({ ...state, [name]: date });
     }
 
-    const handleAddCourse = () =>{
-        //event.preventDefault()
-        if(invalidRecord.duplicateEmails.length > 0 || invalidRecord.invalidRecords.length > 0){
-            setOpenReport(true)
-        }else{
-            handleSubmit()
-        }
-    }
-    const handleSubmit = () => {
-        
+  
+    const handleSubmit = (event) => {
+        event.preventDefault()
         const headers = {
           
             'token': sessionStorage.getItem('token')
@@ -309,17 +302,8 @@ export default function AddCourse(props) {
             API.post('dashboard/addnewCourse', data, { headers: headers }).then(response => {
                 console.log('👉 Returned data in :', response);
                 if (response.data.code == 200) {
-                   // setOpenReport(true)
-                    if (response.data.length > 0) {
-                      
-                        setState({ ...state, reRender: true })
-                    } else {
-                        setState({
-                            status: true,
-                            message: response.data.message,
-                            reRender: true
-                        })
-                    }
+                        setOpenReport(true)                       
+                    
                 } else {
                     console.log('error')
                     setState({
@@ -413,7 +397,12 @@ export default function AddCourse(props) {
 
   
     const handleReportClose = () => {
-        handleSubmit()
+       
+        setState({
+            status: true,
+            message: 'Course Created Successfully',
+            reRender: true
+        })
         setOpenReport(false)
     }
     return (
@@ -603,11 +592,10 @@ export default function AddCourse(props) {
           </Button>
 
                     <Button
-                        
+                        type="submit"
                         variant="contained"
                         color="primary"
                         size="small"
-                        onClick = {handleAddCourse}
                         className={classes.submit}
                         disabled = {wrongFileExtn}
                     >
