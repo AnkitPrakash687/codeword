@@ -175,10 +175,6 @@ const sendResetEmail = async (req,res) => {
 }
 module.exports.sendResetEmail = sendResetEmail
 
-const resetPassword = (req, res) => {
-   return  res.render(`index`)
-}
-module.exports.resetPassword = resetPassword
 
 const reset = (req,res) => {
     UserModel.findOne({emailKey: req.session.username}, function (err, userModel) {
@@ -434,7 +430,7 @@ var requests = (req,res) =>{
                         'You are receiving this because you(or someone else) have requested the reset'+ 
                         'of the password for your account.\n\n" + *Please click on the following link,'+
                         'or paste this into your browser to complete the process within one hour of' +
-                        'receiving it:\n\n' + 'http://localhost:3031/reset/'+token+'\n\n.' + 
+                        'receiving it:\n\n' + 'http://localhost:3000/reset/'+token+'\n\n.' + 
                         'If you did not request this, please ignore this email and your password will remain unchanged.\n,'
                 }
             console.log('sending mail')
@@ -458,23 +454,35 @@ var requests = (req,res) =>{
 module.exports.forgotPassword = forgotPassword
 
 
-const checkResetToken = (req, res) =>{
-    let body = _.pick(req.body, ['resetToken'])
-
-    UserModel.findOne({
-            resetPasswordToken: body.resetToken,
-            resetPasswordExpires: {$gt: Date.now()}
-        }, 
-         (error, user)=>{
-        if(error){
-            res.json({code: 400, message:'Something went wrong'})
-        }
-        if(user){
-
-        }else{
-            res.json({code: 404, message:'Reset link expired'})
-        }
+const resetPassword = (req, res) =>{
+    let body = _.pick(req.body, ['resetToken', 'password'])
+    bcrypt.genSalt(10, (err,salt) => {
+        bcrypt.hash(body.password,salt,(err,hash) => {
+            if(err){
+                res.json({code: 400, message:'Something went wrong'})
+            }
+            UserModel.findOneAndUpdate({
+                resetPasswordToken: body.resetToken,
+                resetPasswordExpires: {$gt: Date.now()}
+            }, 
+            {
+                $set:{
+                    password: hash
+                }
+            },
+             (error, user)=>{
+            if(error){
+                res.json({code: 400, message:'Something went wrong'})
+            }
+            if(user){
+                res.json({code: 200, message:'Password Reset successfully. You can now login.'})
+            }else{
+                res.json({code: 404, message:'Reset link expired'})
+            }
+        })
+        })
     })
+   
 }
 
-module.exports.checkResetToken = checkResetToken
+module.exports.resetPassword = resetPassword
