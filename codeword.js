@@ -39,6 +39,14 @@ app.get('/signin', (req, res) => {
     res.sendFile(path.join(__dirname+'/client/build/index.html'));
   });
 
+  app.get('/forgetPassword', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
+
+  app.get('/resetPassword/:token', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
+
 app.post("/register",function(request,response){
     console.log("-----------------Register---------------");
     register.registeruser(request.body, function(registerResponse){
