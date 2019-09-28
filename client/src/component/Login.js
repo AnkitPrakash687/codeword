@@ -94,6 +94,8 @@ class SignIn extends Component {
   render() {
 
     function handleSubmit(event) {
+      // console.log('*********BASE URL************')
+      // console.log(process.env)
       event.preventDefault()
       const data = this.state
       // console.log(data)
