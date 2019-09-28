@@ -3,9 +3,10 @@ var _ = require('lodash');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var { UserModel } = require('../model/model.user');
-var { mongoose } = require('./../config/database')
 var mailController = require('../config/user.mail.js')
-var XLSX = require('xlsx')
+const crypto = require('crypto');
+require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 
 var signUp = (req,res) => {
@@ -197,6 +198,8 @@ const reset = (req,res) => {
 module.exports.reset = reset
 
 
+
+
 const checkUsers = (req,res) =>{
     //var body = _.pick(req.body,['email']);
     console.log('***********DATA************')
@@ -386,3 +389,69 @@ var requests = (req,res) =>{
  }
 
  module.exports.deleteUser = deleteUser
+
+
+ const forgotPassword = (req, res) => {
+   
+    if (req.body.email == "") {
+        res.json('email required');
+    }
+
+    const body = _.pick(req.body, ['email'])
+    console.log(body)
+    UserModel.findOne({email_id: body.email}, (error, user)=>{
+        if(error){
+            res.json({code: 400, message:'Some went wrong'});
+        }
+
+        if(user){
+
+            const token = crypto.randomBytes(20).toString('hex'); 
+            console.log(token); 
+            UserModel.updateOne({email_id: body.email},
+                {$set: { 
+                        resetPasswordToken: token,
+                        resetPasswordExpires: Date.now() + 360000
+                        }
+                }, (error, updatedUser) =>{
+                    if(error){
+                        res.json({code: 400, message:'Something went wrong'});
+                    }
+
+                    const transporter = nodemailer.createTransport({
+                        service: 'gmail', 
+                        auth: {
+                                user: 'codeword.group03@gmail.com',
+                                pass: 'Aug@2019'
+                             }
+                    });
+
+                const mailoptions = {
+                    from: 'codeword.group03@gmail.com', 
+                    to: body.email, 
+                    subject: "Link To Reset Password", 
+                    text:
+                        'You are receiving this because you(or someone else) have requested the reset'+ 
+                        'of the password for your account.\n\n" + *Please click on the following link,'+
+                        'or paste this into your browser to complete the process within one hour of' +
+                        'receiving it:\n\n' + 'http://localhost:3031/reset/'+token+'\n\n.' + 
+                        'If you did not request this, please ignore this email and your password will remain unchanged.\n,'
+                }
+            console.log('sending mail')
+
+                    transporter.sendMail(mailoptions, function (err, response) {
+                        if (err) {
+                            console.error('there was an error: ', err);
+                        } else {
+                            console.log('here is the res: ', response); res.status(200).json('recovery email sent');
+                        }
+                })
+            })
+
+        }else{
+        res.json({code: 404, message:'User is not registered'});
+        }
+    })
+}
+
+module.exports.forgotPassword = forgotPassword

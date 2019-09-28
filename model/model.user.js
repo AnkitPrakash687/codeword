@@ -49,6 +49,9 @@ var UserModel = mongoose.model('UserModel', {
             codewordsetname: { type: String }
         }
     ],
+
+    resetPasswordToken:{type: String, default: null},
+    resetPasswordExpires: {type: Date, default: null},
     created_at: {
         type: Date
     },
