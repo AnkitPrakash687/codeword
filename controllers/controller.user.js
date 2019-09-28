@@ -430,7 +430,7 @@ var requests = (req,res) =>{
                         'You are receiving this because you(or someone else) have requested the reset'+ 
                         'of the password for your account.\n\n" + *Please click on the following link,'+
                         'or paste this into your browser to complete the process within one hour of' +
-                        'receiving it:\n\n' + 'http://localhost:3000/reset/'+token+'\n\n.' + 
+                        'receiving it:\n\n' + 'http://localhost:3000/resetPassword/'+token+'\n\n.' + 
                         'If you did not request this, please ignore this email and your password will remain unchanged.\n,'
                 }
             console.log('sending mail')
@@ -477,7 +477,7 @@ const resetPassword = (req, res) =>{
             if(user){
                 res.json({code: 200, message:'Password Reset successfully. You can now login.'})
             }else{
-                res.json({code: 404, message:'Reset link expired'})
+                res.json({code: 404, message:'This link is not valid or has already expired.'})
             }
         })
         })

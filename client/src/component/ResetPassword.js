@@ -245,14 +245,18 @@ export default function ResetPassword(props) {
                             >
 
                             </Snackbar>
-                            <Grid container>
-                                <Grid item xs>
+                            <Box display="flex" justifyContent="space-between">
+                                <Box display="flex">
                                     <Link to="/signin" variant="body2">
-                                        Already have an Account?Login
-              </Link>
-                                </Grid>
-
-                            </Grid>
+                                        Back to login
+                                    </Link>
+                                </Box>
+                                <Box display="flex">
+                                    <Link to="/forgotPassword" variant="body2">
+                                        Resend link
+                                    </Link>
+                                </Box>
+                            </Box>
                         </form>
 
                     </Paper>
