@@ -12,7 +12,8 @@ import CodewordSet from './component/codewordset/CodewordSet'
 //import history from './helper/history'
 import PrivateRoute from './component/PrivateRoute'
 import StudentDashboard from './component/student/StudentDashboard';
-
+import ResetPassword from './component/ResetPassword'
+import ForgotPassword from './component/ForgotPassword'
 class App extends Component {
 
  constructor(props){
@@ -31,6 +32,8 @@ class App extends Component {
         <PrivateRoute path="/studentview" component={StudentDashboard}/>
         <Route exact path="/signin" component={Login} />
         <Route exact path="/signup" component={Signup} />
+        <Route path="/forgotPassword/" component={ForgotPassword} />
+        <Route path="/resetPassword/:token" component={ResetPassword} />
     </Router>
   );
 }

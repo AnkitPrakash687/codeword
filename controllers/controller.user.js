@@ -441,9 +441,10 @@ var requests = (req,res) =>{
 
                     transporter.sendMail(mailoptions, function (err, response) {
                         if (err) {
-                            console.error('there was an error: ', err);
+                            res.json({code: 400, message:err});
                         } else {
-                            console.log('here is the res: ', response); res.status(200).json('recovery email sent');
+            
+                            res.json({code: 200, message:'Recovery email sent'});
                         }
                 })
             })
@@ -455,3 +456,25 @@ var requests = (req,res) =>{
 }
 
 module.exports.forgotPassword = forgotPassword
+
+
+const checkResetToken = (req, res) =>{
+    let body = _.pick(req.body, ['resetToken'])
+
+    UserModel.findOne({
+            resetPasswordToken: body.resetToken,
+            resetPasswordExpires: {$gt: Date.now()}
+        }, 
+         (error, user)=>{
+        if(error){
+            res.json({code: 400, message:'Something went wrong'})
+        }
+        if(user){
+
+        }else{
+            res.json({code: 404, message:'Reset link expired'})
+        }
+    })
+}
+
+module.exports.checkResetToken = checkResetToken

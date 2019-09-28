@@ -234,7 +234,7 @@ class SignIn extends Component {
               </form>
               <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    <Link to="/resetPassword/email" variant="body2">
                       Forgot password?
               </Link>
                   </Grid>
