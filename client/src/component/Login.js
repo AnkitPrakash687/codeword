@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import {CardMedia} from '@material-ui/core'
+import {Divider} from '@material-ui/core'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
@@ -180,9 +180,11 @@ class SignIn extends Component {
             src={logo}
           />
           </div>
+         
               <Typography component="h1" variant="h5">
                 Sign in
         </Typography>
+       
               <form onSubmit={handleSubmit.bind(this)} className={classes.form} >
                 <TextField
                   variant="outlined"
@@ -246,6 +248,7 @@ class SignIn extends Component {
                     </Link>
                   </Grid>
                 </Grid>
+                <Divider variant="fullWidth"/>
           </Paper>
          
           <Snackbar

@@ -90,6 +90,7 @@ let getcodewordset = (req, res) => {
 
     UserModel.find({role: 'admin', email_id:{$ne: req.session.email}}, (error,users)=>{
         if(!error){
+
           let usersEmail = users.map((item)=>{
                return item.email_id 
             })
@@ -112,6 +113,7 @@ let getcodewordset = (req, res) => {
                 }
                 }
                 Codewordset.find({createdBy: req.session.email}).then((codewordSet)=>{
+                  
                     if (codewordSet.length > 0){
                         for(var i in codewordSet){
                         console.log(codewordSet[i])
@@ -125,9 +127,9 @@ let getcodewordset = (req, res) => {
                     }
                     // console.log('**********get codeword sets')
                     // console.log(data)
-                    return res.json({ code: 200, data:data, message: true });
+                  
                 }
-
+                    return res.json({ code: 200, data:data, message: true });
                 }).catch((e) => {
                     console.log(e);
                     return res.json({ code: 400, message: e });

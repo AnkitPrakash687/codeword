@@ -345,8 +345,8 @@ export default function AddCourse(props) {
         return true
     }
     const handleClose = () => {
-        console.log(studentCount + '  ' + codewordCount)
-        console.log(((parseFloat(studentCount) - parseFloat(codewordCount)) / parseFloat(codewordCount)))
+        // console.log(studentCount + '  ' + codewordCount)
+        // console.log(((parseFloat(studentCount) - parseFloat(codewordCount)) / parseFloat(codewordCount)))
         props.onClose()
 
     }

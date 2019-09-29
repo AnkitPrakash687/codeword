@@ -162,6 +162,10 @@ export default function InstructorDashboard() {
         setRenderCodewordSet(!renderCodewordSet)
         setValue(1)
     }
+
+    useEffect(()=>{
+         
+    }, [value])
     useEffect(() => {
 
         console.log('***************window size*************')
@@ -216,11 +220,12 @@ export default function InstructorDashboard() {
     useEffect(() => {
 
         console.log('inside effect')
+    
         const headers = {
             'token': sessionStorage.getItem('token')
         };
         API.get('dashboard/getcodewordset', { headers: headers }).then(response => {
-            console.log('👉 Returned data in :', response);
+            console.log('👉 getcodeworset Returned data in :', response);
             let data = response.data.data
             let result = []
             data.map((item)=>{
@@ -232,13 +237,15 @@ export default function InstructorDashboard() {
                     isPublished: item.isPublished
                 })
             })
+            console.log('*******codeword sets*********')
+            console.log(result)
             setCodewordsetData(result)
         })
             .catch(error => {
                 console.log(error)
           
             })
-
+        
     }, [renderCodewordSet])
 
     const listCourses = courseData.map((course) => {

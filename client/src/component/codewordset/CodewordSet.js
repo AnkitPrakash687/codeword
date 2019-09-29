@@ -491,7 +491,6 @@ export default function CodewordSet(props) {
     }
     const handleDeleteClose = () =>{
         setDeleteConfirmation(false)
-        setRender(!render)
     }
 
     return (
