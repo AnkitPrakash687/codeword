@@ -162,10 +162,6 @@ export default function InstructorDashboard() {
         setRenderCodewordSet(!renderCodewordSet)
         setValue(1)
     }
-
-    useEffect(()=>{
-         
-    }, [value])
     useEffect(() => {
 
         console.log('***************window size*************')
