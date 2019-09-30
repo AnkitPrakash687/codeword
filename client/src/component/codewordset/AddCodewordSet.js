@@ -93,7 +93,19 @@ const useStyles = makeStyles(theme => ({
         background: lightGreen[100],
         padding: theme.spacing(1),
         borderRadius: 5
-    }
+    },
+    wrapper: {
+        margin: theme.spacing(1),
+        position: 'relative',
+      },
+      buttonProgress: {
+        color: green[700],
+        position: 'absolute',
+        top: '38%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+      },
 }));
 
 export default function AddCodewordSet(props) {

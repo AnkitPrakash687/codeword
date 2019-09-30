@@ -2,7 +2,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useState, Component, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import { withStyles } from '@material-ui/core/styles';
-import { green, lightGreen, red } from '@material-ui/core/colors';
+import { green, lightGreen, red, grey } from '@material-ui/core/colors';
 import { Paper, Grid, Tooltip, Link, Box } from '@material-ui/core';
 import { withRouter } from 'react-router-dom'
 import API from '../../utils/API'
@@ -32,6 +32,7 @@ const useStyles = makeStyles(theme => ({
     paper2: {
         padding: 10,
         margin: 10,
+        minWidth: 200,
         background: lightGreen[200]
     },
     title: {
@@ -104,7 +105,7 @@ export default function CourseCard(props) {
 
     const LightTooltip = withStyles(theme => ({
         tooltip: {
-          backgroundColor: green[500],
+          backgroundColor: green[100],
           color: 'rgba(0, 0, 0, 0.87)',
           boxShadow: theme.shadows[1],
           fontSize: 13,
@@ -121,12 +122,12 @@ export default function CourseCard(props) {
                         <AppBar position="static" className={classes.appBar}>
                             { window.innerWidth > 500?
                             <LightTooltip title={props.courseName}  enterDelay={500} placement="top-start">
-                            <Typography noWrap variant="body1" className={classes.title}>
+                            <Typography noWrap variant="h6" className={classes.title}>
                                 {props.courseName}
                             </Typography>
                             </LightTooltip>
                             :
-                            <Typography variant="body1" className={classes.title}>
+                            <Typography variant="h6" className={classes.title}>
                             {props.courseName}
                             </Typography>
                     }
@@ -135,35 +136,42 @@ export default function CourseCard(props) {
                    
                     <div className={classes.clickable} onClick={handleCardClick}>
                     <Grid container>
-                        <Grid item xs ={2} sm={2}></Grid>
-                        <Grid item>
+                        <Grid item xs ={1} sm={1}></Grid>
+                       
+                        <Grid item xs ={10} sm={10}>
                     <Box display="flex">
                        
                     <Paper className={classes.paper2}>
                         
-                        <Typography variant="h8" >
+                        <Typography gutterBottom component="div" variant="body1" >
+                            <Box fontSize={17} fontWeight="bold">
                             Aknowledged: {props.ack}
+                            </Box>
                         </Typography>
-                        <Box display="flex" >
+                        <Box display="flex" justifyContent="space-between">
+                        <Box display="flex">
                         { props.startSurvey != 'Unpublished'?
-                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.startSurvey} variant="body2" className={classes.startSurvey}>
+                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.startSurvey} variant="body1" className={classes.startSurvey}>
                          Start Survey
                       </Link>
-                        :<Typography className={classes.startSurvey} variant="body2">Start Survey</Typography>
+                        :<Typography className={classes.startSurvey} variant="body1">Start Survey</Typography>
                         }
+                        </Box>
+                        <Box display="flex">
                         { props.endSurvey != 'Unpublished'?
-                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.endSurvey} variant="body2" className={classes.link}>
+                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.endSurvey} variant="body1" className={classes.link}>
                          End Survey
                       </Link>
                        
-                        :<Typography className={classes.startSurvey} variant="body2">End Survey</Typography>
+                        :<Typography className={classes.startSurvey} variant="body1">End Survey</Typography>
                         }
+                        </Box>
                       </Box>
                     </Paper>
                   
                     </Box>
                     </Grid>
-                    <Grid item xs={2} sm={2}></Grid>
+                    <Grid item xs={1} sm={1}></Grid>
                     </Grid>
                     </div>
                   

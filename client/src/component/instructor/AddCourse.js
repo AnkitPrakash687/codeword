@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, red, grey } from '@material-ui/core/colors';
 import {
-    Paper, Grid, Button, FormControl, InputLabel, Tooltip,
+    Paper, Grid, Button, FormControl, InputLabel, CircularProgress,
     MenuItem, OutlinedInput, Select, Box, Snackbar, IconButton, Chip, Slide,
     Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Divider
 } from '@material-ui/core';
@@ -91,7 +91,19 @@ const useStyles = makeStyles(theme => ({
         background: lightGreen[100],
         padding: theme.spacing(1),
         borderRadius: 5
-    }
+    },
+    wrapper: {
+        margin: theme.spacing(1),
+        position: 'relative',
+      },
+      buttonProgress: {
+        color: green[700],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+      },
 }));
 
 export default function AddCourse(props) {
@@ -100,6 +112,7 @@ export default function AddCourse(props) {
         return <Slide direction="up" ref={ref} {...props} />;
       });
     const classes = useStyles();
+    const [loading, setLoading] = useState(false)
     const [state, setState] = useState({
         role: '',
         token: sessionStorage.getItem('token'),
@@ -149,6 +162,7 @@ export default function AddCourse(props) {
     }])
     useEffect(() => {
         console.log('getdata')
+        
         const headers = {
             'Content-Type': 'application/json',
             'token': state.token
@@ -181,6 +195,7 @@ export default function AddCourse(props) {
                 ))
                 console.log(response.data.data)
             }
+          
         })
 
     }, [])
@@ -277,6 +292,7 @@ export default function AddCourse(props) {
   
     const handleSubmit = (event) => {
         event.preventDefault()
+        setLoading(true)
         const headers = {
           
             'token': sessionStorage.getItem('token')
@@ -315,6 +331,7 @@ export default function AddCourse(props) {
                         message: response.data.message,
                     })
                 }
+                setLoading(false)
             })
                 .catch(error => {
                     console.log(error)
@@ -580,7 +597,7 @@ export default function AddCourse(props) {
                     />
                 </div>
                 <Box display="flex" justifyContent="flex-end">
-                  
+                <div className={classes.wrapper}>    
                     <Button
                         variant="contained"
                         color="primary"
@@ -590,18 +607,20 @@ export default function AddCourse(props) {
                     >
                         Cancel
           </Button>
-
+          </div>
+          <div className={classes.wrapper}>           
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         size="small"
                         className={classes.submit}
-                        disabled = {wrongFileExtn}
+                        disabled = {wrongFileExtn || loading}
                     >
                         Add
           </Button>
-
+          {loading && <CircularProgress size={28} className={classes.buttonProgress} />}
+            </div>
 
 
                 </Box>
