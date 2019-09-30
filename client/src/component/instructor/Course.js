@@ -352,7 +352,7 @@ export default function Course(props) {
                 const data = [...table.data];
                 data[data.indexOf(oldData)] = newData;
                 setTable({ ...table, data });
-                //setRender(!render)
+                setRender(!render)
                 resolve()
             } else {
                 setSnack({

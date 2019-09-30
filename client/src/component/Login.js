@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import {Divider} from '@material-ui/core'
+import {Divider, CircularProgress} from '@material-ui/core'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
@@ -74,6 +74,18 @@ const useStyles = theme => ({
       backgroundColor: "green"
   }
   },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[700],
+    position: 'absolute',
+    top: '38%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 });
 
 
@@ -86,7 +98,8 @@ class SignIn extends Component {
       password: "",
       isLoggedIn: false,
       message: '',
-      error: false
+      error: false,
+      loading: false
     }
   
   }
@@ -98,6 +111,8 @@ class SignIn extends Component {
       // console.log(process.env)
       event.preventDefault()
       const data = this.state
+      this.setState({...this.state, loading:true})
+
       // console.log(data)
       //const validation = validator.validate(state);
       //setState({ validation });
@@ -124,6 +139,7 @@ class SignIn extends Component {
               error: true
             })
           }
+          this.setState({...this.state, loading:false})
         }).catch(error => {
           console.log('login error', error)
         })
@@ -221,19 +237,22 @@ class SignIn extends Component {
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 />
+                 <div className={classes.wrapper}>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   className={classes.submit}
+                  disabled={this.state.loading}
                 >
                   <Typography component="div">
                     <Box fontWeight="bold">
-                    Sign IN 
+                   Sign in
                     </Box>
                   </Typography>
-                  
+                  {this.state.loading ? <CircularProgress size={30} className={classes.buttonProgress} />:null}
           </Button>
+          </div>
                
               </form>
               <Grid container>

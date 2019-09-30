@@ -3,6 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import {CircularProgress} from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
@@ -40,7 +41,18 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
-
+    wrapper: {
+        margin: theme.spacing(1),
+        position: 'relative',
+      },
+      buttonProgress: {
+        color: green[700],
+        position: 'absolute',
+        top: '38%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+      },
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
@@ -62,6 +74,7 @@ const useStyles = makeStyles(theme => ({
 export default function ForgotPassword(props) {
 
     const classes = useStyles();
+    const [loading, setLoading] = useState(false)
     const [email, setEmail] = useState({
         email: ''
     })
@@ -73,6 +86,7 @@ export default function ForgotPassword(props) {
     })
 
     async function handleSubmit(event) {
+        setLoading(true)
         event.preventDefault()
         API
             .post('auth/forgotPassword', { email: email.email })
@@ -88,33 +102,9 @@ export default function ForgotPassword(props) {
                         message: response.data.message,
                     })
                 }
+                setLoading(false)
             })
-        // console.log(data)
-        // const validation = validator.validate(state);
-        // //setState({ validation });
-        // console.log(validation)
-        // if (validation.isValid) {
-        //      try {
-        //         const response = await API.post('auth/signup', data);
-        //         console.log('👉 Returned data:', response);
-        //         console.log(response.data.code)
-        //         if(response.data.code == 200){
-        //         setSuccess({
-        //             status:true,
-        //             message: 'Sign up successful',
-        //             code: 200
-        //         })
-        //     }else if(response.data.code == 400){
-        //         setSuccess({
-        //             status:true,
-        //             message: 'Account already exists',
-        //             code: 400
-        //         })
-        //     }
-        //       } catch (e) {
-        //         console.log(`😱 Axios request failed: ${e}`);
-        //       }
-        //     }
+        
 
     }
 
@@ -186,19 +176,23 @@ export default function ForgotPassword(props) {
 
                             />
 
+                        <div className={classes.wrapper}>
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 className={classes.submit}
+                                disabled={loading}
                             >
+                        
                                 <Typography component="div">
                                     <Box fontWeight="bold">
                                         Send Reset Link
-                    </Box>
+                                    </Box>
                                 </Typography>
                             </Button>
-
+                            {loading && <CircularProgress size={30} className={classes.buttonProgress} />}
+                            </div>
                             <Snackbar
                                 anchorOrigin={{
                                     vertical: 'bottom',
