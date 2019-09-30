@@ -142,12 +142,13 @@ export default function CourseCard(props) {
                     <Box display="flex">
                        
                     <Paper className={classes.paper2}>
-                        
+                    <Box display="flex" justifyContent="center">
                         <Typography gutterBottom component="div" variant="body1" >
                             <Box fontSize={17} fontWeight="bold">
                             Aknowledged: {props.ack}
                             </Box>
                         </Typography>
+                        </Box>
                         <Box display="flex" justifyContent="space-between">
                         <Box display="flex">
                         { props.startSurvey != 'Unpublished'?
@@ -189,15 +190,23 @@ export default function CourseCard(props) {
                     </Grid>
                     {(props.isAssigned) ?
                         <Paper className={classes.banner1}>
-
-                            <Typography variant="h8" className={classes.title}>
-                                CODEWORD ASSIGNED
+                                <Box display="flex" justifyContent="center">
+                    <Typography component="div">
+                                <Box fontWeight="bold" fontSize={15}>
+                                ASSIGNED
+                                </Box>
                     </Typography>
+                    </Box>
                         </Paper> :
                         <Paper className={classes.banner2}>
-                            <Typography variant="h8" className={classes.title}>
-                                CODEWORD NOT ASSIGNED
+                            <Box display="flex" justifyContent="center">
+                           <Typography component="div">
+                                <Box fontWeight="bold" fontSize={15}>
+                                NOT ASSIGNED
+                                </Box>
+                              
                     </Typography>
+                    </Box>
                         </Paper>
                     }
                    

@@ -25,16 +25,16 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 5,
         paddingBottom: 20,
         maxWidth: 300,
-        minWidth:200
+        minWidth: 200
     },
     paper2: {
         padding: 10,
         margin: 30,
         background: lightGreen[200]
     },
- title:{
-    padding: 10
- },
+    title: {
+        padding: 10
+    },
     banner1: {
         background: lightGreen[200],
         padding: 5,
@@ -56,12 +56,12 @@ export default function CourseCard(props) {
 
     const LightTooltip = withStyles(theme => ({
         tooltip: {
-          backgroundColor: green[100],
-          color: 'rgba(0, 0, 0, 0.87)',
-          boxShadow: theme.shadows[1],
-          fontSize: 13,
+            backgroundColor: green[100],
+            color: 'rgba(0, 0, 0, 0.87)',
+            boxShadow: theme.shadows[1],
+            fontSize: 13,
         },
-      }))(Tooltip);
+    }))(Tooltip);
 
     const [redirect, setRedirect] = useState(false);
     const handleCardClick = () => {
@@ -70,66 +70,68 @@ export default function CourseCard(props) {
 
     }
     if (redirect) {
-        history.push('/codewordset'+props.id)
+        history.push('/codewordset' + props.id)
         return <Redirect to={'/codewordset/' + props.id}></Redirect>
     }
 
     return (
 
         <Grid item xs={12} sm={3} md={3} lg={3}>
-            
-                <Paper className={classes.paper}>
+
+            <Paper className={classes.paper}>
                 <CardActionArea onClick={handleCardClick}>
                     <div className={classes.appBar}>
-                         <AppBar position="static" className={classes.appBar}>
-                            { window.innerWidth > 500?
-                            <LightTooltip title={props.codewordSetName}  enterDelay={500} placement="top-start">
-                            <Typography variant="h6" noWrap className={classes.title}>
-                          
-                            {props.codewordSetName}
-                      
-                             </Typography>
-                            </LightTooltip>
-                            :
-                            <Typography component="div">
-                            <Box fontSize={18}  className={classes.title}>
-                            {props.codewordSetName}
-                            </Box>
-                </Typography>
-                    }
+                        <AppBar position="static" className={classes.appBar}>
+                            {window.innerWidth > 500 ?
+                                <LightTooltip title={props.codewordSetName} enterDelay={500} placement="top-start">
+                                    <Typography variant="h6" noWrap className={classes.title}>
+
+                                        {props.codewordSetName}
+
+                                    </Typography>
+                                </LightTooltip>
+                                :
+                                <Typography component="div">
+                                    <Box fontSize={18} className={classes.title}>
+                                        {props.codewordSetName}
+                                    </Box>
+                                </Typography>
+                            }
                         </AppBar>
                     </div>
 
                     <Paper className={classes.paper2}>
-                    <Box display="flex" justifyContent="flex-center">
-                        <Typography variant="body1" >
-                            <Box display="flex" fontWeight="bold">
-                            Count: {props.count}
-                            </Box>  
-                        </Typography>
+                        <Box display="flex" justifyContent="center">
+                            <Typography variant="body1" >
+                                <Box display="flex" fontWeight="bold">
+                                    Count: {props.count}
+                                </Box>
+                            </Typography>
                         </Box>
                     </Paper>
                     {(props.isPublished) ?
                         <Paper className={classes.banner1}>
-
-                        <Typography component="div">
-                                <Box fontSize={13}>
-                                NOT FINALIZED
+                            <Box display="flex" justifyContent="center">
+                                <Typography component="div">
+                                    <Box fontWeight="bold" fontSize={15}>
+                                        FINALIZED
                                 </Box>
-                    </Typography>
+                                </Typography>
+                            </Box>
                         </Paper> :
                         <Paper className={classes.banner2}>
-
-                            <Typography component="div">
-                                <Box fontSize={13}  >
-                                NOT FINALIZED
+                            <Box display="flex" justifyContent="center">
+                                <Typography component="div">
+                                    <Box fontWeight="bold" fontSize={15}  >
+                                        NOT FINALIZED
                                 </Box>
-                    </Typography>
+                                </Typography>
+                            </Box>
                         </Paper>
                     }
-                     </CardActionArea>
-                </Paper>
-           
+                </CardActionArea>
+            </Paper>
+
         </Grid>
 
     );
