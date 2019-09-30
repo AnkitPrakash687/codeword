@@ -93,7 +93,7 @@ export default function InstructorDashboard() {
                     borderBottomRightRadius: 10,
                     borderTopRightRadius: 10,
 
-                }} minHeight={600} p={3}>{children}</Box>
+                }} minHeight={500} p={3}>{children}</Box>
             </Typography>
         );
     }
