@@ -164,8 +164,8 @@ export default function InstructorDashboard() {
     }
     useEffect(() => {
 
-        console.log('***************window size*************')
-        console.log(window.innerWidth)
+        // console.log('***************window size*************')
+        // console.log(window.innerWidth)
 
         setLoading(true)
         console.log('inside effect')
@@ -216,7 +216,7 @@ export default function InstructorDashboard() {
     useEffect(() => {
 
         console.log('inside effect')
-    
+        setLoading(true)
         const headers = {
             'token': sessionStorage.getItem('token')
         };
@@ -236,10 +236,11 @@ export default function InstructorDashboard() {
             console.log('*******codeword sets*********')
             console.log(result)
             setCodewordsetData(result)
+            setLoading(false)
         })
             .catch(error => {
                 console.log(error)
-          
+                setLoading(false)
             })
         
     }, [renderCodewordSet])
