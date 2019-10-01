@@ -25,35 +25,20 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.engine("html", require('ejs').renderFile)
 app.set('view engine', 'html');
 
+router.post('/codeword/api/v1/signup', usersController.signUp);
+router.post('/codeword/api/v1/signin', usersController.signIn);
+app.use('/codeword/api/v1/dashboard', userRouter);
+app.use('/codeword/api/v1/auth', authRouter)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 //app.use(tokencheck.tokencheck);
 app.use(express.json());
 // // Serve static files from the React app
 // app.use(express.static(path.join(__dirname, 'client/build')));
 // // The "catchall" handler: for any request that doesn't
 // // match one above, send back React's index.html file.
-app.get('/signin', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-  });
-
-  app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-  });
-
-  app.get('/forgetPassword', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-  });
-
-  app.get('/resetPassword/:token', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-  });
-
-app.post("/register",function(request,response){
-    console.log("-----------------Register---------------");
-    register.registeruser(request.body, function(registerResponse){
-        response.send(registerResponse);
-    });
-
-});
 
 app.get("/",function(req,res){
     console.log('working/')
@@ -61,10 +46,7 @@ app.get("/",function(req,res){
 });
 
 
-router.post('/codeword/api/v1/signup', usersController.signUp);
-router.post('/codeword/api/v1/signin', usersController.signIn);
-app.use('/codeword/api/v1/dashboard', userRouter);
-app.use('/codeword/api/v1/auth', authRouter)
+
 
 
 // initialize data ............................................
