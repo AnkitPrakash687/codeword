@@ -469,6 +469,8 @@ const resetPassword = (req, res) =>{
             }, 
             {
                 $set:{
+                    resetPasswordToken: null,
+                    resetPasswordExpires:null,
                     password: hash
                 }
             },
