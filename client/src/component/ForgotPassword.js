@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     root: {
-        background: green[500]
+     
     },
     paper: {
         padding: theme.spacing(1, 1),
@@ -132,7 +132,9 @@ export default function ForgotPassword(props) {
     let emailValidation = emailValidator.validate(email)
 
     return (
-        <div className={classes.root}>
+        <div
+        style={{background: 'linear-gradient(180deg, #388e3c, #c8e6c9)'}}
+         className={classes.root}>
 
             <Grid container
                 spacing={0}

@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     root: {
-        background: green[500]
+     
     },
     paper: {
         padding: theme.spacing(1, 1),
@@ -151,7 +151,9 @@ export default function ResetPassword(props) {
     let validation = validator.validate(state)  //
 
     return (
-        <div className={classes.root}>
+        <div 
+        style={{background: 'linear-gradient(180deg, #388e3c, #c8e6c9)'}}
+        className={classes.root}>
 
             <Grid container
                 spacing={0}

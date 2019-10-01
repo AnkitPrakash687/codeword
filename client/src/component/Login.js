@@ -26,6 +26,7 @@ import { AppBar } from '@material-ui/core';
 import MyAppBar from '../component/MyAppBar'
 import {green, grey, lightGreen} from '@material-ui/core/colors'
 import logo from '../static/images/logo_1.png'
+import nwmsugreen from '../static/images/nwmsu.png'
 const useStyles = theme => ({
   '@global': {
     body: {
@@ -33,7 +34,7 @@ const useStyles = theme => ({
     },
   },
   root:{
-    background: green[500]
+   
   },
   paper: {
     padding: theme.spacing(1, 2, 1, 2),
@@ -179,8 +180,10 @@ class SignIn extends Component {
     }
 
     return (
-      <div className={classes.root}>
-         
+      <div  
+      style={{background: 'linear-gradient(180deg, #388e3c, #c8e6c9)'}}
+      className={classes.root}>
+       
       <Grid container
         spacing={0}
         alignItems="center"
