@@ -33,6 +33,8 @@ import { breakpoints } from '@material-ui/system';
         selectedBgColor = defaultSelectedBgColor
       }) => ({
     
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         minWidth: 40,
         opacity: 1,
         overflow: 'initial',

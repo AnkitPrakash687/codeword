@@ -91,7 +91,7 @@ export default function InstructorDashboard() {
                 style={ {
                     borderBottomLeftRadius: 10,
                     borderBottomRightRadius: 10,
-                    borderTopRightRadius: 10,
+                    
 
                 }} minHeight={500} p={3}>{children}</Box>
             </Typography>
