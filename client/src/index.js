@@ -2,19 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Signup from './component/Signup'
-import NavBar from './component/Navbar'
-import Login from './component/Login'
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import * as serviceWorker from './serviceWorker';
-import { Provider } from "react-redux";
-import store from "./store/index";
 import history from './history'
-import AppBar from './component/MyAppBar'
+import { green, lightGreen, grey } from '@material-ui/core/colors';
+
 ReactDOM.render((
    <Router history={history}>
-   
-     <App/>
+   <div  style={{background: green[200]}}>
+     <App />
+     </div>
     </Router>
   ), document.getElementById('root'))
 

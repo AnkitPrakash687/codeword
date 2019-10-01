@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         margin: 30,
         flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: green[200],
     },
     appBar: {
         background: green[600]

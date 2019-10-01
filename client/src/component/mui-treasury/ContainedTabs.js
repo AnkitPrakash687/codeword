@@ -97,9 +97,9 @@ import { breakpoints } from '@material-ui/system';
     const tabClasses = useTabStyles({ ...tabProps, ...tabStyle });
     return (
     
-      <Tabs variant="fullWidth" {...props} classes={tabsClasses}>
+      <Tabs variant="fullWidth"  {...props} classes={tabsClasses}>
         {tabs.map(tab => (
-          <Tab key={tab.label} {...tabProps} {...tab} classes={tabClasses} />
+          <Tab  key={tab.label} {...tabProps} {...tab} classes={tabClasses} />
         ))}
       </Tabs>
 
