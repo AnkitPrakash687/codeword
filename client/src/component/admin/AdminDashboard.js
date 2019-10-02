@@ -8,7 +8,7 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, grey, red } from '@material-ui/core/colors';
-import { Paper, Grid, CircularProgress, Container, CssBaseline, Snackbar, IconButton } from '@material-ui/core';
+import { Paper, Grid, CircularProgress, Container,Tooltip, Fab, CssBaseline, Snackbar, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -34,14 +34,11 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import LockIcon from '@material-ui/icons/Lock';
-import ListAltIcon from '@material-ui/icons/ListAlt';
+import AddIcon from '@material-ui/icons/Add';
 import AddCodewordSet from '../codewordset/AddCodewordSet'
 import CodewordsetCard from '../codewordset/CodewordsetCard'
 import MyAppBar from '../MyAppBar'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+
 const moment = require('moment')
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -99,14 +96,25 @@ const useStyles = makeStyles(theme => ({
 
     },
     button: {
-        margin: theme.spacing(2),
-        textTransform: "none",
-        color: grey[300]
+        marginBottom: theme.spacing(2),
+        background: green[500],
+        "&:hover": {
+            backgroundColor: "green"
+        }
 
     }
 }));
 
 export default function AdminDashboard() {
+
+    const LightTooltip = withStyles(theme => ({
+        tooltip: {
+          backgroundColor: lightGreen[200],
+          color: 'rgba(0, 0, 0, 0.87)',
+          boxShadow: theme.shadows[1],
+          fontSize: 13,
+        },
+      }))(Tooltip);
 
     const CheckIconGreen = withStyles(theme => ({
         root: {
@@ -510,10 +518,11 @@ export default function AdminDashboard() {
                     </TabPanel>
                     <TabPanel value={value} index={2}>
 
-                           
-            <Button variant="contained" color="primary" className={classes.button} onClick={handleCodewordClickOpen}>
-                    Add codeword Set
-            </Button>
+            <LightTooltip title="Add Codeword set" placement="right">
+            <Fab  aria-label="add" className={classes.button} onClick={handleCodewordClickOpen}>
+                <AddIcon />
+            </Fab>
+            </LightTooltip>
            
             <Dialog  fullWidth={true} disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>    
                  <div>

@@ -316,6 +316,7 @@ export default function InstructorDashboard() {
                 <Grid container spacing={3}>
 
                     {
+                        listCourses.length > 0 &&
                         listCourses
                     }
 
@@ -348,6 +349,7 @@ export default function InstructorDashboard() {
                <Grid container spacing={3}>
 
                     {
+                        listCodewordSet.length > 0 &&
                         listCodewordSet
                     }
 
