@@ -79,7 +79,7 @@ export default function Signup() {
         message: '',
         code:null
     })
-
+    const [redirect, setRedirect] = useState(false)
     async function handleSubmit(event){
         event.preventDefault()
          const data = state
@@ -95,9 +95,10 @@ export default function Signup() {
             if(response.data.code == 200){
             setSuccess({
                 status:true,
-                message: 'Sign up successful',
+                message: response.data.message,
                 code: 200
             })
+            sessionStorage.setItem('token',response.data.token)
         }else if(response.data.code == 400){
             setSuccess({
                 status:true,
@@ -123,6 +124,7 @@ export default function Signup() {
 
     function handleClose(event, reason){
         setSuccess({status: false})
+        setRedirect(true)
     }
 
     let passwordMatch = (confirmation,state) => (state.confirmPass && state.password === confirmation)
@@ -145,6 +147,13 @@ export default function Signup() {
     
     
     let validation = validator.validate(state)  //
+
+    if(redirect && sessionStorage.getItem('token')){
+      return <Redirect to={{
+        pathname: '/'
+      }}
+      />
+    }
 
   return (
     <div 

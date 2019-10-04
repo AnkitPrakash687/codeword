@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { useState, Component, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import NavBar from './component/Navbar'
@@ -14,15 +14,16 @@ import PrivateRoute from './component/PrivateRoute'
 import StudentDashboard from './component/student/StudentDashboard';
 import ResetPassword from './component/ResetPassword'
 import ForgotPassword from './component/ForgotPassword'
-class App extends Component {
 
- constructor(props){
-   super(props)
- 
- }
 
+export default function App() {
+
+
+useEffect(()=>{
+    sessionStorage.clear()
+},[])
  
-  render(){
+
   
   return (
     <Router >
@@ -37,5 +38,4 @@ class App extends Component {
     </Router>
   );
 }
-}
-export default App;
+

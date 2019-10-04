@@ -30,8 +30,30 @@ var signUp = (req,res) => {
                 updated_at: date.toISOString()
             });
             userModel.save().then((user) => {
-                if(user)
-                return res.json({ code: 200, message: true});           
+                if(user){
+                    var newToken = jwt.sign({email: body.email, id: user.id },'codewordnwmsu',{expiresIn:  10000 * 3000 }).toString();
+                    console.log(newToken)
+                    UserModel.updateOne({emailKey: body.email},
+                        {
+                            $set: 
+                            {
+                                token: newToken,
+                                last_login: new Date()
+
+                            }}, (err) =>{
+                        if(err){
+                            return res.json({ code: 401, message: 'Unable to generate and update Token'});
+                        }
+                    
+                            return res.json({ 
+                                code: 200, 
+                                message: 'Signed up successfully. Redirecting.', 
+                                token: newToken,
+                                role: user.role });
+                            })
+                }
+                
+                          
             }).catch((e) => {
                 console.log(e);
                 return res.json({ code: 400, message: e});        
