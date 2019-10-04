@@ -235,6 +235,7 @@ export default function AddCourse(props) {
                 setWrongFileExtn(false)
         Papa.parse(file.selectedFile, {
             complete: function (results) {
+                console.log('*************CSV***********')
                 console.log(results)
              
                 var invalidRecords = []
@@ -257,7 +258,7 @@ export default function AddCourse(props) {
                 });
                 console.log(duplicateEmails)
                 let removeDuplicateEmails = validRecords.filter((obj, pos, arr) => {
-                    return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) !== pos;
+                    return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) === pos;
                 });
               console.log(removeDuplicateEmails)
                 setStudents({
