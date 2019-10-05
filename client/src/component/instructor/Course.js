@@ -549,7 +549,7 @@ export default function Course(props) {
                                                         </Box>
                                                     </Typography>
                                                 </Box>
-                                                <Box display="flex" flexDirection="row" justifyContent="space-between">
+                                                <Box display="flex" flexDirection="row" justifyContent="flex-start">
 
                                                     <Typography variant="caption" style={{ marginRight: 15 }}>
                                                         Start Date: {state.startDate}
@@ -567,10 +567,10 @@ export default function Course(props) {
 
                                     </Grid>
                                 </Grid>
-                                <Grid item sm={3}>
-
-                                </Grid>
-                                <Grid item sm={3}>
+                                <Grid item sm={6}>
+                                <Box display="flex" flexDirection="row" justifyContent="flex-end">
+                             
+                                  
 
                                     {/* <Button
                                     variant="contained"
@@ -633,6 +633,9 @@ export default function Course(props) {
                                             <DeleteForeverIcon fontSize="large" />
                                         </IconButton>
                                     </Tooltip>
+                                   
+                              
+                                </Box>
                                 </Grid>
                             </Grid>
                         </Box>
