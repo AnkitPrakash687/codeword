@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,11 +17,12 @@ import FormValidator from '../utils/FormValidator'
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom"
 import Login from './Login'
 import Snackbar from '@material-ui/core/Snackbar';
+import {LinearProgress} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
 import MyAppBar from '../component/MyAppBar'
-import {green, grey} from '@material-ui/core/colors'
+import {green, red,grey, lightGreen} from '@material-ui/core/colors'
 import logo from '../static/images/logo_1.png'
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -57,6 +58,9 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: "green"
   }
   },
+  passStrengthBar:{
+      marginTop: 8,  
+  }
 }));
 
 
@@ -70,10 +74,13 @@ export default function Signup() {
         firstName:"",
         lastName:"",
         email:"",
-        password:"",
         confirmPass:"",
         instructor: false
     }) 
+    const [passStrength, setPassStrength] = useState({
+      value: 0, text: '',  color:grey[100]
+    })
+    const [password, setPassword] = useState('')
     const [success, setSuccess] = useState({
         status: false,
         message: '',
@@ -119,6 +126,10 @@ export default function Signup() {
         if([name]=='instructor'){
             setState({ ...state, [name]: isChecked });
         }
+
+        if([name] == 'password'){
+          setPassword(event.target.value)
+        }
         
     }
 
@@ -127,7 +138,7 @@ export default function Signup() {
         setRedirect(true)
     }
 
-    let passwordMatch = (confirmation,state) => (state.confirmPass && state.password === confirmation)
+    let passwordMatch = (confirmation,state) => (state.confirmPass && password === confirmation)
     
      const validator = new FormValidator([
       
@@ -147,6 +158,22 @@ export default function Signup() {
     
     
     let validation = validator.validate(state)  //
+
+    useEffect(()=>{
+      var strongPassRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{8,})")
+      var mediumPassRegex = RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})")
+      var weakPassRegex = RegExp('(?=.{6,})')
+      
+      if(strongPassRegex.test(password)){
+        setPassStrength({value:100, text: 'strong', color: 'primary'})
+      }else if(mediumPassRegex.test(password)){
+        setPassStrength({value:60, text: 'medium', color: 'primary'})
+      }else if(weakPassRegex.test(password)){
+        setPassStrength({value:30, text: 'weak', color:'secondary'})
+      }else{
+        setPassStrength({value:10, text: '', color:grey[100]})
+      }
+    },[password])
 
     if(redirect && sessionStorage.getItem('token')){
       return <Redirect to={{
@@ -229,6 +256,8 @@ export default function Signup() {
           
           />
           <TextField
+          error={(password.length>0 && passStrength.value < 11 )?true:false}
+          helperText={(password.length>0 && passStrength.value < 11 )?'Password should be minimun 6 character':''}
             variant="outlined"
             required
             fullWidth
@@ -239,9 +268,46 @@ export default function Signup() {
             margin="dense"
             autoComplete="current-password"  
             onChange={handleChange('password')}
-            value={state.password}
+            value={password}
 
           />
+          { passStrength.value > 10 &&
+            <div >
+             <Grid container style={{marginBottom: 5}}>
+               <Grid item xs ={4} sm={4}>
+            <Box display="flex" flexDirection="row" >
+           
+              <Typography component="div">
+                    <Box fontSize={12} fontWeight="italic">
+                    Password Strength  
+                    </Box>
+                  </Typography>
+                  </Box>
+                  <Box>
+         
+        
+          </Box>
+          </Grid>
+          <Grid item xs={6} sm={6} m={1}>
+         
+          <LinearProgress 
+          variant="determinate" 
+          value={passStrength.value} 
+          className={classes.passStrengthBar}
+          color={passStrength.color}
+          />
+         
+          </Grid>
+          <Grid item xs={2} sm={2}>
+          <Typography style={{marginLeft: 5}} component="div">
+                    <Box fontSize={12}>
+                    {passStrength.text} 
+                    </Box>
+                  </Typography>
+          </Grid>
+          </Grid>
+          </div>
+          }
             <TextField
              error={validation.confirmPass.isInvalid && state.confirmPass.length>0?true:false}
              helperText={validation.confirmPass.isInvalid && state.confirmPass.length>0?'Password do not match':''}
@@ -267,6 +333,9 @@ export default function Signup() {
             fullWidth
             variant="contained"
             className={classes.submit}
+            disabled={passStrength.value < 11 ||
+              validation.confirmPass.isInvalid 
+              ? true: false}
           >
               <Typography component="div">
                     <Box fontWeight="bold">
