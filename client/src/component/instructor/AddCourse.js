@@ -501,7 +501,7 @@ export default function AddCourse(props) {
                         />
                         <label htmlFor="text-button-file">
                             <Grid container spacing={1}>
-                                <Grid item xs={7} sm={7} md={7} lg={7}>
+                                <Grid item xs={8} sm={8} md={8} lg={8}>
                                     <TextField fullWidth="true" className={classes.textField}
                                         id="filename"
                                         name="filename"
@@ -514,8 +514,8 @@ export default function AddCourse(props) {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={3} sm={3} md={3} lg={3}>
-                                    <Button variant="contained" component="span" color="primary" className={classes.button}>
+                                <Grid item xs={2} sm={2} md={2} lg={2}>
+                                    <Button size="small" variant="contained" component="span" color="primary" className={classes.button}>
                                         Upload
                                     <CloudUploadIcon className={classes.rightIcon} />
                                     </Button>
@@ -523,14 +523,17 @@ export default function AddCourse(props) {
                                 {
                                     (invalidRecord.duplicateEmails.length > 0 || invalidRecord.invalidRecords.length > 0) &&
                                     <Grid item xs={2} sm={2} md={2} lg={2}>
+                                        <Box display="flex" m={0}>
                                         <Tooltip title="Open Report" placement="bottom">
                                             <IconButton
                                                 className={classes.iconButton}
                                                 onClick={handleReportOpen}
+                                                style={{marginLeft: 25}}
                                             >
-                                                <InfoIcon fontSize="large" style={{ color: red[600] }} />
+                                                <InfoIcon fontSize="inherit" style={{ color: red[600] }} />
                                             </IconButton>
                                         </Tooltip>
+                                        </Box>
                                     </Grid>
                                 }
 
@@ -563,7 +566,7 @@ export default function AddCourse(props) {
                                         label={'Duplicate Records: ' + invalidRecord.duplicateEmails.length}
                                         size="small"
                                         className={classes.chip}
-                                        color="primary"
+                                        color="secondary"
                                         variant="outlined"
                                     /> : false
                                 }
@@ -572,7 +575,7 @@ export default function AddCourse(props) {
                                         label={'Invalid Records: ' + invalidRecord.invalidRecords.length}
                                         size="small"
                                         className={classes.chip}
-                                        color="primary"
+                                        color="secondary"
                                         variant="outlined"
                                     /> : false
                                 }
