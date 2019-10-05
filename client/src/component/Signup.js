@@ -334,7 +334,9 @@ export default function Signup() {
             variant="contained"
             className={classes.submit}
             disabled={passStrength.value < 11 ||
-              validation.confirmPass.isInvalid 
+              validation.confirmPass.isInvalid ||
+              validation.email.isInvalid
+              
               ? true: false}
           >
               <Typography component="div">
