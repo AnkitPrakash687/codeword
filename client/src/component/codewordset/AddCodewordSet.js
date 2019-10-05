@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, red, grey } from '@material-ui/core/colors';
 import {
-    Paper, Grid, Button, FormControl, InputLabel,
+    Paper, Grid, Button, FormControl, InputLabel, Tooltip, Modal,
     MenuItem, OutlinedInput, Select, Box, Snackbar, IconButton, Chip, 
     Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Slide, Divider
 } from '@material-ui/core';
@@ -18,11 +18,12 @@ import DateFnsUtils from '@date-io/date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CloseIcon from '@material-ui/icons/Close';
-import { flexbox } from '@material-ui/system';
+import { flexbox, typography } from '@material-ui/system';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker
 } from '@material-ui/pickers';
+import InfoIcon from '@material-ui/icons/Info';
 
 const Papa = require('papaparse')
 var moment = require('moment');
@@ -37,9 +38,10 @@ const useStyles = makeStyles(theme => ({
         background: green[600]
     },
     paper: {
-        paddingBottom: 20
+        paddingBottom:0
     },
     paper2: {
+        
         padding: 20,
         margin: 20,
         background: lightGreen[200]
@@ -92,7 +94,8 @@ const useStyles = makeStyles(theme => ({
     paper: {
         background: lightGreen[100],
         padding: theme.spacing(1),
-        borderRadius: 5
+        borderRadius: 5,
+        marginTop: theme.spacing(2)
     },
     wrapper: {
         margin: theme.spacing(1),
@@ -106,6 +109,22 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12,
       },
+      report: {
+
+        position: 'absolute',
+        minWidth: 300,
+        maxWidth: 800,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    reportButton:{
+        margin: theme.spacing(2)
+    }
 }));
 
 export default function AddCodewordSet(props) {
@@ -121,7 +140,7 @@ export default function AddCodewordSet(props) {
         error: false,
         message: '',
         reRender: false,
-        alertOpen: true
+        alertOpen: false
     })
    
     const [openReport, setOpenReport] = useState(false)
@@ -146,6 +165,8 @@ export default function AddCodewordSet(props) {
     }
 
     const handleFileChange = (event) => {
+
+        console.log(fileLabel.current.files[0].name)
         if (fileLabel.current.files[0] && fileLabel.current.files[0].name) {
             setState({ ...state, filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });
             let file = event.target.files[0]
@@ -173,7 +194,10 @@ export default function AddCodewordSet(props) {
                          return item.replace(/[\r]+/g,"")
                      })
                      console.log(codewordSetData)
-                    filterData(codewordSetData)
+
+                    filterData(codewordSetData.filter((item)=>{
+                        return item !== ""
+                    }))
                 }
                
             }else{
@@ -229,6 +253,9 @@ export default function AddCodewordSet(props) {
         setState({ ...state, [name]: date });
     }
 
+    const handleReportOpen = () =>{
+        setOpenReport(true)
+    }
     const handleSubmit = (event) => {
         event.preventDefault()
         const headers = {
@@ -238,29 +265,39 @@ export default function AddCodewordSet(props) {
             codewordSetName: state.codewordSetName,
             codewords: hardRuleData.filteredData
         }
+
+        console.log('***********Add codewordset**********')
         console.log(data)
         
         API.post('dashboard/addcodewordset',  data, { headers: headers }).then(response => {
             console.log('👉 Returned data in :', response);
-            if (response.status == 200) {
+            if (response.data.code == 200) {
               
-                if(hardRuleData.lessThanThree.length > 0 || hardRuleData.invalidCodewords.length > 0
-                    || hardRuleData.duplicates.length > 0){
-                setOpenReport(true)
-                    }else{
-                        setState({
-                            status: true,
-                            message: "Codeword Set created!",
-                            reRender: true
-                        })
-                    }
-            } else {
-                console.log('error')
+             
+                //setOpenReport(true)
                 setState({
-                    codewordSetName: state.codewordSetName,
+                    ...state,
+                    status: true,
+                    message: "Codeword Set created!",
+                    reRender: true
+                })
+                  
+            } 
+            else if(response.data.message.code==11000){
+                setState({
+                    ...state,
                     status: true,
                     error: true,
-                    message: response.data.message,
+                    message: 'Codeword set already registered',
+                })
+            }
+            else {
+                console.log('error')
+                setState({
+                    ...state,
+                    status: true,
+                    error: true,
+                    message: 'Expected error',
                 })
             }
         })
@@ -282,11 +319,7 @@ export default function AddCodewordSet(props) {
 
     const handleReportClose = () =>{
         setOpenReport(false)
-        setState({
-            status: true,
-            message: "Codeword Set created!",
-            reRender: true
-        })
+    
        
     }
     const handleClose = () => {
@@ -311,10 +344,35 @@ export default function AddCodewordSet(props) {
     };
 
     return (
+        <div>
+
+            <div>
+                <Box display="flex" style={{width:'100%'}} justifyContent="space-between">
+                <Typography component="div">
+                    <Box fontSize={18} style={{margin: 10}}>
+                    ADD COURSE
+                    </Box>
+                   
+                </Typography>
+
+                { (hardRuleData.duplicates.length > 0 || hardRuleData.lessThanThree.length > 0
+                                || hardRuleData.invalidCodewords.length > 0) &&
+            <Button
+                        onClick={handleReportOpen}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        className={classes.reportButton}
+                    >
+                        Open Report
+          </Button>
+            }
+                </Box>
+                </div>
+                <Divider/>
         <Container component="main" maxWidth="sm">
             <CssBaseline />
-
-
+           
             <form enctype="multipart/form-data" onSubmit={handleSubmit} className={classes.form} >
                 <div className={classes.paper}>
                     <TextField className={classes.textField}
@@ -349,12 +407,29 @@ export default function AddCodewordSet(props) {
                                     value={state.filename}
                                 />
                             </Grid>
-                            <Grid item xs={4} sm={4} md={4} lg={4}>
-                                <Button variant="contained" component="span" color="primary" className={classes.button}>
+                            <Grid item xs={2} sm={2} md={2} lg={2}>
+                                <Button size="small" variant="contained" component="span" color="primary" className={classes.button}>
                                     Upload
                                     <CloudUploadIcon className={classes.rightIcon} />
                                 </Button>
-                            </Grid>
+                                </Grid>
+                                { (hardRuleData.duplicates.length > 0 || hardRuleData.lessThanThree.length > 0
+                                || hardRuleData.invalidCodewords.length > 0) &&
+                                  <Grid item xs={2} sm={2} md={2} lg={2}>
+                                  <Box display="flex" m={0}>
+                                <Tooltip title="Open Report" placement="bottom">
+                                            <IconButton
+                                                className={classes.iconButton}
+                                                onClick={handleReportOpen}
+                                                style={{marginLeft: 25}}
+                                            >
+                                                <InfoIcon fontSize="inherit" style={{ color: red[600] }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                        </Box>
+                                        </Grid>
+                                }
+                        
                         </Grid>
 
                     </label>
@@ -362,13 +437,24 @@ export default function AddCodewordSet(props) {
                   
                 </div>
                 <Grid container className={classes.chipContainer}>
+                    {   state.filename !== ''&&
+                         <Grid item>
+                         <Chip
+                             label={'Valid codewords: ' + hardRuleData.filteredData.length}
+                             size="small"
+                             className={classes.chip}
+                             color="primary"
+                             variant="outlined"
+                         /> 
+                         </Grid>
+                    }
                        { (hardRuleData.duplicates.length > 0) &&
                        <Grid item>
                         <Chip
                             label={'No. of duplicate: ' + hardRuleData.duplicates.length}
                             size="small"
                             className={classes.chip}
-                            color="primary"
+                            color="secondary"
                             variant="outlined"
                         /> 
                         </Grid>
@@ -379,7 +465,7 @@ export default function AddCodewordSet(props) {
                             label={'Less than 3 letters: ' + hardRuleData.lessThanThree.length}
                             size="small"
                             className={classes.chip}
-                            color="primary"
+                            color="secondary"
                             variant="outlined"
                         /> 
                         </Grid>
@@ -390,7 +476,7 @@ export default function AddCodewordSet(props) {
                             label={'Invalid Codewords: ' + hardRuleData.invalidCodewords.length}
                             size="small"
                             className={classes.chip}
-                            color="primary"
+                            color="secondary"
                             variant="outlined"
                         /> 
                         </Grid>
@@ -423,7 +509,7 @@ export default function AddCodewordSet(props) {
                
             </form>
 
-            <Dialog
+            {/* <Dialog
            fullWidth={true} 
         open={openReport}
         TransitionComponent={Transition}
@@ -485,7 +571,7 @@ export default function AddCodewordSet(props) {
             OK
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
             <Snackbar
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -508,7 +594,76 @@ export default function AddCodewordSet(props) {
                     </IconButton>,
                 ]}
             ></Snackbar>
+
+
+            
         </Container>
+        <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={openReport}
+                onClose={handleClose}
+                disableBackdropClick
+                className={classes.modal}
+            >
+              <Paper className={classes.report}>
+              <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
+              <Divider />
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Duplicate Codewords: {hardRuleData.duplicates.length}
+            </DialogContentText>
+            <Grid container >
+           { hardRuleData.duplicates.map((item)=>{
+                   return  <Typography component="div">
+                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                        {item}
+                    </Box>
+                </Typography>
+                })
+            }
+          </Grid>
+    
+          <DialogContentText id="alert-dialog-slide-description">
+            Codewords with less than three letters: {hardRuleData.lessThanThree.length}
+            </DialogContentText>
+            <Grid container >
+            {
+                hardRuleData.lessThanThree.map((item)=>{
+                   return <Typography component="div">
+                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                        {item}
+                    </Box>
+                </Typography>
+                })
+            }
+            </Grid>
+        
+            <DialogContentText id="alert-dialog-slide-description">
+            Invalid codewords: {hardRuleData.invalidCodewords.length}
+            </DialogContentText>
+            <Grid container >
+            { hardRuleData.invalidCodewords.map((item)=>{
+                   return  <Typography component="div">
+                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                        {item}
+                    </Box>
+                </Typography>
+                })
+            }
+           </Grid>
+           
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+                        <Button onClick={handleReportClose} color="primary">
+                            OK
+           </Button>
+                    </DialogActions>
+        
+                  </Paper>
+            </Modal>
+        </div>
     );
 }
 

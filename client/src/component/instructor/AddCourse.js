@@ -30,10 +30,10 @@ var moment = require('moment');
 var _ = require("underscore");
 const useStyles = makeStyles(theme => ({
     root: {
-      
+
     },
-    form:{
-        padding: theme.spacing(1,5,1,5),
+    form: {
+        padding: theme.spacing(1, 5, 1, 5),
         background: grey[100]
     },
     appBar: {
@@ -77,8 +77,8 @@ const useStyles = makeStyles(theme => ({
     },
     submit: {
         background: green[600],
-       
-    
+
+
         "&:hover": {
             backgroundColor: "green"
         }
@@ -92,7 +92,7 @@ const useStyles = makeStyles(theme => ({
     },
     paper: {
 
-       
+
         borderRadius: 5
     },
     wrapper: {
@@ -121,6 +121,9 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    reportButton:{
+        margin: theme.spacing(2)
     }
 }));
 
@@ -263,8 +266,8 @@ export default function AddCourse(props) {
                     complete: function (results) {
                         console.log('*************CSV***********')
                         console.log(results)
-                        var results = results.data.filter((item)=>{
-                            if(item[0] !== '' && item[1] !== ''){
+                        var results = results.data.filter((item) => {
+                            if (item[0] !== '' && item[1] !== '') {
                                 return {
                                     name: item[0],
                                     email: item[1]
@@ -464,17 +467,31 @@ export default function AddCourse(props) {
     return (
 
         <div>
-                <div>
-                <Typography component="div">
-                    <Box fontSize={18} style={{margin: 10}}>
-                    ADD COURSE
+            <div>
+                <Box display="flex" style={{ width: '100%' }} justifyContent="space-between">
+                    <Typography component="div">
+                        <Box fontSize={18} style={{ margin: 10 }}>
+                            ADD COURSE
                     </Box>
-                   
-                </Typography>
-                </div>
-            <div  maxWidth="sm" className={classes.root}>
+
+                    </Typography>
+
+                    {(invalidRecord.duplicateEmails.length > 0 || invalidRecord.invalidRecords.length > 0) &&
+                        <Button
+                            onClick={handleReportOpen}
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            className={classes.reportButton}
+                        >
+                            Open Report
+          </Button>
+                    }
+                </Box>
+            </div>
+            <div maxWidth="sm" className={classes.root}>
                 <CssBaseline />
-            
+
                 <form enctype="multipart/form-data" onSubmit={handleSubmit} className={classes.form} >
                     <div className={classes.paper}>
                         <TextField className={classes.textField}
@@ -524,36 +541,36 @@ export default function AddCourse(props) {
                                     (invalidRecord.duplicateEmails.length > 0 || invalidRecord.invalidRecords.length > 0) &&
                                     <Grid item xs={2} sm={2} md={2} lg={2}>
                                         <Box display="flex" m={0}>
-                                        <Tooltip title="Open Report" placement="bottom">
-                                            <IconButton
-                                                className={classes.iconButton}
-                                                onClick={handleReportOpen}
-                                                style={{marginLeft: 25}}
-                                            >
-                                                <InfoIcon fontSize="inherit" style={{ color: red[600] }} />
-                                            </IconButton>
-                                        </Tooltip>
+                                            <Tooltip title="Open Report" placement="bottom">
+                                                <IconButton
+                                                    className={classes.iconButton}
+                                                    onClick={handleReportOpen}
+                                                    style={{ marginLeft: 25 }}
+                                                >
+                                                    <InfoIcon fontSize="inherit" style={{ color: red[600] }} />
+                                                </IconButton>
+                                            </Tooltip>
                                         </Box>
                                     </Grid>
                                 }
 
                                 {
-                                     (invalidRecord.duplicateEmails.length == 0 && 
+                                    (invalidRecord.duplicateEmails.length == 0 &&
                                         invalidRecord.invalidRecords.length == 0) &&
-                                        students.validRecords.length > 0 &&
-                                     <Chip
-                                     label={'No invalid records'}
-                                     size="small"
-                                     className={classes.chip}
-                                     color="primary"
-                                     variant="outlined"
-                                 />
+                                    students.validRecords.length > 0 &&
+                                    <Chip
+                                        label={'No invalid records'}
+                                        size="small"
+                                        className={classes.chip}
+                                        color="primary"
+                                        variant="outlined"
+                                    />
                                 }
                                 {
                                     !wrongFileExtn && students.validRecords.length > 0 ?
                                         <Chip
-                                            label={'Valid Records: ' + students.validRecords.length+
-                                        '. '}
+                                            label={'Valid Records: ' + students.validRecords.length +
+                                                '. '}
                                             size="small"
                                             className={classes.chip}
                                             color="primary"
@@ -677,8 +694,8 @@ export default function AddCourse(props) {
                             value={state.endSurvey}
                         />
                     </div>
-              
-                <Box display="flex" justifyContent="flex-end">
+
+                    <Box display="flex" justifyContent="flex-end">
                         <div className={classes.wrapper}>
                             <Button
                                 variant="contained"
@@ -709,7 +726,7 @@ export default function AddCourse(props) {
 
 
                 </form>
-              
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -732,86 +749,6 @@ export default function AddCourse(props) {
                         </IconButton>,
                     ]}
                 ></Snackbar>
-                {/* { 
-            ((parseFloat(studentCount)-parseFloat(codewordCount))/parseFloat(codewordCount)) < 0.1 ?
-            <Dialog
-        open={alertOpen}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-    >
-        <DialogTitle id="alert-dialog-title">{"Warning"}</DialogTitle>
-        <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {'message'}
-        </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={handleAlertClose} color="primary" autoFocus>
-                OK
-            </Button>
-        </DialogActions>
-    </Dialog>
-            :
-            (codewordCount-studentCount) < 0?
-            <countAlert open={true} handleClose={handleClose('alertOpen')} message="Student count exceeds codeword count"></countAlert>:false
-            }
-          */}
-
-                {/* <Dialog
-           fullWidth={true} 
-           closeAfterTransition={true}
-        open={openReport}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
-        <Divider />
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Duplicate Records: {invalidRecord.duplicateEmails.length}
-            </DialogContentText>
-            <Grid container >
-           { invalidRecord.duplicateEmails.map((item)=>{
-                   return  <Typography component="div">
-                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
-                        {item}
-                    </Box>
-                </Typography>
-                })
-            }
-          </Grid>
-    
-          <DialogContentText id="alert-dialog-slide-description">
-            Invalid records: {invalidRecord.invalidRecords.length}
-            </DialogContentText>
-            <Grid container >
-            {
-                invalidRecord.invalidRecords.map((item)=>{
-                   return <Typography component="div">
-                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
-                        {item.email} - {item.name}
-                    </Box>
-                </Typography>
-                })
-            }
-            </Grid>
-           
-        </DialogContent>
-        <Divider />
-        <DialogActions>
-          <Button onClick={handleReportClose} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-
-
-
-
             </div>
 
 
