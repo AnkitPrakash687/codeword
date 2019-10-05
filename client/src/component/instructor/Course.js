@@ -38,6 +38,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import LockIcon from '@material-ui/icons/Lock';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import MyAppBar from '../MyAppBar';
+import history from '../../history'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -167,24 +169,25 @@ export default function Course(props) {
         columns: [
             { title: 'Name', field: 'name' },
             { title: 'Email', field: 'email' },
-            { title: 'Registered', field: 'registered', editable: 'never',
-            render: rowData => {
-                if(rowData && rowData.registered){
-                    return <Typography component="div">
-                        <Box color="green" fontWeight="bold">
-                            Yes
+            {
+                title: 'Registered', field: 'registered', editable: 'never',
+                render: rowData => {
+                    if (rowData && rowData.registered) {
+                        return <Typography component="div">
+                            <Box color="green" fontWeight="bold">
+                                Yes
                         </Box>
-                    </Typography>
-                }
-                else{
-                    return (<Typography component="div">
-                    <Box color="red" fontWeight="bold">
-                        No
+                        </Typography>
+                    }
+                    else {
+                        return (<Typography component="div">
+                            <Box color="red" fontWeight="bold">
+                                No
                     </Box>
-                </Typography>)
+                        </Typography>)
+                    }
                 }
-          }
-         }
+            }
 
         ],
         data: [],
@@ -203,65 +206,65 @@ export default function Course(props) {
         };
         var users = []
         API.get('dashboard/checkUsers', { headers: headers }).then(response => {
-            if(response.data.code == 200){
-                
+            if (response.data.code == 200) {
+
                 users = response.data.data
                 return true
             }
-        }).then(response =>{
-        API.get('dashboard/getcourse/' + state.id, { headers: headers }).then(response => {
-            console.log('👉 Returned data in :', response);
+        }).then(response => {
+            API.get('dashboard/getcourse/' + state.id, { headers: headers }).then(response => {
+                console.log('👉 Returned data in :', response);
 
-            if (response.status == 200) {
-                console.log(response.data)
-                var course = response.data.data
-                var studentList = course.students.map((student) => {
-                    
-                    return { name: student.name, email: student.email, registered: users.includes(student.email) }
-                })
+                if (response.status == 200) {
+                    console.log(response.data)
+                    var course = response.data.data
+                    var studentList = course.students.map((student) => {
 
-                setTable({
-                   ...table,
-                    data: studentList
-                })
-                var ack = course.students.reduce((acc, item) => {
-                    if (item.isRevealed) {
-                        return acc + 1
-                    } else {
-                        return acc + 0
+                        return { name: student.name, email: student.email, registered: users.includes(student.email) }
+                    })
+
+                    setTable({
+                        ...table,
+                        data: studentList
+                    })
+                    var ack = course.students.reduce((acc, item) => {
+                        if (item.isRevealed) {
+                            return acc + 1
+                        } else {
+                            return acc + 0
+                        }
+                    }, 0)
+                    setState({
+                        id: course._id,
+                        courseName: course.courseNameKey,
+                        startDate: (course.Startdate.toString()).substring(0, 10),
+                        endDate: (course.Enddate.toString()).substring(0, 10),
+                        startSurvey: course.PreSurveyURL == '' ? 'Unpublished' : course.PreSurveyURL,
+                        endSurvey: course.PostSurveyURL == '' ? 'Unpublished' : course.PostSurveyURL,
+                        isAssigned: course.isAssigned,
+                        codewordCount: (course.codewordSet.codewords && course.codewordSet.codewords.length > 0) ?
+                            course.codewordSet.codewords.length : 0,
+                        codewordset: (!course.codewordSet.codewordSetName || course.codewordSet.codewordSetName == '')
+                            ? 'Not Assigned' : course.codewordSet.codewordSetName,
+                        ack: ack + '/' + course.students.length
+                    })
+
+
+                    if (course.isAssigned) {
+                        setDisableEdit(true)
                     }
-                }, 0)
-                setState({
-                    id: course._id,
-                    courseName: course.courseNameKey,
-                    startDate: (course.Startdate.toString()).substring(0, 10),
-                    endDate: (course.Enddate.toString()).substring(0, 10),
-                    startSurvey: course.PreSurveyURL == '' ? 'Unpublished' : course.PreSurveyURL,
-                    endSurvey: course.PostSurveyURL == '' ? 'Unpublished' : course.PostSurveyURL,
-                    isAssigned: course.isAssigned,
-                    codewordCount: (course.codewordSet.codewords && course.codewordSet.codewords.length > 0 ) ? 
-                                    course.codewordSet.codewords.length : 0,
-                    codewordset: (!course.codewordSet.codewordSetName || course.codewordSet.codewordSetName == '')
-                        ? 'Not Assigned' : course.codewordSet.codewordSetName,
-                    ack: ack + '/' + course.students.length
-                })
 
-                
-                if (course.isAssigned) {
-                    setDisableEdit(true)
+                    setLoading(false)
                 }
-
-                setLoading(false)
-            }
-        })
-    })  .catch(error => {
-                console.log(error)
             })
+        }).catch(error => {
+            console.log(error)
+        })
     }, [render])
 
 
     // useEffect(()=>{
-    
+
     //     const headers = {
     //         'token': sessionStorage.getItem('token')
     //     };
@@ -280,6 +283,7 @@ export default function Course(props) {
 
     }
     if (redirect) {
+        history.push('/', {value: 0})
         return <Redirect to="/"></Redirect>
     }
 
@@ -296,7 +300,7 @@ export default function Course(props) {
     }
     const addCourseRow = (resolve, newData) => {
 
-       
+
         var data = {
             id: state.id,
             email: newData.email,
@@ -327,8 +331,8 @@ export default function Course(props) {
                 resolve()
             }
         })
-    
-}
+
+    }
 
     const updateCourseRow = (resolve, newData, oldData) => {
         var data = {
@@ -362,7 +366,7 @@ export default function Course(props) {
                 resolve()
             }
         })
-    
+
     }
 
     const deleteCourseRow = (resolve, oldData) => {
@@ -383,7 +387,7 @@ export default function Course(props) {
                 const data = [...table.data];
                 data.splice(data.indexOf(oldData), 1);
                 setTable({ ...table, data });
-               // setRender(!render)
+                // setRender(!render)
                 resolve();
             } else {
                 setSnack({
@@ -409,17 +413,17 @@ export default function Course(props) {
     }
     const handleAssign = value => {
         console.log(state.codewordset)
-        
-      
-       if (state.codewordset == 'Not Assigned' || state.codewordset == '' || !state.codewordset) {
+
+
+        if (state.codewordset == 'Not Assigned' || state.codewordset == '' || !state.codewordset) {
             setCannotAssignError(true)
-        } else if(state.codewordCount < table.data.length){
+        } else if (state.codewordCount < table.data.length) {
             setSnack({
                 message: 'Select larger codeword set',
                 open: true
             })
-           
-        } 
+
+        }
         else {
             var studentEmails = table.data.map((item) => {
                 return item.email
@@ -501,10 +505,14 @@ export default function Course(props) {
         render: PropTypes.bool.isRequired,
     };
 
+    const handleBackButton = () => {
+        setRedirect(true)
+    }
+
     return (
         <div>
-         
-            <MyAppBar/>
+
+            <MyAppBar />
             {loading ? <Grid container
                 spacing={0}
                 alignItems="center"
@@ -521,28 +529,42 @@ export default function Course(props) {
                             <Grid container >
                                 <Grid item sm={6}>
                                     <Grid container direction="column" >
-                                        <Grid item>
-                                            <Typography component="div">
-                                                <Box fontSize="h6.fontSize" fontWeight="fontWeightBold" m={1}>
-                                                    {state.courseName}
+                                        <Box display="flex" flexDirection="row" justifyContent="flex-start">
+                                            <Box p={1}>
+                                                <Tooltip title="Back to dasboard">
+                                                    <IconButton
+                                                        className={classes.backButton}
+                                                        onClick={handleBackButton}
+
+                                                    >
+                                                        <ArrowBackIosIcon fontSize="large" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Box>
+                                            <Box p={2} display="flex" flexDirection="column" justifyContent="flex-start">
+                                                <Box >
+                                                    <Typography component="div">
+                                                        <Box fontSize="h6.fontSize" fontWeight="fontWeightBold">
+                                                            {state.courseName}
+                                                        </Box>
+                                                    </Typography>
                                                 </Box>
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid container>
-                                                <Grid item>
-                                                    <Typography variant="caption" className={classes.title}>
+                                                <Box display="flex" flexDirection="row" justifyContent="space-between">
+
+                                                    <Typography variant="caption" style={{ marginRight: 15 }}>
                                                         Start Date: {state.startDate}
                                                     </Typography>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant="caption" className={classes.title}>
+
+                                                    <Typography variant="caption">
                                                         End date: {state.endDate}
                                                     </Typography>
-                                                </Grid>
 
-                                            </Grid>
-                                        </Grid>
+                                                </Box>
+                                            </Box>
+
+                                        </Box>
+
+
                                     </Grid>
                                 </Grid>
                                 <Grid item sm={3}>
@@ -678,20 +700,21 @@ export default function Course(props) {
                                     exportButton: true,
                                     exportAllData: true
                                 }}
-                                editable={{ onRowAdd: !disableEdit ? newData =>
+                                editable={{
+                                    onRowAdd: !disableEdit ? newData =>
                                         new Promise(resolve => {
                                             addCourseRow(resolve, newData)
 
-                                        }):null,
+                                        }) : null,
                                     onRowUpdate: !disableEdit ? (newData, oldData) =>
                                         new Promise(resolve => {
                                             updateCourseRow(resolve, newData, oldData)
 
-                                        }):null,
+                                        }) : null,
                                     onRowDelete: !disableEdit ? oldData =>
                                         new Promise(resolve => {
                                             deleteCourseRow(resolve, oldData)
-                                        }):null,
+                                        }) : null,
 
                                 }}
                             />

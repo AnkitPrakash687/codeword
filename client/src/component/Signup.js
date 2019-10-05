@@ -281,7 +281,7 @@ export default function Signup() {
           horizontal: 'left',
         }}
         open={success.status}
-        autoHideDuration={6000}
+        autoHideDuration={1000}
         variant="success"
         onClose={handleClose}
         message={success.message}

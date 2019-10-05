@@ -40,7 +40,8 @@ import LockIcon from '@material-ui/icons/Lock';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import EditCodewordSet from './EditCodewordSet';
 import MyAppBar from '../MyAppBar';
-
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import history from '../../history'
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -117,12 +118,12 @@ const useStyles = makeStyles(theme => ({
         background: lightGreen[100],
 
     },
-    iconButton:{
+    iconButton: {
         background: grey[300],
         margin: theme.spacing(1),
         color: grey[900]
     },
-    iconButtonDelete:{
+    iconButtonDelete: {
         background: grey[300],
         margin: theme.spacing(1),
         color: red[900]
@@ -184,6 +185,7 @@ export default function CodewordSet(props) {
     const [openReport, setOpenReport] = useState(false)
     const [deleteConfirmation, setDeleteConfirmation] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [redirect, setRedirect] = useState(false)
     useEffect(() => {
         setLoading(true)
         const headers = {
@@ -225,13 +227,14 @@ export default function CodewordSet(props) {
     }, [render])
 
 
-    const [redirect, setRedirect] = useState(false);
+   
     const handleCardClick = () => {
         console.log('click working')
         setRedirect(true)
 
     }
     if (redirect) {
+        history.push('/', {value: 1})
         return <Redirect to="/"></Redirect>
     }
 
@@ -486,55 +489,70 @@ export default function CodewordSet(props) {
         setOpenReport(false)
     }
 
-    const handleDeleteConfirmation = () =>{
+    const handleDeleteConfirmation = () => {
         setDeleteConfirmation(true)
     }
-    const handleDeleteClose = () =>{
+    const handleDeleteClose = () => {
         setDeleteConfirmation(false)
+    }
+
+    const handleBackButton = () =>{
+       
+        setRedirect(true)
+
     }
 
     return (
         <div>
             <MyAppBar></MyAppBar>
-        <div>
-            
-            {loading?<Grid container
-            spacing={0}
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: '100vh' }}>
-            <CircularProgress className={classes.progress} />
-        </Grid>
-        :
-            <Container component="main" maxWidth='lg'>
-                <CssBaseline />
-                <div className={classes.root}>
+            <div>
 
-                    <Box className={classes.header} >
-                        <Grid container >
-                            <Grid item sm={6}>
-                                <Grid container direction="column" >
-                                    <Grid item>
-                                        <Typography component="div">
-                                            <Box fontSize="h6.fontSize" fontWeight="fontWeightBold" m={1}>
-                                                {state.codewordSetName}
+                {loading ? <Grid container
+                    spacing={0}
+                    alignItems="center"
+                    justify="center"
+                    style={{ minHeight: '100vh' }}>
+                    <CircularProgress className={classes.progress} />
+                </Grid>
+                    :
+                    <Container component="main" maxWidth='lg'>
+                        <CssBaseline />
+                        <div className={classes.root}>
+
+                            <Box className={classes.header} >   
+                                <Grid container >
+                                    <Grid item sm={6}>
+
+                                        <Box display="flex" flexDirection="row" justifyContent="flex-start">
+                                            <Box p={1}>
+                                                <Tooltip title="Back to dasboard">
+                                                    <IconButton
+                                                        className={classes.backButton}
+                                                        onClick={handleBackButton}
+
+                                                    >
+                                                        <ArrowBackIosIcon fontSize="large" />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </Box>
-                                        </Typography>
+                                            <Box p={2}>
+                                                <Typography component="div">
+                                                    <Box fontSize="h6.fontSize" fontWeight="fontWeightBold" m={1}>
+                                                        {state.codewordSetName}
+                                                    </Box>
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+
+
+
                                     </Grid>
-                                    <Grid item>
-                                        <Grid container>
+                                    <Grid item sm={1}>
 
-
-                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item sm={1}>
-
-                            </Grid>
-                            <Grid item sm={5}>
-                            <Box display="flex" flexDirection="row" justifyContent="flex-end">
-                                {/* <Button
+                                    <Grid item sm={5}>
+                                        <Box display="flex" flexDirection="row" justifyContent="flex-end">
+                                            {/* <Button
                                     variant="contained"
                                     color="primary"
                                     size="medium"
@@ -545,26 +563,26 @@ export default function CodewordSet(props) {
 
                                     Report
                                 </Button> */}
-                                <Tooltip title="Report">
-                                <IconButton 
-                                    className={classes.iconButton} 
-                                    onClick={handleReport}
-                                    disabled={disableEdit}
-                                    >
-                                    <ListAltIcon fontSize="large"/>
-                                </IconButton>
-                                </Tooltip>
+                                            <Tooltip title="Report">
+                                                <IconButton
+                                                    className={classes.iconButton}
+                                                    onClick={handleReport}
+                                                    disabled={disableEdit}
+                                                >
+                                                    <ListAltIcon fontSize="large" />
+                                                </IconButton>
+                                            </Tooltip>
 
-                                <Tooltip title="Finalize codeword set">
-                                <IconButton 
-                                    className={classes.iconButton} 
-                                    onClick={handleFinalize}
-                                    disabled={disableEdit}
-                                    >
-                                    <LockIcon fontSize="large"/>
-                                </IconButton>
-                                </Tooltip>
-                                {/* <Button
+                                            <Tooltip title="Finalize codeword set">
+                                                <IconButton
+                                                    className={classes.iconButton}
+                                                    onClick={handleFinalize}
+                                                    disabled={disableEdit}
+                                                >
+                                                    <LockIcon fontSize="large" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            {/* <Button
                                     variant="contained"
                                     color="primary"
                                     size="medium"
@@ -575,16 +593,16 @@ export default function CodewordSet(props) {
 
                                     Finalize
                                 </Button> */}
-                                <Tooltip title="Edit codeword set">
-                                <IconButton 
-                                    className={classes.iconButton} 
-                                    onClick={handleClickOpen}
-                                    disabled={disableEdit}
-                                    >
-                                    <EditIcon fontSize="large"/>
-                                </IconButton>
-                                </Tooltip>
-                                {/* <Button
+                                            <Tooltip title="Edit codeword set">
+                                                <IconButton
+                                                    className={classes.iconButton}
+                                                    onClick={handleClickOpen}
+                                                    disabled={disableEdit}
+                                                >
+                                                    <EditIcon fontSize="large" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            {/* <Button
                                     type="submit"
                                     variant="contained"
                                     color="primary"
@@ -595,17 +613,17 @@ export default function CodewordSet(props) {
                                 >
                                     edit
                                 </Button> */}
-                                <SimpleDialog data={state} open={open} onClose={handleClickClose} render={render} />
-                                <Tooltip title="Delete codeword set">
-                                <IconButton 
-                                    className={classes.iconButtonDelete} 
-                                    onClick={handleDeleteConfirmation}
-                                    >
-                                    <DeleteForeverIcon fontSize="large"/>
-                                </IconButton>
-                                </Tooltip>
-                                
-                                {/* <Button
+                                            <SimpleDialog data={state} open={open} onClose={handleClickClose} render={render} />
+                                            <Tooltip title="Delete codeword set">
+                                                <IconButton
+                                                    className={classes.iconButtonDelete}
+                                                    onClick={handleDeleteConfirmation}
+                                                >
+                                                    <DeleteForeverIcon fontSize="large" />
+                                                </IconButton>
+                                            </Tooltip>
+
+                                            {/* <Button
                                     type="submit"
                                     variant="contained"
                                     color="primary"
@@ -614,134 +632,134 @@ export default function CodewordSet(props) {
                                     onClick={handleDeleteConfirmation} >
                                     delete
                                 </Button> */}
-                                </Box>
-                            </Grid>
-                        </Grid>
-                    </Box>
-
-                    <div border={1} className={classes.course}>
-                        <Grid container >
-                            <Grid item sm={6} md={6} lg={6}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12} >
-                                        <Typography component="div">
-                                            <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
-                                                Number of codewords: {state.count}
-                                            </Box>
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={12} >
-                                        <Typography component="div">
-                                            <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
-                                                {state.isPublished}
-                                            </Box>
-                                        </Typography>
+                                        </Box>
                                     </Grid>
                                 </Grid>
-                            </Grid>
+                            </Box>
 
-                        </Grid>
+                            <div border={1} className={classes.course}>
+                                <Grid container >
+                                    <Grid item sm={6} md={6} lg={6}>
+                                        <Grid container direction="column">
+                                            <Grid item xs={12} >
+                                                <Typography component="div">
+                                                    <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
+                                                        Number of codewords: {state.count}
+                                                    </Box>
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} >
+                                                <Typography component="div">
+                                                    <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
+                                                        {state.isPublished}
+                                                    </Box>
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
 
-                    </div>
-                    <Grid container>
-                        <Grid item sm={3}></Grid>
-                        <Grid item >
-                            <div className={classes.table}>
-                                <MaterialTable
-                                    icons={tableIcons}
-                                    title="Codewords"
-                                    columns={table.columns}
-                                    data={table.data}
-                                    options={{
-                                        actionsColumnIndex: -1,
-                                        headerStyle: {
-                                            fontSize: 15
-                                        },
-                                        emptyRowsWhenPaging: false,
-                                        exportButton: true,
-                                        exportAllData: true
-                                    }}
-                                    editable={{
-                                        onRowAdd: newData =>
-                                            new Promise(resolve => {
-                                                addCodewordRow(resolve, newData)
+                                </Grid>
 
-                                            }),
-                                        onRowUpdate: (newData, oldData) =>
-                                            new Promise(resolve => {
-                                                updateCourseRow(resolve, newData, oldData)
-
-                                            }),
-                                        onRowDelete: oldData =>
-                                            new Promise(resolve => {
-                                                deleteCodewordRow(resolve, oldData)
-                                            }),
-                                    }}
-
-                                />
                             </div>
-                        </Grid>
-                    </Grid>
-                    <Snackbar
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                        }}
-                        open={snack.open}
-                        autoHideDuration={2000}
-                        variant="success"
-                        onClose={handleMessageClose}
-                        message={snack.message}
-                        action={[
-                            <IconButton
-                                key="close"
-                                aria-label="Close"
-                                color="inherit"
-                                className={classes.close}
-                                onClick={handleMessageClose}
-                            >
-                                <CloseIcon />
-                            </IconButton>,
-                        ]}
-                    ></Snackbar>
-                </div>
+                            <Grid container>
+                                <Grid item sm={3}></Grid>
+                                <Grid item >
+                                    <div className={classes.table}>
+                                        <MaterialTable
+                                            icons={tableIcons}
+                                            title="Codewords"
+                                            columns={table.columns}
+                                            data={table.data}
+                                            options={{
+                                                actionsColumnIndex: -1,
+                                                headerStyle: {
+                                                    fontSize: 15
+                                                },
+                                                emptyRowsWhenPaging: false,
+                                                exportButton: true,
+                                                exportAllData: true
+                                            }}
+                                            editable={{
+                                                onRowAdd: newData =>
+                                                    new Promise(resolve => {
+                                                        addCodewordRow(resolve, newData)
 
-                <Dialog fullScreen={true} disableBackdropClick={true} onClose={handleReportClose} aria-labelledby="simple-dialog-title" open={openReport}>
-                    <div className={classes.report}>
-                        <Box p={2} display="flex" flexDirection="row" justifyContent="center">
-                            <Typography variant="h6">
-                                REPORT
+                                                    }),
+                                                onRowUpdate: (newData, oldData) =>
+                                                    new Promise(resolve => {
+                                                        updateCourseRow(resolve, newData, oldData)
+
+                                                    }),
+                                                onRowDelete: oldData =>
+                                                    new Promise(resolve => {
+                                                        deleteCodewordRow(resolve, oldData)
+                                                    }),
+                                            }}
+
+                                        />
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <Snackbar
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                open={snack.open}
+                                autoHideDuration={2000}
+                                variant="success"
+                                onClose={handleMessageClose}
+                                message={snack.message}
+                                action={[
+                                    <IconButton
+                                        key="close"
+                                        aria-label="Close"
+                                        color="inherit"
+                                        className={classes.close}
+                                        onClick={handleMessageClose}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>,
+                                ]}
+                            ></Snackbar>
+                        </div>
+
+                        <Dialog fullScreen={true} disableBackdropClick={true} onClose={handleReportClose} aria-labelledby="simple-dialog-title" open={openReport}>
+                            <div className={classes.report}>
+                                <Box p={2} display="flex" flexDirection="row" justifyContent="center">
+                                    <Typography variant="h6">
+                                        REPORT
                      </Typography>
 
-                        </Box>
-                        <Report id={props.match.params.id} handleClose={handleReportClose}></Report>
-                    </div>
-                </Dialog>
+                                </Box>
+                                <Report id={props.match.params.id} handleClose={handleReportClose}></Report>
+                            </div>
+                        </Dialog>
 
-                <Dialog
-                    open={deleteConfirmation}
-                    onClose={handleDeleteClose}
-                    aria-labelledby="alert-dialog-slide-title"
-                    aria-describedby="alert-dialog-slide-description"
-                >
-                    <DialogTitle id="alert-dialog-slide-title">{"Warning"}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-slide-description">
-                        Are you sure you want to delete this codeword set?
+                        <Dialog
+                            open={deleteConfirmation}
+                            onClose={handleDeleteClose}
+                            aria-labelledby="alert-dialog-slide-title"
+                            aria-describedby="alert-dialog-slide-description"
+                        >
+                            <DialogTitle id="alert-dialog-slide-title">{"Warning"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    Are you sure you want to delete this codeword set?
                         </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleDeleteClose} color="secondary">
-                            NO
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleDeleteClose} color="secondary">
+                                    NO
                          </Button>
-                        <Button onClick={handleDeleteCodewordset} color="primary">
-                            YES
+                                <Button onClick={handleDeleteCodewordset} color="primary">
+                                    YES
                         </Button>
-                    </DialogActions>
-                </Dialog>
-            </Container>
-            }
-        </div>
+                            </DialogActions>
+                        </Dialog>
+                    </Container>
+                }
+            </div>
         </div>
     );
 

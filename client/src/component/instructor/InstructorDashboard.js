@@ -22,6 +22,8 @@ import API from '../../utils/API'
 import ContainedTabs from '../mui-treasury/ContainedTabs'
 import MyAppBar from '../MyAppBar'
 import { light } from '@material-ui/core/styles/createPalette';
+import history from '../../history'
+
 const useStyles = makeStyles(theme => ({
     root: {
         margin: 30,
@@ -60,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function InstructorDashboard() {
+export default function InstructorDashboard(props) {
 
     const LightTooltip = withStyles(theme => ({
         tooltip: {
@@ -245,6 +247,15 @@ export default function InstructorDashboard() {
         
     }, [renderCodewordSet])
 
+    useEffect(()=>{
+        if(history.location.state){
+        console.log('************history***********')
+        console.log(history.location.state.value)
+        setValue(history.location.state.value)
+        }
+        
+    },[])
+
     const listCourses = courseData.map((course) => {
         return <CourseCard id={course.id}
             courseName={course.courseName}
@@ -316,7 +327,7 @@ export default function InstructorDashboard() {
                 <Grid container spacing={3}>
 
                     {
-                        listCourses.length > 0 &&
+                         !loading && listCourses.length > 0 &&
                         listCourses
                     }
 
@@ -349,7 +360,7 @@ export default function InstructorDashboard() {
                <Grid container spacing={3}>
 
                     {
-                        listCodewordSet.length > 0 &&
+                        !loading && listCodewordSet.length > 0 &&
                         listCodewordSet
                     }
 
