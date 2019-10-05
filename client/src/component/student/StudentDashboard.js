@@ -6,9 +6,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import {Redirect} from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, grey, red } from '@material-ui/core/colors';
-import { Paper, Grid, CircularProgress, Container, CssBaseline, Snackbar, IconButton } from '@material-ui/core';
+import { Paper, Tooltip, Grid, CircularProgress, Container, CssBaseline, Snackbar, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -16,6 +17,8 @@ import Button from '@material-ui/core/Button'
 import API from '../../utils/API'
 import Card from './CourseCard'
 import MyAppBar from '../MyAppBar';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import history from '../../history'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -62,15 +65,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function StudentDashboard() {
 
-   
-
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(0)
+    const [redirect, setRedirect] = useState(0)
+    const view = sessionStorage.getItem('view')
     const [snack, setSnack] = useState({
         status: false,
         message: ''
     })
     const [loading, setLoading] = useState(false)
-    const [instructorRequest,setInstructorRequest] = useState();
+    const [instructorRequest,setInstructorRequest] = useState()
     const [isInstructor, setIsInstructor] = useState(false)
     const classes = useStyles();
    
@@ -177,6 +180,15 @@ export default function StudentDashboard() {
         ></Card>
     })
 
+    const handleBackButton = () =>{
+         setRedirect(true)
+    }
+
+    if (redirect) {
+        history.push('/', {value: 0})
+        return <Redirect to="/"></Redirect>
+    }
+
     return (
         <div>
             <MyAppBar disableStudentView={true}/>
@@ -192,6 +204,19 @@ export default function StudentDashboard() {
             <Container component="main" maxWidth='lg'>
                     <CssBaseline />
                     <Paper className={classes.menuBar}>
+                        { view == 'instructor' &&
+                        <Box p={1}>
+                            <Tooltip title="Back to dasboard" placement="right">
+                                <IconButton
+                                    className={classes.backButton}
+                                    onClick={handleBackButton}
+
+                                >
+                                    <ArrowBackIosIcon fontSize="inherit" />
+                                </IconButton>
+                            </Tooltip>
+                            </Box>
+                        }
                         <Grid container >
                            <Grid item sm={12}> 
                         <Box display="flex" justifyContent="flex-end">

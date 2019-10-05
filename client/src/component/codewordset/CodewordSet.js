@@ -233,10 +233,7 @@ export default function CodewordSet(props) {
         setRedirect(true)
 
     }
-    if (redirect) {
-        history.push('/', {value: 1})
-        return <Redirect to="/"></Redirect>
-    }
+
 
     const handleMessageClose = () => {
 
@@ -502,6 +499,11 @@ export default function CodewordSet(props) {
 
     }
 
+    if (redirect) {
+        history.push('/', {value: 1})
+        return <Redirect to="/"></Redirect>
+    }
+    
     return (
         <div>
             <MyAppBar></MyAppBar>

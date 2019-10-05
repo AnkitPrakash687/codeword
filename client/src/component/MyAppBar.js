@@ -51,7 +51,7 @@ export default function MyAppBar(props) {
   const [redirect, setRedirect] = useState(false)
   const handleLogout = () =>{
  
-    sessionStorage.removeItem('token')
+    sessionStorage.clear()
     setLogout(true)
   }
 
@@ -88,6 +88,7 @@ export default function MyAppBar(props) {
     if(logout){
       return <Redirect to="/"></Redirect>
     }else if(studentView){
+      sessionStorage.setItem('view', 'instructor')
       history.push('/studentview')
       return <Redirect to="/studentview"></Redirect>
     }else if(redirect){

@@ -252,6 +252,8 @@ export default function InstructorDashboard(props) {
         console.log('************history***********')
         console.log(history.location.state.value)
         setValue(history.location.state.value)
+        }else{
+            setValue(0)
         }
         
     },[])
