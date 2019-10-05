@@ -114,9 +114,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     report: {
-        margin: theme.spacing(5),
-        background: lightGreen[100],
-
+        margin: theme.spacing(2,0,0,0),
     },
     iconButton: {
         background: grey[300],
@@ -484,6 +482,7 @@ export default function CodewordSet(props) {
 
     const handleReportClose = () => {
         setOpenReport(false)
+        setRender(!render)
     }
 
     const handleDeleteConfirmation = () => {
@@ -503,7 +502,7 @@ export default function CodewordSet(props) {
         history.push('/', {value: 1})
         return <Redirect to="/"></Redirect>
     }
-    
+
     return (
         <div>
             <MyAppBar></MyAppBar>
@@ -682,20 +681,20 @@ export default function CodewordSet(props) {
                                                 exportAllData: true
                                             }}
                                             editable={{
-                                                onRowAdd: newData =>
+                                                onRowAdd: !disableEdit ? newData =>
                                                     new Promise(resolve => {
                                                         addCodewordRow(resolve, newData)
 
-                                                    }),
-                                                onRowUpdate: (newData, oldData) =>
+                                                    }):null,
+                                                onRowUpdate: !disableEdit ? (newData, oldData) =>
                                                     new Promise(resolve => {
                                                         updateCourseRow(resolve, newData, oldData)
 
-                                                    }),
-                                                onRowDelete: oldData =>
+                                                    }):null,
+                                                onRowDelete: !disableEdit ? oldData =>
                                                     new Promise(resolve => {
                                                         deleteCodewordRow(resolve, oldData)
-                                                    }),
+                                                    }):null,
                                             }}
 
                                         />
@@ -726,14 +725,14 @@ export default function CodewordSet(props) {
                             ></Snackbar>
                         </div>
 
-                        <Dialog fullScreen={true} disableBackdropClick={true} onClose={handleReportClose} aria-labelledby="simple-dialog-title" open={openReport}>
+                        <Dialog fullScreen={true} disableBackdropClick={true} onClose={handleReportClose} aria-labelledby="simple-dialog-title" open={openReport} >
                             <div className={classes.report}>
-                                <Box p={2} display="flex" flexDirection="row" justifyContent="center">
+                                {/* <Box p={2} display="flex" flexDirection="row" justifyContent="center">
                                     <Typography variant="h6">
                                         REPORT
                      </Typography>
 
-                                </Box>
+                                </Box> */}
                                 <Report id={props.match.params.id} handleClose={handleReportClose}></Report>
                             </div>
                         </Dialog>

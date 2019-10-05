@@ -17,17 +17,24 @@ const useStyles = makeStyles(theme => ({
         minHeight: 500
 
     },
+    report: {
+        background: green[600],
+    },
     paper: {
         borderRadius: 5,
-        background: lightGreen[300],
+        background: lightGreen[200],
         padding: theme.spacing(2),
-        marginBottom: theme.spacing(4)
     },
 
     heading: {
         borderRadius: 5,
-        background: green[600],
-        
+        margin: theme.spacing(2, 0, 0, 0),
+        background: green[300],
+
+    },
+    content: {
+        padding: theme.spacing(5),
+        background: grey[200]
     },
     progress: {
         margin: theme.spacing(2),
@@ -35,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     formControl: {
         minWidth: 250
     },
-    cancelButton:{
+    cancelButton: {
         margin: theme.spacing(1),
         color: red[900]
     }
@@ -76,7 +83,7 @@ export default function Report(props) {
         })
     }, [render])
 
-    const handleClose = () =>{
+    const handleClose = () => {
         props.handleClose()
     }
     const handleRender = () => {
@@ -115,93 +122,136 @@ export default function Report(props) {
                             justify="center"
                             style={{ minHeight: '100vh' }}>
                             <CircularProgress className={classes.progress} />
-                        </Grid>:false
+                        </Grid> : false
                 }
-                        
-                        <div>
-                            <Paper>
-                        
-                                <Box display="flex"  flexDirection="row" className={classes.heading}>
-                                    <Box p={1}  width="100%" justifyContent="flex-start">
+
+                <div>
+                    <Paper className={classes.report}>
+                        <Grid container>
+                            <Grid item sm={6}>
+
+                                <Box display="flex" p={2}>
                                     <Typography component="div">
+
                                         <Box fontSize="h6.fontSize" m={1}>
-                                            Similar Codewords
+                                            Report
                                         </Box>
                                     </Typography>
-                                  </Box>
-                                    <Box   justifyContent="flex-end">
-                                    
-                                      
-                                            <IconButton
-                                                color="primary"
-                                                className={classes.cancelButton}
-                                                aria-label="cancel"
-                                                component="span"
-                                                onClick = {handleClose}
-                                            >
-                                                <CancelRoundedIcon fontSize="large"/>
-                                            </IconButton>
-                                    
-                            </Box>
-                           
-                              </Box>
+                                </Box>
+                            </Grid>
+                            <Grid item sm={6}>
+                                <Box display="flex" justifyContent="flex-end">
+
+
+                                    <IconButton
+                                        color="primary"
+                                        className={classes.cancelButton}
+                                        aria-label="cancel"
+                                        component="span"
+                                        onClick={handleClose}
+                                    >
+                                        <CancelRoundedIcon fontSize="large" />
+                                    </IconButton>
+
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Paper>
-                                <Paper className={classes.paper}>
 
-                                    <FormControl margin='dense' variant="outlined" className={classes.formControl}>
-                                        <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
-                                            Select Level of similarity
-                        </InputLabel>
-                                        <Select
-                                            value={level}
-                                            onChange={handleChange}
-                                            input={<OutlinedInput labelWidth={labelWidth} name="level" id="outlined-age-simple" />}
-                                        >
-                                            <MenuItem value="">
-                                                <em>None</em>
-                                            </MenuItem>
+                    <Paper className={classes.content}>
 
-                                            <MenuItem value={0}>Level 1 - Lowest</MenuItem>
-                                            <MenuItem value={1}>Level 2 - Low</MenuItem>
-                                            <MenuItem value={2}>Level 3 - Medium</MenuItem>
-                                            <MenuItem value={3}>Level 3 - High</MenuItem>
-                                            <MenuItem value={4}>Level 4 - Highest</MenuItem>
-
-                                        </Select>
-                                    </FormControl>
-
-                                    <Grid container >
-
-                                        {
-                                            listCodeword
-                                        }
-
-                                    </Grid>
-                                </Paper>
-
-                                <Paper>
-                                    <Box className={classes.heading}>
-                                        <Typography component="div">
-                                            <Box fontSize="h6.fontSize" m={1}>
-                                                Anagrams
+                        <Box display="flex" flexDirection="row" className={classes.heading}>
+                            <Box p={1} width="100%" justifyContent="flex-start">
+                                <Typography component="div">
+                                    <Box fontSize="h6.fontSize" m={1}>
+                                        Similar Codewords
+                                        </Box>
+                                </Typography>
                             </Box>
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                                <Paper className={classes.paper}>
 
-                                    <Grid container >
 
-                                        {
-                                            listAnagrams
-                                        }
+                        </Box>
 
+                        <Paper className={classes.paper}>
+                        
+                            <FormControl margin='dense' variant="outlined" className={classes.formControl}>
+                                <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
+                                    Select Level of similarity
+                        </InputLabel>
+                                <Select
+                                    value={level}
+                                    onChange={handleChange}
+                                    input={<OutlinedInput labelWidth={labelWidth} name="level" id="outlined-age-simple" />}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+
+                                    <MenuItem value={0}>Level 1 - Lowest</MenuItem>
+                                    <MenuItem value={1}>Level 2 - Low</MenuItem>
+                                    <MenuItem value={2}>Level 3 - Medium</MenuItem>
+                                    <MenuItem value={3}>Level 3 - High</MenuItem>
+                                    <MenuItem value={4}>Level 4 - Highest</MenuItem>
+
+                                </Select>
+                            </FormControl>
+                        
+                            <Grid container >
+
+                                {listCodeword.length > 0 ?
+                                    listCodeword
+                                    :
+                                    <Grid container>
+                                        <Box p={1} width="100%" display="flex" justifyContent="center">
+                                            <Typography component="div">
+                                                <Box fontSize="h6.fontSize" m={1}>
+                                                    No similar codewords
+                                        </Box>
+                                            </Typography>
+                                        </Box>
                                     </Grid>
-                                </Paper>
+                                }
+
+                            </Grid>
+                        </Paper>
+
+                        <Paper>
+                            <Box display="flex" flexDirection="row" className={classes.heading}>
+                                <Box p={1} width="100%" justifyContent="flex-start">
+                                    <Typography component="div">
+                                        <Box fontSize="h6.fontSize" m={1}>
+                                            Anagrams
+                                        </Box>
+                                    </Typography>
+                                </Box>
+
+
+                            </Box>
+                        </Paper>
+                        <Paper className={classes.paper}>
+
+                            <Grid container >
+                                {listAnagrams.length > 0 ?
+                                    listAnagrams
+                                    :
+                                    <Grid container>
+                                        <Box p={1} width="100%" display="flex" justifyContent="center">
+                                            <Typography component="div">
+                                                <Box fontSize="h6.fontSize" m={1}>
+                                                    No Anagrams
+                                            </Box>
+                                            </Typography>
+                                        </Box>
+                                    </Grid>
+                                }
+
+                            </Grid>
+                        </Paper>
+                    </Paper>
                 </div>
-                            
+
             </Container>
         </div>
-            )
-        }
-        
+    )
+}
+

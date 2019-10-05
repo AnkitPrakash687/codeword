@@ -49,7 +49,7 @@ export default function ReportCard(props) {
         API.post('dashboard/deletecodeword', data, { headers: headers }).then(response => {
             console.log(response.data)
             if (response.data.code == 200) {
-                props.render()
+               
                 setChipData(chips => chips.filter(chip => chip.key !== chipToDelete.key));
             } else {
 
