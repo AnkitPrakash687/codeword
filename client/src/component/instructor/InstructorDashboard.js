@@ -8,7 +8,7 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
-import { Paper, Grid, Fab, Tooltip } from '@material-ui/core';
+import { Paper, Grid, Fab, Tooltip, Divider } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CourseCard from './CourseCard'
 import CodewordsetCard from '../codewordset/CodewordsetCard'
@@ -110,37 +110,19 @@ export default function InstructorDashboard(props) {
     const [render, setRender] = useState(false);
     const [renderCodewordSet, setRenderCodewordSet] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [report, setReport] = useState(false)
+    const handleReportOpen = () =>{
+        setReport(true)
+    }
+
+    const handleReportClose = () =>{
+        setReport(false)
+    }
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
 
-    function SimpleDialog(props) {
-
-        const { onClose, open, render } = props;
-
-        const handleClose = (error) => {
-            console.log('render   ' + render)
-            setRender(!render)
-            onClose();
-        }
-        
-        return (
-
-            <Dialog fullWidth={true} disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
-                 <div>
-                 <DialogTitle id="simple-dialog-title">Add Course</DialogTitle>
-                <AddCourse onClose={handleClose}></AddCourse>
-                </div>         
-            </Dialog>
-        );
-    }
-
-    SimpleDialog.propTypes = {
-        onClose: PropTypes.func.isRequired,
-        open: PropTypes.bool.isRequired,
-        render: PropTypes.bool.isRequired,
-
-    };
+    
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -312,9 +294,9 @@ export default function InstructorDashboard(props) {
             </LightTooltip>
                 {/* <SimpleDialog closeAfterTransition={true} open={open} onClose={handleClose} render={render} /> */}
 
-                <Dialog fullWidth={true} disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
+                <Dialog  fullWidth={true} disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
                  <div>
-                 <DialogTitle id="simple-dialog-title">Add Course</DialogTitle>
+               
                 <AddCourse onClose={handleClose}></AddCourse>
                 </div>         
             </Dialog>
@@ -351,6 +333,14 @@ export default function InstructorDashboard(props) {
                 <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
                 </div>         
             </Dialog>
+
+            <Dialog  fullWidth={true} disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>    
+                 <div>
+                 <DialogTitle id="simple-dialog-title">Add Codeword Set</DialogTitle>
+                <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
+                </div>         
+            </Dialog>
+                    
             {loading?     <Grid container
             spacing={0}
             alignItems="center"
