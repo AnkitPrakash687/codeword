@@ -168,17 +168,21 @@ export default function AddCodewordSet(props) {
             let file = event.target.files[0]
             let fileExt = file.name.split('.')[1]
             if(fileExt == 'csv'){
-            // Papa.parse(event.target.files[0], {
-            //     complete: function (results) {
-            //         console.log(results)
-            //         var students = results.data.filter((item) => {
-            //             if (item[0] != '') {
-            //                 return item
-            //             }
-            //         })
+            Papa.parse(event.target.files[0], {
+                complete: function (results) {
+                    console.log('********CSV file******')
+                    console.log(results)
+                    var codewordSetData = results.data.map((item)=>{
+                        return item[0]
+                    })
+                    console.log(codewordSetData)
+
+                   filterData(codewordSetData.filter((item)=>{
+                       return item !== ""
+                   }))
                 
-            //     }
-            // })
+                }
+            })
             }else if(fileExt == 'txt'){
                 
                 let reader = new FileReader()
@@ -400,7 +404,7 @@ export default function AddCodewordSet(props) {
                                     name="filename"
                                     disabled="true"
                                     margin="dense"
-                                    helperText="*only .txt file is allowed. Codewords on each line"
+                                    helperText="*only .txt file is allowed. One Codeword per line"
                                     value={state.filename}
                                 />
                             </Grid>
