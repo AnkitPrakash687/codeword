@@ -614,42 +614,6 @@ export default function AddCourse(props) {
 
                         </label>
 
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <Grid container spacing={5}>
-                                <Grid item xs={6} sm={6} md={6} lg={6}>
-                                    <KeyboardDatePicker
-                                        variant="normal"
-                                        format="MM/dd/yyyy"
-                                        margin="normal"
-                                        id="start-date"
-                                        label="Start Date"
-                                        value={state.startDate}
-                                        onChange={handleDateChange('startDate')}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change date',
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={6} sm={6} md={6} lg={6}>
-                                    <KeyboardDatePicker
-                                        variant="normal"
-                                        format="MM/dd/yyyy"
-                                        margin="normal"
-                                        id="end-date"
-                                        minDate={state.startDate}
-
-                                        label="End Date"
-                                        value={state.endDate}
-                                        onChange={handleDateChange('endDate')}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change date',
-                                        }}
-                                    />
-                                </Grid>
-
-                            </Grid>
-                        </MuiPickersUtilsProvider>
-
                         <FormControl margin='dense' fullWidth="true" variant="outlined" className={classes.formControl}>
                             <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
                                 Codeword Set
@@ -668,7 +632,11 @@ export default function AddCourse(props) {
                                 })}
                             </Select>
                         </FormControl>
-                        <TextField className={classes.textField}
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <Grid container spacing={2}>
+                                
+                                <Grid item xs={8} sm={8} md={8} lg={8}>
+                                <TextField style={{marginTop: 25}}
                             variant="outlined"
                             fullWidth
                             id="startSurvey"
@@ -679,7 +647,31 @@ export default function AddCourse(props) {
                             onChange={handleChange('startSurvey')}
                             value={state.startSurvey}
                         />
-                        <TextField className={classes.textField}
+                                </Grid>
+                                <Grid item xs={4} sm={4} md={4} lg={4}>
+                                    <KeyboardDatePicker
+                                        variant="normal"
+                                        format="MM/dd/yyyy"
+                                        margin="normal"
+                                        id="start-date"
+                                        label="Start Date"
+                                        value={state.startDate}
+                                        onChange={handleDateChange('startDate')}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                        }}
+                                    />
+                                </Grid>
+
+                            </Grid>
+                        </MuiPickersUtilsProvider>
+
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <Grid container spacing={2}>
+                                
+                                <Grid item xs={8} sm={8} md={8} lg={8}>
+                                <TextField 
+                                style={{marginTop: 25}}
                             variant="outlined"
                             fullWidth
                             id="endSurvey"
@@ -690,6 +682,29 @@ export default function AddCourse(props) {
                             onChange={handleChange('endSurvey')}
                             value={state.endSurvey}
                         />
+                                </Grid>
+                                <Grid item xs={4} sm={4} md={4} lg={4}>
+                                <KeyboardDatePicker
+                                        variant="normal"
+                                        format="MM/dd/yyyy"
+                                        margin="normal"
+                                        id="end-date"
+                                        minDate={state.startDate}
+
+                                        label="End Date"
+                                        value={state.endDate}
+                                        onChange={handleDateChange('endDate')}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                        }}
+                                    />
+                                </Grid>
+
+                            </Grid>
+                        </MuiPickersUtilsProvider>
+
+                     
+                     
                     </div>
 
                     <Box display="flex" justifyContent="flex-end">
