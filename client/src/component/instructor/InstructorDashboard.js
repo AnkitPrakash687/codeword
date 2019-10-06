@@ -85,7 +85,7 @@ export default function InstructorDashboard(props) {
     const [open, setOpen] = useState(false);
     const inputLabel = React.useRef(null);
     const [filterCourse, setFilterCourse] = useState(10);
-    const [sortCourse, setSortCourse] = useState(10);
+    const [sortCourse, setSortCourse] = useState(100);
     const [labelWidth, setLabelWidth] = React.useState(0);
     React.useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
@@ -207,8 +207,8 @@ export default function InstructorDashboard(props) {
                 console.log('****COURSE******')
                 console.log(result)
                 setCourseData(result)
-                setFilteredData(result)
-                setLoading(false)
+                setsortedData(result)
+               
             }
         })
             .catch(error => {
@@ -262,52 +262,92 @@ export default function InstructorDashboard(props) {
         
     },[])
 
+    Array.prototype.sortCallback = function(compareFunction, resultFunction){
+        let result = this.sort(compareFunction);
+        resultFunction(result);
+    }
     const [filteredData, setFilteredData] = useState([{}])
-
+    const [sortedData, setsortedData] = useState([{}])
     useEffect(()=>{
+        console.log('****values******')
+        console.log(sortCourse +' '+filterCourse)
+        var filterData = []
+        setsortedData([])
         let activeDate = moment().subtract(4,'month')
+
+
         if(filterCourse == 10){
-            setFilteredData(
-                courseData
-            )
+           filterData = courseData
         }else if( filterCourse == 0){
-            setFilteredData(
+            filterData =
                 courseData.filter((course)=>{
                     if(course.isAssigned){
                         return course
                     }
                 })
-            )
+            
+            
         }else if(filterCourse == 1){
-            setFilteredData(
+            filterData = 
                 courseData.filter((course)=>{
                     if(!course.isAssigned){
                         return course
                     }
                 })
-            )
+            
             }else if(filterCourse == 2){
                 
-                setFilteredData(
+                filterData = 
                     courseData.filter((course)=>{
                         if(activeDate.isBefore(course.endDate)){
                             return course
                         }
                     })
-                )
+                
             }else if(filterCourse == 3){
                
-                setFilteredData(
+                filterData = 
                     courseData.filter((course)=>{
                         if(activeDate.isAfter(course.endDate)){
                             return course
                         }
                     })
-                )
+                
             }
-    },[filterCourse])
+            if(sortCourse == 100){
+                setsortedData(filterData)
+            }
+            else if(sortCourse == 0){
+                
+                 filterData.sortCallback(sort_by('courseName', true, (a) => a.toUpperCase(), false),
+                    (sorted)=>{
+                        setsortedData(sorted)
+                    })
+                
+            
+        }else if(sortCourse == 1){
+            filterData.sortCallback(sort_by('courseName', false, (a) => a.toUpperCase(), false),
+            (sorted)=>{
+                setsortedData(sorted)
+            })
+        }else if(sortCourse == 2){
+            filterData.sortCallback(sort_by('startDate', true, null, true),
+                    (sorted)=>{
+                        setsortedData(sorted)
+                    })
+        }else if(sortCourse == 3){
+            filterData.sortCallback(sort_by('startDate', false, null, true),
+            (sorted)=>{
+                setsortedData(sorted)
+            })
+        }
+           
+    },[filterCourse, sortCourse])
+
+
+  
     
-    const listCourses = filteredData.map((course) => {
+    const listCourses = sortedData.map((course) => {
         return <CourseCard id={course.id}
             courseName={course.courseName}
             ack={course.ack}
@@ -330,6 +370,37 @@ export default function InstructorDashboard(props) {
             isPublished = {item.isPublished}
         ></CodewordsetCard>
     })
+
+    const sort_by = (field, reverse, primer, isDate) => {
+
+        const key = primer ?
+          function(x) {
+            return primer(x[field])
+          } :
+          function(x) {
+            return x[field]
+          };
+      
+          const dateKey = function(x){
+              var date = new Date(x[field].toString())
+              return date.getTime()
+          }
+        
+          
+        reverse = !reverse ? 1 : -1;
+       const r = isDate?  
+       function(a, b) {
+       // return new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime();
+       return a = dateKey(a), b = dateKey(b), reverse * ((a > b) - (b > a));
+        }
+        :
+         function(a, b) {
+          return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+        }
+
+        return r
+      }
+
     return (
        <div>
 
@@ -357,7 +428,7 @@ export default function InstructorDashboard(props) {
                     Add Course
                 </Button> */}
                 <Grid container>
-                    <Grid item sm={6}>
+                    <Grid item xs={12} sm={6}>
                 <Box  style={{width:'100%'}} display="flex" flexDirection="row">
                 <LightTooltip title="Add Course" placement="right">
             <Fab  aria-label="add" className={classes.button} onClick={handleClickOpen}>
@@ -366,7 +437,7 @@ export default function InstructorDashboard(props) {
             </LightTooltip>
                 </Box>
                 </Grid>
-                <Grid item sm={6}>
+                <Grid item xs={12} sm={6}>
                 <Box  style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-end">
                                     <FormControl  variant="outlined" className={classes.formControl}>
                                     <InputLabel ref={inputLabel} htmlFor="outlined-filterCourse-simple">
@@ -395,7 +466,7 @@ export default function InstructorDashboard(props) {
                                         <FormHelperText></FormHelperText>
                                     </FormControl>
 
-                                    <FormControl  variant="outlined" className={classes.formControl}>
+                                    {/* <FormControl  variant="outlined" className={classes.formControl}>
                                     <InputLabel ref={inputLabel} htmlFor="outlined-filterCourse-simple">
                                             Sort
                                     </InputLabel>
@@ -411,16 +482,19 @@ export default function InstructorDashboard(props) {
                                             name="sortCourse"
                                             className={classes.selectEmpty}
                                         >
-                                            <MenuItem value={10}>
-                                                <em>All</em>
+                                            <MenuItem value={100}>
+                                                <em>None</em>
                                             </MenuItem>
-                                            <MenuItem value={0}>Assigned</MenuItem>
-                                            <MenuItem value={1}>Not Assigned</MenuItem>
-                                            <MenuItem value={2}>Active</MenuItem>
-                                            <MenuItem value={3}>Inactive</MenuItem>
+                                            <MenuItem value={0}>
+                                                Course Name(Ascending)
+                                            </MenuItem>
+                                            <MenuItem value={1}>Course Name(Descending)</MenuItem>
+                                            <MenuItem value={2}>Start Date(Ascending)</MenuItem>
+                                            <MenuItem value={3}>Start Date(Descending)</MenuItem>
+                                            
                                         </Select>
                                         <FormHelperText></FormHelperText>
-                                    </FormControl>
+                                    </FormControl> */}
                             </Box>
                 </Grid>
                 </Grid>
