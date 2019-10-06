@@ -8,7 +8,8 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
-import { Paper, Grid, Fab, Tooltip, Divider } from '@material-ui/core';
+import { Paper, Grid, Fab, Tooltip, Divider, MenuItem, FormControl, InputLabel, Select,
+OutlinedInput, FormHelperText } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CourseCard from './CourseCard'
 import CodewordsetCard from '../codewordset/CodewordsetCard'
@@ -23,7 +24,7 @@ import ContainedTabs from '../mui-treasury/ContainedTabs'
 import MyAppBar from '../MyAppBar'
 import { light } from '@material-ui/core/styles/createPalette';
 import history from '../../history'
-
+const moment = require('moment')
 const useStyles = makeStyles(theme => ({
     root: {
         margin: 30,
@@ -59,7 +60,14 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: "green"
         }
 
-    }
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+      },
+      selectEmpty: {
+       
+      },
 }));
 
 export default function InstructorDashboard(props) {
@@ -74,9 +82,17 @@ export default function InstructorDashboard(props) {
       }))(Tooltip);
 
     const [value, setValue] = useState(0);
-    const [open, setOpen] = useState(false)
-
+    const [open, setOpen] = useState(false);
+    const inputLabel = React.useRef(null);
+    const [filterCourse, setFilterCourse] = useState(10);
+    const [sortCourse, setSortCourse] = useState(10);
+    const [labelWidth, setLabelWidth] = React.useState(0);
+    React.useEffect(() => {
+        setLabelWidth(inputLabel.current.offsetWidth);
+    }, []);
     const classes = useStyles();
+
+    
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
 
@@ -118,8 +134,13 @@ export default function InstructorDashboard(props) {
     const handleReportClose = () =>{
         setReport(false)
     }
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const handleChange = name => (event) => {
+        if([name]=='filterCourse') {
+        setFilterCourse(event.target.value);
+        }
+        if([name]=='sortCourse'){
+            setSortCourse(event.target.value)
+        }
     }
 
     
@@ -175,17 +196,18 @@ export default function InstructorDashboard(props) {
                     result.push({
                         id: course._id,
                         courseName: course.courseNameKey,
-                        startDate: (course.Startdate.toString()).substring(0, 10),
-                        endDate: (course.Enddate.toString()).substring(0, 10),
+                        startDate: course.Startdate,
+                        endDate: course.Enddate,
                         startSurvey: course.PreSurveyURL == '' ? 'Unpublished' : course.PreSurveyURL,
                         endSurvey: course.PostSurveyURL == '' ? 'Unpublished' : course.PostSurveyURL,
                         isAssigned: course.isAssigned,
                         'ack': ack + '/' + course.students.length
                     })
                 })
-
+                console.log('****COURSE******')
                 console.log(result)
                 setCourseData(result)
+                setFilteredData(result)
                 setLoading(false)
             }
         })
@@ -240,17 +262,64 @@ export default function InstructorDashboard(props) {
         
     },[])
 
-    const listCourses = courseData.map((course) => {
+    const [filteredData, setFilteredData] = useState([{}])
+
+    useEffect(()=>{
+        let activeDate = moment().subtract(4,'month')
+        if(filterCourse == 10){
+            setFilteredData(
+                courseData
+            )
+        }else if( filterCourse == 0){
+            setFilteredData(
+                courseData.filter((course)=>{
+                    if(course.isAssigned){
+                        return course
+                    }
+                })
+            )
+        }else if(filterCourse == 1){
+            setFilteredData(
+                courseData.filter((course)=>{
+                    if(!course.isAssigned){
+                        return course
+                    }
+                })
+            )
+            }else if(filterCourse == 2){
+                
+                setFilteredData(
+                    courseData.filter((course)=>{
+                        if(activeDate.isBefore(course.endDate)){
+                            return course
+                        }
+                    })
+                )
+            }else if(filterCourse == 3){
+               
+                setFilteredData(
+                    courseData.filter((course)=>{
+                        if(activeDate.isAfter(course.endDate)){
+                            return course
+                        }
+                    })
+                )
+            }
+    },[filterCourse])
+    
+    const listCourses = filteredData.map((course) => {
         return <CourseCard id={course.id}
             courseName={course.courseName}
             ack={course.ack}
-            startDate={course.startDate}
-            endDate={course.endDate}
+            startDate={course.startDate?course.startDate.toString().substring(0, 10):null}
+            endDate={course.endDate?course.startDate.toString().substring(0, 10):null}
             startSurvey={course.startSurvey}
             endSurvey={course.endSurvey}
             isAssigned={course.isAssigned}
         ></CourseCard>
     })
+
+    
 
     const listCodewordSet = codewordsetData.map((item) => {
         // console.log('*******codeworset*******')
@@ -287,11 +356,75 @@ export default function InstructorDashboard(props) {
                 {/* <Button variant="contained" color="primary" className={classes.button} onClick={handleClickOpen}>
                     Add Course
                 </Button> */}
+                <Grid container>
+                    <Grid item sm={6}>
+                <Box  style={{width:'100%'}} display="flex" flexDirection="row">
                 <LightTooltip title="Add Course" placement="right">
             <Fab  aria-label="add" className={classes.button} onClick={handleClickOpen}>
                 <AddIcon />
             </Fab>
             </LightTooltip>
+                </Box>
+                </Grid>
+                <Grid item sm={6}>
+                <Box  style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-end">
+                                    <FormControl  variant="outlined" className={classes.formControl}>
+                                    <InputLabel ref={inputLabel} htmlFor="outlined-filterCourse-simple">
+                                            Filter
+                                    </InputLabel>
+                                        <Select
+                                            value={filterCourse}
+                                            onChange={handleChange('filterCourse')}
+                                            labelWidth={labelWidth}
+                                            inputProps={{
+                                                name: 'filterCourse',
+                                                id: 'filterCourse-label-placeholder',
+                                            }}
+                                            displayEmpty
+                                            name="filterCourse"
+                                            className={classes.selectEmpty}
+                                        >
+                                            <MenuItem value={10}>
+                                                <em>All</em>
+                                            </MenuItem>
+                                            <MenuItem value={0}>Assigned</MenuItem>
+                                            <MenuItem value={1}>Not Assigned</MenuItem>
+                                            <MenuItem value={2}>Active</MenuItem>
+                                            <MenuItem value={3}>Inactive</MenuItem>
+                                        </Select>
+                                        <FormHelperText></FormHelperText>
+                                    </FormControl>
+
+                                    <FormControl  variant="outlined" className={classes.formControl}>
+                                    <InputLabel ref={inputLabel} htmlFor="outlined-filterCourse-simple">
+                                            Sort
+                                    </InputLabel>
+                                        <Select
+                                            value={sortCourse}
+                                            onChange={handleChange('sortCourse')}
+                                            labelWidth={labelWidth}
+                                            inputProps={{
+                                                name: 'sortCourse',
+                                                id: 'sortCourse-label-placeholder',
+                                            }}
+                                            displayEmpty
+                                            name="sortCourse"
+                                            className={classes.selectEmpty}
+                                        >
+                                            <MenuItem value={10}>
+                                                <em>All</em>
+                                            </MenuItem>
+                                            <MenuItem value={0}>Assigned</MenuItem>
+                                            <MenuItem value={1}>Not Assigned</MenuItem>
+                                            <MenuItem value={2}>Active</MenuItem>
+                                            <MenuItem value={3}>Inactive</MenuItem>
+                                        </Select>
+                                        <FormHelperText></FormHelperText>
+                                    </FormControl>
+                            </Box>
+                </Grid>
+                </Grid>
+           
                 {/* <SimpleDialog closeAfterTransition={true} open={open} onClose={handleClose} render={render} /> */}
 
                 <Dialog disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
@@ -314,6 +447,8 @@ export default function InstructorDashboard(props) {
                          !loading && listCourses.length > 0 &&
                         listCourses
                     }
+
+                
 
                 </Grid>
                 }
