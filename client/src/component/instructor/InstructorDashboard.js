@@ -134,12 +134,15 @@ export default function InstructorDashboard(props) {
     const handleReportClose = () =>{
         setReport(false)
     }
-    const handleChange = name => (event) => {
+    const handleChange = name => (event, newValue) => {
         if([name]=='filterCourse') {
         setFilterCourse(event.target.value);
         }
         if([name]=='sortCourse'){
             setSortCourse(event.target.value)
+        }
+        if([name] == 'value'){
+            setValue(newValue)
         }
     }
 
@@ -416,7 +419,7 @@ export default function InstructorDashboard(props) {
           { label: 'Codeword' }
         ]}
         value={value}
-        onChange={handleChange}
+        onChange={handleChange('value')}
       >
 
       </ContainedTabs>
