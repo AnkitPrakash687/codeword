@@ -30,21 +30,16 @@ var moment = require('moment');
 var _ = require("underscore");
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: 30,
+       
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
     },
     appBar: {
         background: green[600]
     },
-    paper: {
-        paddingBottom:0
-    },
     paper2: {
         
-        padding: 20,
-        margin: 20,
-        background: lightGreen[200]
+  
     },
     title: {
         padding: 10
@@ -78,7 +73,7 @@ const useStyles = makeStyles(theme => ({
     },
     submit: {
         background: green[600],
-        marginTop: theme.spacing(2),
+       
         marginBottom: theme.spacing(2),
         "&:hover": {
             backgroundColor: "green"
@@ -86,14 +81,15 @@ const useStyles = makeStyles(theme => ({
     },
     cancel: {
         background: red[600],
-        margin: theme.spacing(2),
+        margin: theme.spacing(0,2,2,2),
         "&:hover": {
             backgroundColor: "red"
         }
     },
     paper: {
-        background: lightGreen[100],
-        padding: theme.spacing(1),
+
+        background: grey[200],
+         padding: theme.spacing(2),
         borderRadius: 5,
         marginTop: theme.spacing(2)
     },
@@ -350,7 +346,7 @@ export default function AddCodewordSet(props) {
                 <Box display="flex" style={{width:'100%'}} justifyContent="space-between">
                 <Typography component="div">
                     <Box fontSize={18} style={{margin: 10}}>
-                    ADD COURSE
+                    ADD CODEWORD SET
                     </Box>
                    
                 </Typography>
@@ -404,6 +400,7 @@ export default function AddCodewordSet(props) {
                                     name="filename"
                                     disabled="true"
                                     margin="dense"
+                                    helperText="*only .txt file is allowed. Codewords on each line"
                                     value={state.filename}
                                 />
                             </Grid>
@@ -487,7 +484,7 @@ export default function AddCodewordSet(props) {
                     <Button
                         variant="contained"
                         color="primary"
-                        size="large"
+                        size="inherit"
                         className={classes.cancel}
                         onClick={handleClose}
                     >
@@ -498,7 +495,7 @@ export default function AddCodewordSet(props) {
                         type="submit"
                         variant="contained"
                         color="primary"
-                        size="large"
+                        size="inherit"
                         className={classes.submit}
                     >
                         Add

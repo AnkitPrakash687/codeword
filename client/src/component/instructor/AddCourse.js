@@ -30,17 +30,14 @@ var moment = require('moment');
 var _ = require("underscore");
 const useStyles = makeStyles(theme => ({
     root: {
-
+        padding: theme.spacing(2),
     },
     form: {
-        padding: theme.spacing(1, 5, 1, 5),
-        background: grey[100]
+       
+        
     },
     appBar: {
         background: green[600]
-    },
-    paper: {
-        paddingBottom: 20
     },
     paper2: {
         padding: 20,
@@ -91,8 +88,8 @@ const useStyles = makeStyles(theme => ({
         }
     },
     paper: {
-
-
+        padding: theme.spacing(2),
+        background: grey[100],
         borderRadius: 5
     },
     wrapper: {

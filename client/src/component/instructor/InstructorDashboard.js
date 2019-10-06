@@ -294,7 +294,7 @@ export default function InstructorDashboard(props) {
             </LightTooltip>
                 {/* <SimpleDialog closeAfterTransition={true} open={open} onClose={handleClose} render={render} /> */}
 
-                <Dialog  fullWidth={true} disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
+                <Dialog disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
                  <div>
                
                 <AddCourse onClose={handleClose}></AddCourse>
@@ -327,7 +327,7 @@ export default function InstructorDashboard(props) {
                 <AddIcon />
             </Fab>
             </LightTooltip>
-            <Dialog  fullWidth={true} disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>    
+            <Dialog   disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>    
                  <div>
                
                 <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
