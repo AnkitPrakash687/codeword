@@ -109,6 +109,8 @@ const useStyles = makeStyles(theme => ({
         position: 'absolute',
         minWidth: 300,
         maxWidth: 800,
+        maxHeight: 500,
+        overflow: 'auto',
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
 
@@ -117,7 +119,7 @@ const useStyles = makeStyles(theme => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     reportButton:{
         margin: theme.spacing(2)
@@ -777,7 +779,7 @@ export default function AddCourse(props) {
                     <Divider />
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
-                            Duplicate Records: {invalidRecord.duplicateEmails.length}
+                            Duplicate Records: <p>{invalidRecord.duplicateEmails.length}</p>
                         </DialogContentText>
                         <Grid container >
                             {invalidRecord.duplicateEmails.map((item) => {
