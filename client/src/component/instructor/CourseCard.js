@@ -3,14 +3,14 @@ import React, { useState, Component, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, red, grey } from '@material-ui/core/colors';
-import { Paper, Grid, Tooltip, Link, Box } from '@material-ui/core';
+import { Paper, Grid, Tooltip, Link, Box, IconButton } from '@material-ui/core';
 import { withRouter } from 'react-router-dom'
 import API from '../../utils/API'
 import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { Redirect } from "react-router-dom";
 import history from '../../history'
-
+import ControlPointDuplicateIcon from '@material-ui/icons/ControlPointDuplicate';
 
 
 const useStyles = makeStyles(theme => ({
@@ -112,6 +112,10 @@ export default function CourseCard(props) {
         },
       }))(Tooltip);
 
+      const handleClone = ()=>{
+
+      }
+
     return (
 
         <Grid item xs={12} sm={3} md={3} lg={3}>
@@ -188,6 +192,7 @@ export default function CourseCard(props) {
                             </Typography>
                         </Grid>
                     </Grid>
+                    
                     {(props.isAssigned) ?
                         <Paper className={classes.banner1}>
                                 <Box display="flex" justifyContent="center">
@@ -206,12 +211,24 @@ export default function CourseCard(props) {
                                 </Box>
                               
                     </Typography>
+                
                     </Box>
+                   
                         </Paper>
                     }
-                   
+                     {/* <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={handleClone}
+                        >
+                            <ControlPointDuplicateIcon />
+                        </IconButton> */}
                 </Paper>
+              
                 </CardActionArea>
+               
         </Grid>
 
     );

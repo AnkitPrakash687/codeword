@@ -9,7 +9,8 @@ import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
 import { Paper, Grid, Fab, Tooltip, Divider, MenuItem, FormControl, InputLabel, Select,
-OutlinedInput, FormHelperText } from '@material-ui/core';
+    DialogActions, DialogContentText, DialogContent, Snackbar, IconButton,
+OutlinedInput, FormHelperText, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CourseCard from './CourseCard'
 import CodewordsetCard from '../codewordset/CodewordsetCard'
@@ -22,6 +23,7 @@ import {CircularProgress} from '@material-ui/core'
 import API from '../../utils/API'
 import ContainedTabs from '../mui-treasury/ContainedTabs'
 import MyAppBar from '../MyAppBar'
+import CloseIcon from '@material-ui/icons/Close';
 import { light } from '@material-ui/core/styles/createPalette';
 import history from '../../history'
 const moment = require('moment')
@@ -87,6 +89,13 @@ export default function InstructorDashboard(props) {
     const [filterCourse, setFilterCourse] = useState(10);
     const [sortCourse, setSortCourse] = useState(100);
     const [labelWidth, setLabelWidth] = React.useState(0);
+    const [status, setStatus] = useState({open:false})
+    const [openCloneCodewordset, setOpenCloneCodewordset] = useState({
+        open: false,
+        codewordSetName: '',
+        codewords: []
+    });
+    const [cloneCodewordsetData, setCloneCodewordsetData]= useState()
     React.useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
@@ -127,10 +136,69 @@ export default function InstructorDashboard(props) {
     const [renderCodewordSet, setRenderCodewordSet] = useState(false)
     const [loading, setLoading] = useState(false)
     const [report, setReport] = useState(false)
+    const [newCodewordsetName, setNewCodewordsetName]= useState()
     const handleReportOpen = () =>{
         setReport(true)
     }
 
+    const handleCloneCodewordset = (event) => {
+        // event.preventDefault()
+         const headers = {
+             'token': sessionStorage.getItem('token')
+         };
+ 
+        //  let regex = /(\(\d\))+$/
+        //  let reg = /[\d]+/
+        //  let y = regex.exec(props.codewordSetName)
+        //  let x =  y?parseInt(reg.exec(y)) + 1:1
+         var data = {
+             codewordSetName: newCodewordsetName,
+             codewords: openCloneCodewordset.codewords
+         }
+ 
+         console.log('***********Add codewordset**********')
+         console.log(data)
+         
+         API.post('dashboard/addcodewordset',  data, { headers: headers }).then(response => {
+             console.log('👉 Returned data in :', response);
+             if (response.data.code == 200) {
+                 //setOpenReport(true)
+                 setStatus({
+                     open: true,
+                     message: 'Duplicate set created!'
+                 })
+                 
+             } 
+             else if(response.data.message.code==11000){
+                setStatus({
+                    open: true,
+                    message: 'Codeword set with this name already exists'
+                })
+                
+             }
+             else {
+                 console.log('error')
+                 setStatus({
+                    open: true,
+                    message: 'Unexpected Error!'
+                })
+             }
+         })
+             .catch(error => {
+                 console.log(error)
+                 console.log('error')
+                 setStatus({
+                    open: true,
+                    message: error
+                })
+             });
+     }
+
+     const handleMessageClose = () =>{
+         setStatus({open:false})
+         setOpenCloneCodewordset({open:false})
+         setRenderCodewordSet(!renderCodewordSet)
+     }
     const handleReportClose = () =>{
         setReport(false)
     }
@@ -143,6 +211,9 @@ export default function InstructorDashboard(props) {
         }
         if([name] == 'value'){
             setValue(newValue)
+        }
+        if([name] == 'newCodewordsetName'){
+            setNewCodewordsetName(event.target.value)
         }
     }
 
@@ -169,6 +240,21 @@ export default function InstructorDashboard(props) {
         setOpenCodeword(false)
         setRenderCodewordSet(!renderCodewordSet)
         setValue(1)
+    }
+
+    const handleClone = (props) =>{
+        console.log('*******clone props*********')
+        console.log(props)
+        setOpenCloneCodewordset({
+            open: true,
+            codewordSetName: props.codewordSetName,
+            codewords: props.codewords
+        })
+    }
+
+    const handleCloneCodewordsetClose = () =>{
+        setOpenCloneCodewordset({open:false})
+        setRenderCodewordSet(!renderCodewordSet)
     }
     useEffect(() => {
 
@@ -211,6 +297,7 @@ export default function InstructorDashboard(props) {
                 console.log(result)
                 setCourseData(result)
                 setsortedData(result)
+                setLoading(false)
                
             }
         })
@@ -239,7 +326,9 @@ export default function InstructorDashboard(props) {
                     id: item.id,
                     codewordSetName: item.codewordSetName,
                     count: item.count,
-                    isPublished: item.isPublished
+                    codewords: item.codewords,
+                    isPublished: item.isPublished,
+                    isAdmin: item.isAdmin
                 })
             })
             console.log('*******codeword sets*********')
@@ -265,10 +354,7 @@ export default function InstructorDashboard(props) {
         
     },[])
 
-    Array.prototype.sortCallback = function(compareFunction, resultFunction){
-        let result = this.sort(compareFunction);
-        resultFunction(result);
-    }
+ 
     const [filteredData, setFilteredData] = useState([{}])
     const [sortedData, setsortedData] = useState([{}])
     useEffect(()=>{
@@ -321,28 +407,21 @@ export default function InstructorDashboard(props) {
                 setsortedData(filterData)
             }
             else if(sortCourse == 0){
-                
-                 filterData.sortCallback(sort_by('courseName', true, (a) => a.toUpperCase(), false),
-                    (sorted)=>{
-                        setsortedData(sorted)
-                    })
-                
+
+                    var s = filterData.sort(sort_by('courseName', true, (a) => a.toUpperCase(), false))
+                setsortedData(s)
             
         }else if(sortCourse == 1){
-            filterData.sortCallback(sort_by('courseName', false, (a) => a.toUpperCase(), false),
-            (sorted)=>{
-                setsortedData(sorted)
-            })
+          
+            var s = filterData.sort(sort_by('courseName', false, (a) => a.toUpperCase(), false))
+            setsortedData(s)
         }else if(sortCourse == 2){
-            filterData.sortCallback(sort_by('startDate', true, null, true),
-                    (sorted)=>{
-                        setsortedData(sorted)
-                    })
+                    
+                    var s = filterData.sort(sort_by('startDate', true, null, true))
+                setsortedData(s)
         }else if(sortCourse == 3){
-            filterData.sortCallback(sort_by('startDate', false, null, true),
-            (sorted)=>{
-                setsortedData(sorted)
-            })
+            var s = filterData.sort(sort_by('startDate', false, null, true))
+                setsortedData(s)
         }
            
     },[filterCourse, sortCourse])
@@ -371,6 +450,8 @@ export default function InstructorDashboard(props) {
             codewordSetName={item.codewordSetName}
             count={item.count}
             isPublished = {item.isPublished}
+            codewords = {item.codewords}
+            onClone = {handleClone}
         ></CodewordsetCard>
     })
 
@@ -564,6 +645,62 @@ export default function InstructorDashboard(props) {
                 </Grid>
             }
         </TabPanel>
+
+        <Dialog
+        open={openCloneCodewordset.open}
+        onClose={handleCloneCodewordsetClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Clone Codeword Set: "+ openCloneCodewordset.codewordSetName}</DialogTitle>
+        <DialogContent>
+        <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  margin="dense"
+                  name="newCodewordsetName"
+                  label="New Codewordset Name"
+                  type="text"
+                  id="newCodewordsetName"
+                  autoComplete="current-password"
+                  value={newCodewordsetName}
+                  onChange={handleChange('newCodewordsetName')}
+                />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloneCodewordsetClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleCloneCodewordset} color="primary" autoFocus>
+            Clone
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={status.open}
+                    autoHideDuration={2000}
+                    variant="success"
+                    onClose={handleMessageClose}
+                    message={status.message}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={handleMessageClose}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                ></Snackbar>
         </div>
                 
         </div>

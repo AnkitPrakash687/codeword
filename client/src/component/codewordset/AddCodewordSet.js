@@ -253,7 +253,7 @@ export default function AddCodewordSet(props) {
         setState({ ...state, [name]: date });
     }
 
-    const handleReportOpen = () =>{
+    const handleCodewordsetReportOpen = () =>{
         setOpenReport(true)
     }
     const handleSubmit = (event) => {
@@ -358,7 +358,7 @@ export default function AddCodewordSet(props) {
                 { (hardRuleData.duplicates.length > 0 || hardRuleData.lessThanThree.length > 0
                                 || hardRuleData.invalidCodewords.length > 0) &&
             <Button
-                        onClick={handleReportOpen}
+                        onClick={handleCodewordsetReportOpen}
                         variant="contained"
                         color="primary"
                         size="small"
@@ -421,7 +421,7 @@ export default function AddCodewordSet(props) {
                                 <Tooltip title="Open Report" placement="bottom">
                                             <IconButton
                                                 className={classes.iconButton}
-                                                onClick={handleReportOpen}
+                                                onClick={handleCodewordsetReportOpen}
                                                 style={{marginLeft: 25}}
                                             >
                                                 <InfoIcon fontSize="inherit" style={{ color: red[600] }} />

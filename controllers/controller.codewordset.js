@@ -108,7 +108,8 @@ let getcodewordset = (req, res) => {
                         codewordSetName: codewordSet[i].codewordSetName,
                         count: codewordSet[i].codewords.length,
                         codewords: codewordSet[i].codewords,
-                        isPublished: codewordSet[i].isPublished
+                        isPublished: codewordSet[i].isPublished,
+                        isAdmin: true
                     })
                 }
                 }
@@ -122,7 +123,8 @@ let getcodewordset = (req, res) => {
                             codewordSetName: codewordSet[i].codewordSetName,
                             count: codewordSet[i].codewords.length,
                             codewords: codewordSet[i].codewords,
-                            isPublished: codewordSet[i].isPublished
+                            isPublished: codewordSet[i].isPublished,
+                            isAdmin: false
                         })
                     }
                     // console.log('**********get codeword sets')

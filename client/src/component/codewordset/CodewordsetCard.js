@@ -3,14 +3,14 @@ import React, { useState, Component, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, red } from '@material-ui/core/colors';
-import { Paper, Grid, Tooltip, Box } from '@material-ui/core';
+import { Paper, Grid, Tooltip, Box, IconButton } from '@material-ui/core';
 import { withRouter } from 'react-router-dom'
 import API from '../../utils/API'
 import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { Redirect } from "react-router-dom";
 import history from '../../history'
-
+import ControlPointDuplicateIcon from '@material-ui/icons/ControlPointDuplicate';
 const useStyles = makeStyles(theme => ({
     root: {
         margin: 30,
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
     paper: {
         borderRadius: 5,
-        paddingBottom: 20,
+     
         maxWidth: 300,
         minWidth: 200
     },
@@ -69,10 +69,16 @@ export default function CourseCard(props) {
         setRedirect(true)
 
     }
+
+   const handleClone = () =>{
+       props.onClone(props)
+   }
+   
     if (redirect) {
         history.push('/codewordset' + props.id)
         return <Redirect to={'/codewordset/' + props.id}></Redirect>
     }
+
 
     return (
 
@@ -97,6 +103,7 @@ export default function CourseCard(props) {
                                     </Box>
                                 </Typography>
                             }
+                            
                         </AppBar>
                     </div>
 
@@ -130,6 +137,23 @@ export default function CourseCard(props) {
                         </Paper>
                     }
                 </CardActionArea>
+                <Grid container>
+                <Grid item sm={12}>
+            <Box display="flex" style={{width:'100%'}} flexDirection="row" justifyContent="flex-end">
+                    <Box >
+            <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={handleClone}
+                        >
+                            <ControlPointDuplicateIcon />
+                        </IconButton>
+                        </Box>
+            </Box> 
+            </Grid>
+            </Grid>
             </Paper>
 
         </Grid>
