@@ -9,7 +9,7 @@ import { green, lightGreen, grey } from '@material-ui/core/colors';
 
 ReactDOM.render((
    <Router history={history}>
-   <div  style={{background: green[200]}}>
+   <div  style={{minHeight: 1000,background: grey[200]}}>
      <App />
      </div>
     </Router>

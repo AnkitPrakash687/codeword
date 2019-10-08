@@ -22,7 +22,7 @@ import history from '../../history'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: 30,
+        margin: theme.spacing(0,3,3,3),
         flexGrow: 1,
         backgroundColor: theme.palette.white,
     },
@@ -192,6 +192,13 @@ export default function StudentDashboard() {
     return (
         <div>
             <MyAppBar disableStudentView={true}/>
+            <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="center">
+                <Typography component="div">
+                    <Box fontSize={24} color={grey[800]} fontWeight="fontWeightBold" m={1}>
+                        Student Dashboard
+                    </Box>
+                </Typography>
+                </Box>
          <div className={classes.root}>
              {loading? <Grid container
             spacing={0}

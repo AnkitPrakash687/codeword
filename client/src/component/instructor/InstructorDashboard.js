@@ -8,9 +8,11 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
-import { Paper, Grid, Fab, Tooltip, Divider, MenuItem, FormControl, InputLabel, Select,
+import {
+    Paper, Grid, Fab, Tooltip, Divider, MenuItem, FormControl, InputLabel, Select,
     DialogActions, DialogContentText, DialogContent, Snackbar, IconButton,
-OutlinedInput, FormHelperText, TextField } from '@material-ui/core';
+    OutlinedInput, FormHelperText, TextField
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CourseCard from './CourseCard'
 import CodewordsetCard from '../codewordset/CodewordsetCard'
@@ -19,7 +21,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button'
 import AddCourse from './AddCourse'
-import {CircularProgress} from '@material-ui/core'
+import { CircularProgress } from '@material-ui/core'
 import API from '../../utils/API'
 import ContainedTabs from '../mui-treasury/ContainedTabs'
 import MyAppBar from '../MyAppBar'
@@ -29,9 +31,10 @@ import history from '../../history'
 const moment = require('moment')
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: 30,
+        padding: theme.spacing(3),
+        margin: theme.spacing(0,3,3,3),
         flexGrow: 1,
-        backgroundColor: green[200],
+        backgroundColor: grey[200],
     },
     appBar: {
         background: green[600]
@@ -47,14 +50,14 @@ const useStyles = makeStyles(theme => ({
     title: {
         padding: 10
     },
- 
+
     fabProgress: {
         color: green[500],
         position: 'absolute',
         top: -6,
         left: -6,
         zIndex: 1,
-      },
+    },
     button: {
         marginBottom: theme.spacing(2),
         background: green[500],
@@ -66,22 +69,22 @@ const useStyles = makeStyles(theme => ({
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
-      },
-      selectEmpty: {
-       
-      },
+    },
+    selectEmpty: {
+
+    },
 }));
 
 export default function InstructorDashboard(props) {
 
     const LightTooltip = withStyles(theme => ({
         tooltip: {
-          backgroundColor: lightGreen[200],
-          color: 'rgba(0, 0, 0, 0.87)',
-          boxShadow: theme.shadows[1],
-          fontSize: 13,
+            backgroundColor: lightGreen[200],
+            color: 'rgba(0, 0, 0, 0.87)',
+            boxShadow: theme.shadows[1],
+            fontSize: 13,
         },
-      }))(Tooltip);
+    }))(Tooltip);
 
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
@@ -89,19 +92,19 @@ export default function InstructorDashboard(props) {
     const [filterCourse, setFilterCourse] = useState(10);
     const [sortCourse, setSortCourse] = useState(100);
     const [labelWidth, setLabelWidth] = React.useState(0);
-    const [status, setStatus] = useState({open:false})
+    const [status, setStatus] = useState({ open: false })
     const [openCloneCodewordset, setOpenCloneCodewordset] = useState({
         open: false,
         codewordSetName: '',
         codewords: []
     });
-    const [cloneCodewordsetData, setCloneCodewordsetData]= useState()
+    const [cloneCodewordsetData, setCloneCodewordsetData] = useState()
     React.useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
     const classes = useStyles();
 
-    
+
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
 
@@ -115,12 +118,12 @@ export default function InstructorDashboard(props) {
                 {...other}
             >
                 <Box bgcolor={lightGreen[100]}
-                style={ {
-                    borderBottomLeftRadius: 10,
-                    borderBottomRightRadius: 10,
-                    
+                    style={{
+                        borderBottomLeftRadius: 10,
+                        borderBottomRightRadius: 10,
 
-                }} minHeight={500} p={3}>{children}</Box>
+
+                    }} minHeight={500} p={3}>{children}</Box>
             </Typography>
         );
     }
@@ -131,99 +134,99 @@ export default function InstructorDashboard(props) {
         value: PropTypes.any.isRequired,
     };
 
- 
+
     const [render, setRender] = useState(false);
     const [renderCodewordSet, setRenderCodewordSet] = useState(false)
     const [loading, setLoading] = useState(false)
     const [report, setReport] = useState(false)
-    const [newCodewordsetName, setNewCodewordsetName]= useState()
-    const handleReportOpen = () =>{
+    const [newCodewordsetName, setNewCodewordsetName] = useState()
+    const handleReportOpen = () => {
         setReport(true)
     }
 
     const handleCloneCodewordset = (event) => {
         // event.preventDefault()
-         const headers = {
-             'token': sessionStorage.getItem('token')
-         };
- 
+        const headers = {
+            'token': sessionStorage.getItem('token')
+        };
+
         //  let regex = /(\(\d\))+$/
         //  let reg = /[\d]+/
         //  let y = regex.exec(props.codewordSetName)
         //  let x =  y?parseInt(reg.exec(y)) + 1:1
-         var data = {
-             codewordSetName: newCodewordsetName,
-             codewords: openCloneCodewordset.codewords
-         }
- 
-         console.log('***********Add codewordset**********')
-         console.log(data)
-         
-         API.post('dashboard/addcodewordset',  data, { headers: headers }).then(response => {
-             console.log('👉 Returned data in :', response);
-             if (response.data.code == 200) {
-                 //setOpenReport(true)
-                 setStatus({
-                     open: true,
-                     message: 'Duplicate set created!'
-                 })
-                 
-             } 
-             else if(response.data.message.code==11000){
+        var data = {
+            codewordSetName: newCodewordsetName,
+            codewords: openCloneCodewordset.codewords
+        }
+
+        console.log('***********Add codewordset**********')
+        console.log(data)
+
+        API.post('dashboard/addcodewordset', data, { headers: headers }).then(response => {
+            console.log('👉 Returned data in :', response);
+            if (response.data.code == 200) {
+                //setOpenReport(true)
+                setStatus({
+                    open: true,
+                    message: 'Duplicate set created!'
+                })
+
+            }
+            else if (response.data.message.code == 11000) {
                 setStatus({
                     open: true,
                     message: 'Codeword set with this name already exists'
                 })
-                
-             }
-             else {
-                 console.log('error')
-                 setStatus({
+
+            }
+            else {
+                console.log('error')
+                setStatus({
                     open: true,
                     message: 'Unexpected Error!'
                 })
-             }
-         })
-             .catch(error => {
-                 console.log(error)
-                 console.log('error')
-                 setStatus({
+            }
+        })
+            .catch(error => {
+                console.log(error)
+                console.log('error')
+                setStatus({
                     open: true,
                     message: error
                 })
-             });
-     }
+            });
+    }
 
-     const handleMessageClose = () =>{
-         setStatus({open:false})
-         setOpenCloneCodewordset({open:false})
-         setRenderCodewordSet(!renderCodewordSet)
-     }
-    const handleReportClose = () =>{
+    const handleMessageClose = () => {
+        setStatus({ open: false })
+        setOpenCloneCodewordset({ open: false })
+        setRenderCodewordSet(!renderCodewordSet)
+    }
+    const handleReportClose = () => {
         setReport(false)
     }
     const handleChange = name => (event, newValue) => {
-        if([name]=='filterCourse') {
-        setFilterCourse(event.target.value);
+        if ([name] == 'filterCourse') {
+            setFilterCourse(event.target.value);
         }
-        if([name]=='sortCourse'){
+        if ([name] == 'sortCourse') {
             setSortCourse(event.target.value)
         }
-        if([name] == 'value'){
+        if ([name] == 'value') {
             setValue(newValue)
         }
-        if([name] == 'newCodewordsetName'){
+        if ([name] == 'newCodewordsetName') {
             setNewCodewordsetName(event.target.value)
         }
     }
 
-    
+
 
     const handleClickOpen = () => {
         setOpen(true)
     }
 
-    const handleClose = value => { 
+    const handleClose = value => {
         setOpen(false)
         setRender(!render)
     };
@@ -231,8 +234,8 @@ export default function InstructorDashboard(props) {
     const [courseData, setCourseData] = useState([{}])
     const [codewordsetData, setCodewordsetData] = useState([{}])
     const [openCodeword, setOpenCodeword] = useState()
-  
-    const handleCodewordClickOpen = () =>{
+
+    const handleCodewordClickOpen = () => {
         setOpenCodeword(true)
     }
 
@@ -242,7 +245,7 @@ export default function InstructorDashboard(props) {
         setValue(1)
     }
 
-    const handleClone = (props) =>{
+    const handleClone = (props) => {
         console.log('*******clone props*********')
         console.log(props)
         setOpenCloneCodewordset({
@@ -252,8 +255,8 @@ export default function InstructorDashboard(props) {
         })
     }
 
-    const handleCloneCodewordsetClose = () =>{
-        setOpenCloneCodewordset({open:false})
+    const handleCloneCodewordsetClose = () => {
+        setOpenCloneCodewordset({ open: false })
         setRenderCodewordSet(!renderCodewordSet)
     }
     useEffect(() => {
@@ -298,12 +301,12 @@ export default function InstructorDashboard(props) {
                 setCourseData(result)
                 setsortedData(result)
                 setLoading(false)
-               
+
             }
         })
             .catch(error => {
                 console.log(error)
-          
+
             })
 
     }, [render])
@@ -320,7 +323,7 @@ export default function InstructorDashboard(props) {
             console.log('👉 getcodeworset Returned data in :', response);
             let data = response.data.data
             let result = []
-            data.map((item)=>{
+            data.map((item) => {
                 console.log(item)
                 result.push({
                     id: item.id,
@@ -340,108 +343,108 @@ export default function InstructorDashboard(props) {
                 console.log(error)
                 setLoading(false)
             })
-        
+
     }, [renderCodewordSet])
 
-    useEffect(()=>{
-        if(history.location.state){
-        console.log('************history***********')
-        console.log(history.location.state.value)
-        setValue(history.location.state.value)
-        }else{
+    useEffect(() => {
+        if (history.location.state) {
+            console.log('************history***********')
+            console.log(history.location.state.value)
+            setValue(history.location.state.value)
+        } else {
             setValue(0)
         }
-        
-    },[])
 
- 
+    }, [])
+
+
     const [filteredData, setFilteredData] = useState([{}])
     const [sortedData, setsortedData] = useState([{}])
-    useEffect(()=>{
+    useEffect(() => {
         console.log('****values******')
-        console.log(sortCourse +' '+filterCourse)
+        console.log(sortCourse + ' ' + filterCourse)
         var filterData = []
         setsortedData([])
-        let activeDate = moment().subtract(4,'month')
+        let activeDate = moment().subtract(4, 'month')
 
 
-        if(filterCourse == 10){
-           filterData = courseData
-        }else if( filterCourse == 0){
+        if (filterCourse == 10) {
+            filterData = courseData
+        } else if (filterCourse == 0) {
             filterData =
-                courseData.filter((course)=>{
-                    if(course.isAssigned){
+                courseData.filter((course) => {
+                    if (course.isAssigned) {
                         return course
                     }
                 })
-            
-            
-        }else if(filterCourse == 1){
-            filterData = 
-                courseData.filter((course)=>{
-                    if(!course.isAssigned){
-                        return course
-                    }
-                })
-            
-            }else if(filterCourse == 2){
-                
-                filterData = 
-                    courseData.filter((course)=>{
-                        if(activeDate.isBefore(course.endDate)){
-                            return course
-                        }
-                    })
-                
-            }else if(filterCourse == 3){
-               
-                filterData = 
-                    courseData.filter((course)=>{
-                        if(activeDate.isAfter(course.endDate)){
-                            return course
-                        }
-                    })
-                
-            }
-            if(sortCourse == 100){
-                setsortedData(filterData)
-            }
-            else if(sortCourse == 0){
 
-                    var s = filterData.sort(sort_by('courseName', true, (a) => a.toUpperCase(), false))
-                setsortedData(s)
-            
-        }else if(sortCourse == 1){
-          
+
+        } else if (filterCourse == 1) {
+            filterData =
+                courseData.filter((course) => {
+                    if (!course.isAssigned) {
+                        return course
+                    }
+                })
+
+        } else if (filterCourse == 2) {
+
+            filterData =
+                courseData.filter((course) => {
+                    if (activeDate.isBefore(course.endDate)) {
+                        return course
+                    }
+                })
+
+        } else if (filterCourse == 3) {
+
+            filterData =
+                courseData.filter((course) => {
+                    if (activeDate.isAfter(course.endDate)) {
+                        return course
+                    }
+                })
+
+        }
+        if (sortCourse == 100) {
+            setsortedData(filterData)
+        }
+        else if (sortCourse == 0) {
+
+            var s = filterData.sort(sort_by('courseName', true, (a) => a.toUpperCase(), false))
+            setsortedData(s)
+
+        } else if (sortCourse == 1) {
+
             var s = filterData.sort(sort_by('courseName', false, (a) => a.toUpperCase(), false))
             setsortedData(s)
-        }else if(sortCourse == 2){
-                    
-                    var s = filterData.sort(sort_by('startDate', true, null, true))
-                setsortedData(s)
-        }else if(sortCourse == 3){
+        } else if (sortCourse == 2) {
+
+            var s = filterData.sort(sort_by('startDate', true, null, true))
+            setsortedData(s)
+        } else if (sortCourse == 3) {
             var s = filterData.sort(sort_by('startDate', false, null, true))
-                setsortedData(s)
+            setsortedData(s)
         }
-           
-    },[filterCourse, sortCourse])
+
+    }, [filterCourse, sortCourse])
 
 
-  
-    
+
+
     const listCourses = sortedData.map((course) => {
         return <CourseCard id={course.id}
             courseName={course.courseName}
             ack={course.ack}
-            startDate={course.startDate?course.startDate.toString().substring(0, 10):null}
-            endDate={course.endDate?course.startDate.toString().substring(0, 10):null}
+            startDate={course.startDate ? course.startDate.toString().substring(0, 10) : null}
+            endDate={course.endDate ? course.startDate.toString().substring(0, 10) : null}
             startSurvey={course.startSurvey}
             endSurvey={course.endSurvey}
             isAssigned={course.isAssigned}
         ></CourseCard>
     })
 
-    
+
 
     const listCodewordSet = codewordsetData.map((item) => {
         // console.log('*******codeworset*******')
@@ -449,82 +452,90 @@ export default function InstructorDashboard(props) {
         return <CodewordsetCard id={item.id}
             codewordSetName={item.codewordSetName}
             count={item.count}
-            isPublished = {item.isPublished}
-            codewords = {item.codewords}
-            onClone = {handleClone}
+            isPublished={item.isPublished}
+            codewords={item.codewords}
+            onClone={handleClone}
         ></CodewordsetCard>
     })
 
     const sort_by = (field, reverse, primer, isDate) => {
 
         const key = primer ?
-          function(x) {
-            return primer(x[field])
-          } :
-          function(x) {
-            return x[field]
-          };
-      
-          const dateKey = function(x){
-              var date = new Date(x[field].toString())
-              return date.getTime()
-          }
-        
-          
+            function (x) {
+                return primer(x[field])
+            } :
+            function (x) {
+                return x[field]
+            };
+
+        const dateKey = function (x) {
+            var date = new Date(x[field].toString())
+            return date.getTime()
+        }
+
+
         reverse = !reverse ? 1 : -1;
-       const r = isDate?  
-       function(a, b) {
-       // return new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime();
-       return a = dateKey(a), b = dateKey(b), reverse * ((a > b) - (b > a));
-        }
-        :
-         function(a, b) {
-          return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
-        }
+        const r = isDate ?
+            function (a, b) {
+                // return new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime();
+                return a = dateKey(a), b = dateKey(b), reverse * ((a > b) - (b > a));
+            }
+            :
+            function (a, b) {
+                return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+            }
 
         return r
-      }
+    }
 
     return (
-       <div>
-
-       <MyAppBar/>
-        <div className={classes.root}>
-            
         <div>
-        
-        <ContainedTabs
-        style={{ alignSelf: 'flex-center',  }}
-        tabs={[
-          { label: 'Course' },
-          { label: 'Codeword' }
-        ]}
-        value={value}
-        onChange={handleChange('value')}
-      >
 
-      </ContainedTabs>
+            <MyAppBar />
+            <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="center">
+                <Typography component="div">
+                    <Box fontSize={24} color={grey[800]} fontWeight="fontWeightBold" m={1}>
+                        Instructor Dashboard
+                    </Box>
+                </Typography>
+                </Box>
+            <div className={classes.root}>
+               
 
-                    
-            <TabPanel value={value} index={0}>
+                <div>
 
-                {/* <Button variant="contained" color="primary" className={classes.button} onClick={handleClickOpen}>
+                    <ContainedTabs
+                        style={{ alignSelf: 'flex-center', }}
+                        tabs={[
+                            { label: 'Course' },
+                            { label: 'Codeword' }
+                        ]}
+                        value={value}
+                        onChange={handleChange('value')}
+                    >
+
+                    </ContainedTabs>
+
+
+                    <TabPanel value={value} index={0}>
+
+                        {/* <Button variant="contained" color="primary" className={classes.button} onClick={handleClickOpen}>
                     Add Course
                 </Button> */}
-                <Grid container>
-                    <Grid item xs={12} sm={6}>
-                <Box  style={{width:'100%'}} display="flex" flexDirection="row">
-                <LightTooltip title="Add Course" placement="right">
-            <Fab  aria-label="add" className={classes.button} onClick={handleClickOpen}>
-                <AddIcon />
-            </Fab>
-            </LightTooltip>
-                </Box>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                <Box  style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-end">
-                                    <FormControl  variant="outlined" className={classes.formControl}>
-                                    <InputLabel ref={inputLabel} htmlFor="outlined-filterCourse-simple">
+                        <Grid container>
+                            <Grid item xs={12} sm={6}>
+                                <Box style={{ width: '100%' }} display="flex" flexDirection="row">
+                                    <LightTooltip title="Add Course" placement="right">
+                                        <Fab aria-label="add" className={classes.button} onClick={handleClickOpen}>
+                                            <AddIcon />
+                                        </Fab>
+                                    </LightTooltip>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Box style={{ width: '100%' }} display="flex" flexDirection="row" justifyContent="flex-end">
+                                    <FormControl variant="outlined" className={classes.formControl}>
+                                        <InputLabel ref={inputLabel} htmlFor="outlined-filterCourse-simple">
                                             Filter
                                     </InputLabel>
                                         <Select
@@ -579,131 +590,131 @@ export default function InstructorDashboard(props) {
                                         </Select>
                                         <FormHelperText></FormHelperText>
                                     </FormControl> */}
-                            </Box>
-                </Grid>
-                </Grid>
-           
-                {/* <SimpleDialog closeAfterTransition={true} open={open} onClose={handleClose} render={render} /> */}
+                                </Box>
+                            </Grid>
+                        </Grid>
 
-                <Dialog disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>    
-                 <div>
-               
-                <AddCourse onClose={handleClose}></AddCourse>
-                </div>         
-            </Dialog>
-                {loading?     <Grid container
-            spacing={0}
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: '100vh' }}>
-            <CircularProgress className={classes.progress} />
-        </Grid>
-        :
-                <Grid container spacing={3}>
+                        {/* <SimpleDialog closeAfterTransition={true} open={open} onClose={handleClose} render={render} /> */}
 
-                    {
-                         !loading && listCourses.length > 0 &&
-                        listCourses
-                    }
+                        <Dialog disableBackdropClick={true} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+                            <div>
 
-                
+                                <AddCourse onClose={handleClose}></AddCourse>
+                            </div>
+                        </Dialog>
+                        {loading ? <Grid container
+                            spacing={0}
+                            alignItems="center"
+                            justify="center"
+                            style={{ minHeight: '100vh' }}>
+                            <CircularProgress className={classes.progress} />
+                        </Grid>
+                            :
+                            <Grid container spacing={3}>
 
-                </Grid>
-                }
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-            {/* <Button variant="contained" color="primary" className={classes.button} onClick={handleCodewordClickOpen}>
+                                {
+                                    !loading && listCourses.length > 0 &&
+                                    listCourses
+                                }
+
+
+
+                            </Grid>
+                        }
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        {/* <Button variant="contained" color="primary" className={classes.button} onClick={handleCodewordClickOpen}>
                     Add codeword Set
             </Button> */}
-            <LightTooltip title="Add Codeword set" placement="right">
-            <Fab  aria-label="add" className={classes.button} onClick={handleCodewordClickOpen}>
-                <AddIcon />
-            </Fab>
-            </LightTooltip>
-            <Dialog   disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>    
-                 <div>
-               
-                <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
-                </div>         
-            </Dialog>
-                    
-            {loading?     <Grid container
-            spacing={0}
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: '100vh' }}>
-            <CircularProgress className={classes.progress} />
-        </Grid>
-        :
-               <Grid container spacing={3}>
+                        <LightTooltip title="Add Codeword set" placement="right">
+                            <Fab aria-label="add" className={classes.button} onClick={handleCodewordClickOpen}>
+                                <AddIcon />
+                            </Fab>
+                        </LightTooltip>
+                        <Dialog disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>
+                            <div>
 
-                    {
-                        !loading && listCodewordSet.length > 0 &&
-                        listCodewordSet
-                    }
+                                <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
+                            </div>
+                        </Dialog>
 
-                </Grid>
-            }
-        </TabPanel>
+                        {loading ? <Grid container
+                            spacing={0}
+                            alignItems="center"
+                            justify="center"
+                            style={{ minHeight: '100vh' }}>
+                            <CircularProgress className={classes.progress} />
+                        </Grid>
+                            :
+                            <Grid container spacing={3}>
 
-        <Dialog
-        open={openCloneCodewordset.open}
-        onClose={handleCloneCodewordsetClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Clone Codeword Set: "+ openCloneCodewordset.codewordSetName}</DialogTitle>
-        <DialogContent>
-        <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  margin="dense"
-                  name="newCodewordsetName"
-                  label="New Codewordset Name"
-                  type="text"
-                  id="newCodewordsetName"
-                  autoComplete="current-password"
-                  value={newCodewordsetName}
-                  onChange={handleChange('newCodewordsetName')}
-                />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloneCodewordsetClose} color="secondary">
-            Cancel
+                                {
+                                    !loading && listCodewordSet.length > 0 &&
+                                    listCodewordSet
+                                }
+
+                            </Grid>
+                        }
+                    </TabPanel>
+
+                    <Dialog
+                        open={openCloneCodewordset.open}
+                        onClose={handleCloneCodewordsetClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Clone Codeword Set: " + openCloneCodewordset.codewordSetName}</DialogTitle>
+                        <DialogContent>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                margin="dense"
+                                name="newCodewordsetName"
+                                label="New Codewordset Name"
+                                type="text"
+                                id="newCodewordsetName"
+                                autoComplete="current-password"
+                                value={newCodewordsetName}
+                                onChange={handleChange('newCodewordsetName')}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloneCodewordsetClose} color="secondary">
+                                Cancel
           </Button>
-          <Button onClick={handleCloneCodewordset} color="primary" autoFocus>
-            Clone
+                            <Button onClick={handleCloneCodewordset} color="primary" autoFocus>
+                                Clone
           </Button>
-        </DialogActions>
-      </Dialog>
+                        </DialogActions>
+                    </Dialog>
 
-      <Snackbar
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                    open={status.open}
-                    autoHideDuration={2000}
-                    variant="success"
-                    onClose={handleMessageClose}
-                    message={status.message}
-                    action={[
-                        <IconButton
-                            key="close"
-                            aria-label="Close"
-                            color="inherit"
-                            className={classes.close}
-                            onClick={handleMessageClose}
-                        >
-                            <CloseIcon />
-                        </IconButton>,
-                    ]}
-                ></Snackbar>
-        </div>
-                
-        </div>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                        open={status.open}
+                        autoHideDuration={2000}
+                        variant="success"
+                        onClose={handleMessageClose}
+                        message={status.message}
+                        action={[
+                            <IconButton
+                                key="close"
+                                aria-label="Close"
+                                color="inherit"
+                                className={classes.close}
+                                onClick={handleMessageClose}
+                            >
+                                <CloseIcon />
+                            </IconButton>,
+                        ]}
+                    ></Snackbar>
+                </div>
+
+            </div>
         </div>
 
     );
