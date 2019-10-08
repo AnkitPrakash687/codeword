@@ -160,11 +160,17 @@ export default function AddCodewordSet(props) {
 
     }
 
+    const handleFileOnClick = (event) =>{
+        event.target.value = ''
+        
+    }
+
     const handleFileChange = (event) => {
 
-        console.log(fileLabel.current.files[0].name)
-        if (fileLabel.current.files[0] && fileLabel.current.files[0].name) {
-            setState({ ...state, filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });
+        console.log('*******event******')
+        console.log(event.target)
+        if (event.target.files[0]) {
+            setState({ ...state, filename: event.target.files[0].name, selectedFile: event.target.files[0] });
             let file = event.target.files[0]
             let fileExt = file.name.split('.')[1]
             if(fileExt == 'csv'){
@@ -393,8 +399,8 @@ export default function AddCodewordSet(props) {
                         id="text-button-file"
                         multiple
                         type="file"
-                        ref={fileLabel}
                         onChange={handleFileChange}
+                        onClick={handleFileOnClick}
                     />
                     <label htmlFor="text-button-file">
                         <Grid container spacing={1}>

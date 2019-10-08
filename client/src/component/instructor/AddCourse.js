@@ -514,6 +514,7 @@ export default function AddCourse(props) {
                             type="file"
                             ref={fileLabel}
                             onChange={handleFileChange}
+                            onClick={(event) => event.target.value = ''}
                         />
                         <label htmlFor="text-button-file">
                             <Grid container spacing={1}>
