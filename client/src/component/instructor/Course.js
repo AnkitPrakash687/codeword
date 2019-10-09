@@ -262,20 +262,12 @@ export default function Course(props) {
         })
     }, [render])
 
-
-    // useEffect(()=>{
-
-    //     const headers = {
-    //         'token': sessionStorage.getItem('token')
-    //     };
-    //     API.get('dashboard/checkUsers', { headers: headers }).then(response => {
-    //         if(response.data.code == 200){
-    //             setUsers(response.data.data)
-    //             console.log('**users**')
-    //             console.log(response.data.data)
-    //         }
-    //     })
-    // }, [])
+    window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+      }
+    useEffect(()=>{
+        window.scrollTo(0,0)
+    }, [])
     const [redirect, setRedirect] = useState(false);
     const handleCardClick = () => {
         console.log('click working')

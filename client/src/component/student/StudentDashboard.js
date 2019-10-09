@@ -88,6 +88,7 @@ export default function StudentDashboard() {
     const [courseData, setCourseData] = useState([{}])
     const [render, setRender] = useState(false)
     useEffect(() => {
+        window.scrollTo(0,0)
         setLoading(true)
         console.log('inside effect')
         const headers = {
@@ -148,6 +149,11 @@ export default function StudentDashboard() {
         })
        
     }, [])
+
+    window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+      }
+  
 
   const handleInstructorRequest = () =>{
     const headers = {

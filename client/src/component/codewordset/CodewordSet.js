@@ -224,7 +224,12 @@ export default function CodewordSet(props) {
             })
     }, [render])
 
-
+    window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+      }
+    useEffect(()=>{
+        window.scrollTo(0,0)
+    }, [])
    
     const handleCardClick = () => {
         console.log('click working')
