@@ -1,30 +1,20 @@
-import Typography from '@material-ui/core/Typography';
-import React, { useState, Component, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { CircularProgress, Container, CssBaseline, Fab, Grid, IconButton, Snackbar, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import { withStyles } from '@material-ui/core/styles';
-import { green, lightGreen, grey, red } from '@material-ui/core/colors';
-import { Paper, Grid, CircularProgress, Container,Tooltip, Fab, CssBaseline, Snackbar, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close'
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { green, lightGreen, red } from '@material-ui/core/colors';
 import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button'
-import API from '../../utils/API'
-import ContainedTabs from '../mui-treasury/ContainedTabs'
-import MaterialTable from 'material-table';
-import { forwardRef } from 'react';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import CancelIcon from '@material-ui/icons/Cancel';
 import Check from '@material-ui/icons/Check';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CancelIcon from '@material-ui/icons/Cancel';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Clear from '@material-ui/icons/Clear';
+import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Edit from '@material-ui/icons/Edit';
 import FilterList from '@material-ui/icons/FilterList';
@@ -34,10 +24,14 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import AddIcon from '@material-ui/icons/Add';
-import AddCodewordSet from '../codewordset/AddCodewordSet'
-import CodewordsetCard from '../codewordset/CodewordsetCard'
-import MyAppBar from '../MyAppBar'
+import MaterialTable from 'material-table';
+import PropTypes from 'prop-types';
+import React, { forwardRef, useEffect, useState } from 'react';
+import API from '../../utils/API';
+import AddCodewordSet from '../codewordset/AddCodewordSet';
+import CodewordsetCard from '../codewordset/CodewordsetCard';
+import ContainedTabs from '../mui-treasury/ContainedTabs';
+import MyAppBar from '../MyAppBar';
 
 const moment = require('moment')
 const tableIcons = {

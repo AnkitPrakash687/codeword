@@ -1,47 +1,36 @@
-import Typography from '@material-ui/core/Typography';
-import React, { useState, Component, useEffect } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Appbar from '../MyAppBar'
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { green, lightGreen, red, grey, orange } from '@material-ui/core/colors';
-import {
-    Paper, Grid, Box, Slide, Button, Container, CssBaseline, Snackbar, CircularProgress,
-    IconButton, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Tooltip
-} from '@material-ui/core';
-import { withRouter } from 'react-router-dom'
-import API from '../../utils/API'
+import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Slide, Snackbar, Tooltip } from '@material-ui/core';
+import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import { Redirect } from "react-router-dom";
-import MaterialTable from 'material-table';
-import { forwardRef } from 'react';
-import EditCourse from '../instructor/EditCourse'
-import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 import AddBox from '@material-ui/icons/AddBox';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import Check from '@material-ui/icons/Check';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Clear from '@material-ui/icons/Clear';
+import CloseIcon from '@material-ui/icons/Close';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
+import { default as Edit, default as EditIcon } from '@material-ui/icons/Edit';
 import FilterList from '@material-ui/icons/FilterList';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import LockIcon from '@material-ui/icons/Lock';
 import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import Report from './Report'
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import LockIcon from '@material-ui/icons/Lock';
-import ListAltIcon from '@material-ui/icons/ListAlt';
-import EditCodewordSet from './EditCodewordSet';
+import MaterialTable from 'material-table';
+import PropTypes from 'prop-types';
+import React, { forwardRef, useEffect, useState } from 'react';
+import { Redirect } from "react-router-dom";
+import history from '../../history';
+import API from '../../utils/API';
 import MyAppBar from '../MyAppBar';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import history from '../../history'
+import EditCodewordSet from './EditCodewordSet';
+import Report from './Report';
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),

@@ -1,29 +1,17 @@
-import Typography from '@material-ui/core/Typography';
-import React, { useState, Component, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import { withStyles } from '@material-ui/core/styles';
-import { green, lightGreen, red, grey } from '@material-ui/core/colors';
-import {
-    Paper, Grid, Button, FormControl, InputLabel, CircularProgress, Modal, Tooltip,
-    MenuItem, OutlinedInput, Select, Box, Snackbar, IconButton, Chip, Slide,
-    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Divider
-} from '@material-ui/core';
-import { withRouter } from 'react-router-dom'
-import API from '../../utils/API'
-import TextField from '@material-ui/core/TextField'
-import Container from '@material-ui/core/Container'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import DateFnsUtils from '@date-io/date-fns';
+import { Box, Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Modal, OutlinedInput, Paper, Select, Slide, Snackbar, Tooltip } from '@material-ui/core';
+import { green, grey, lightGreen, red } from '@material-ui/core/colors';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import { flexbox, maxHeight } from '@material-ui/system';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker
-} from '@material-ui/pickers';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import InfoIcon from '@material-ui/icons/Info';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import API from '../../utils/API';
 
 const Papa = require('papaparse')
 var moment = require('moment');

@@ -1,33 +1,23 @@
-import Typography from '@material-ui/core/Typography';
-import React, { useState, Component, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { CircularProgress, DialogActions, DialogContent, Fab, FormControl, FormHelperText, Grid, IconButton, InputLabel, MenuItem, Select, Snackbar, TextField, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import { withStyles } from '@material-ui/core/styles';
-import { green, lightGreen, grey } from '@material-ui/core/colors';
-import {
-    Paper, Grid, Fab, Tooltip, Divider, MenuItem, FormControl, InputLabel, Select,
-    DialogActions, DialogContentText, DialogContent, Snackbar, IconButton,
-    OutlinedInput, FormHelperText, TextField
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import CourseCard from './CourseCard'
-import CodewordsetCard from '../codewordset/CodewordsetCard'
-import AddCodewordSet from '../codewordset/AddCodewordSet'
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import { green, grey, lightGreen } from '@material-ui/core/colors';
 import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button'
-import AddCourse from './AddCourse'
-import { CircularProgress } from '@material-ui/core'
-import API from '../../utils/API'
-import ContainedTabs from '../mui-treasury/ContainedTabs'
-import MyAppBar from '../MyAppBar'
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-import { light } from '@material-ui/core/styles/createPalette';
-import history from '../../history'
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import history from '../../history';
+import API from '../../utils/API';
+import AddCodewordSet from '../codewordset/AddCodewordSet';
+import CodewordsetCard from '../codewordset/CodewordsetCard';
+import ContainedTabs from '../mui-treasury/ContainedTabs';
+import MyAppBar from '../MyAppBar';
+import AddCourse from './AddCourse';
+import CourseCard from './CourseCard';
 const moment = require('moment')
 const useStyles = makeStyles(theme => ({
     root: {

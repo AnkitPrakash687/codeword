@@ -1,16 +1,12 @@
-import Typography from '@material-ui/core/Typography';
-import React, { useState, Component, useEffect } from 'react';
+import { Box, Grid, Link, Paper, Tooltip } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import { withStyles } from '@material-ui/core/styles';
-import { green, lightGreen, red, grey } from '@material-ui/core/colors';
-import { Paper, Grid, Tooltip, Link, Box, IconButton } from '@material-ui/core';
-import { withRouter } from 'react-router-dom'
-import API from '../../utils/API'
-import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import { green, lightGreen, red } from '@material-ui/core/colors';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from "react-router-dom";
-import history from '../../history'
-import ControlPointDuplicateIcon from '@material-ui/icons/ControlPointDuplicate';
+import history from '../../history';
 
 
 const useStyles = makeStyles(theme => ({

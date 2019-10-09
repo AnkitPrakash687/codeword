@@ -1,29 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import {CircularProgress} from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
+import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import { green, grey } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
-import API from "../utils/API";
-import FormValidator from '../utils/FormValidator'
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom"
-import Login from './Login'
-import Snackbar from '@material-ui/core/Snackbar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import clsx from 'clsx';
-import MyAppBar from '../component/MyAppBar'
-import { green, grey } from '@material-ui/core/colors'
-import logo from '../static/images/logo_1.png'
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import logo from '../static/images/logo_1.png';
+import API from "../utils/API";
+import FormValidator from '../utils/FormValidator';
 const useStyles = makeStyles(theme => ({
     '@global': {
         body: {

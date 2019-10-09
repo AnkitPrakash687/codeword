@@ -1,13 +1,10 @@
-import React, { useState, Component, useEffect } from 'react';
-import { green, lightGreen, red, grey } from '@material-ui/core/colors';
+import { Box, CircularProgress, Container, CssBaseline, FormControl, Grid, IconButton, InputLabel, MenuItem, OutlinedInput, Paper, Select, Typography } from '@material-ui/core';
+import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
-import API from '../../utils/API'
-import {
-    Paper, Grid, Box, Typography, CircularProgress, Button, Container, CssBaseline,
-    Select, MenuItem, FormControl, OutlinedInput, IconButton, InputLabel
-} from '@material-ui/core';
-import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
-import ReportCard from './ReportCard'
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
+import React, { useEffect, useState } from 'react';
+import API from '../../utils/API';
+import ReportCard from './ReportCard';
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: 20,

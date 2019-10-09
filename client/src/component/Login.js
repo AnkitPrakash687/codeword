@@ -1,32 +1,23 @@
-import React, { useState, Component } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import {Divider, CircularProgress} from '@material-ui/core'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
+import { CircularProgress, Divider } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import { green, grey, lightGreen } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
-import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom"
-import API from "../utils/API";
-import Snackbar from '@material-ui/core/Snackbar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Dashboard from './Dashboard';
+import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
-import history from '../history'
-import App from '../App';
-import { AppBar } from '@material-ui/core';
-import MyAppBar from '../component/MyAppBar'
-import {green, grey, lightGreen} from '@material-ui/core/colors'
-import logo from '../static/images/logo_1.png'
-import nwmsugreen from '../static/images/nwmsu.png'
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import React, { Component } from 'react';
+import { Link, Redirect, withRouter } from "react-router-dom";
+import logo from '../static/images/logo_1.png';
+import API from "../utils/API";
 const useStyles = theme => ({
   '@global': {
     body: {

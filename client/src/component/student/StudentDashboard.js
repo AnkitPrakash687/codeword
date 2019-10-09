@@ -1,24 +1,17 @@
-import Typography from '@material-ui/core/Typography';
-import React, { useState, Component, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { CircularProgress, Container, CssBaseline, Grid, IconButton, Paper, Snackbar, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import {Redirect} from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles';
-import { green, lightGreen, grey, red } from '@material-ui/core/colors';
-import { Paper, Tooltip, Grid, CircularProgress, Container, CssBaseline, Snackbar, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close'
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button'
-import API from '../../utils/API'
-import Card from './CourseCard'
-import MyAppBar from '../MyAppBar';
+import Button from '@material-ui/core/Button';
+import { green, grey, lightGreen, red } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import history from '../../history'
+import CloseIcon from '@material-ui/icons/Close';
+import React, { useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import history from '../../history';
+import API from '../../utils/API';
+import MyAppBar from '../MyAppBar';
+import Card from './CourseCard';
 
 const useStyles = makeStyles(theme => ({
     root: {
