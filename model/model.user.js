@@ -49,17 +49,27 @@ var UserModel = mongoose.model('UserModel', {
             codewordsetname: { type: String }
         }
     ],
-
-    resetPasswordToken:{type: String, default: null},
-    resetPasswordExpires: {type: Date, default: null},
+    resetPasswordToken:{
+        type: String, 
+        default: null
+    },
+    resetPasswordExpires: {
+        type: Date,
+        default: null
+    },
+    emailVerificationToken: {
+        type: String, 
+        default: null
+    },
+    isEmailVerified:{
+        type: Boolean, 
+        default: false
+    },
     created_at: {
         type: Date
     },
     updated_at: {
         type: Date,
     }
-
-
-
 });
 module.exports.UserModel = UserModel
