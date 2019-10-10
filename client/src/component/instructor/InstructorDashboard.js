@@ -21,8 +21,7 @@ import CourseCard from './CourseCard';
 const moment = require('moment')
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(3),
-        margin: theme.spacing(0,3,3,3),
+        padding: theme.spacing(0,3,3,3),
         flexGrow: 1,
         backgroundColor: grey[200],
     },
@@ -482,7 +481,7 @@ export default function InstructorDashboard(props) {
         <div>
 
             <MyAppBar />
-            <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="center">
+            <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="flex-start">
                 <Typography component="div">
                     <Box fontSize={24} color={grey[800]} fontWeight="fontWeightBold" m={1}>
                         Instructor Dashboard

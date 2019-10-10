@@ -15,7 +15,7 @@ import Card from './CourseCard';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: theme.spacing(0,3,3,3),
+       margin: theme.spacing(0,2,2,2),
         flexGrow: 1,
         backgroundColor: theme.palette.white,
     },
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
     paper2: {
         padding: 20,
-        margin: 20,
+   
         background: lightGreen[200]
     },
     title: {
@@ -191,7 +191,7 @@ export default function StudentDashboard() {
     return (
         <div>
             <MyAppBar disableStudentView={true}/>
-            <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="center">
+            <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="flex-start">
                 <Typography component="div">
                     <Box fontSize={24} color={grey[800]} fontWeight="fontWeightBold" m={1}>
                         Student Dashboard
@@ -207,7 +207,7 @@ export default function StudentDashboard() {
             <CircularProgress className={classes.progress} />
         </Grid>
         :            
-            <Container component="main" maxWidth='lg'>
+            <div className={classes.root} minWidth='xs'>
                     <CssBaseline />
                     <Paper className={classes.menuBar}>
                         { view == 'instructor' &&
@@ -256,7 +256,7 @@ export default function StudentDashboard() {
                     </Grid>
                 </Paper>  
           
-            </Container>
+            </div>
              }
 
             <Snackbar
