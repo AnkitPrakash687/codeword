@@ -95,7 +95,7 @@ export default function CourseCard(props) {
                 <div className={classes.appBar}>
                     <AppBar position="static" className={classes.appBar}>
                         {
-                        <LightTooltip title={props.courseName} placement="top-start">
+                        <LightTooltip title={props.courseName} placement="top-start" enterDelay={500}>
                         <Typography noWrap variant="h6" className={classes.title}>
                             {props.courseName} 
                         </Typography>
