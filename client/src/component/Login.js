@@ -127,7 +127,7 @@ class SignIn extends Component {
           } else {
             this.setState({
               isLoggedIn: false,
-              message: response.data.message,
+              message: 'Invalid username or password!',
               error: true
             })
           }
