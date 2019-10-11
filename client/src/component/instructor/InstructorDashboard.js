@@ -153,6 +153,7 @@ export default function InstructorDashboard(props) {
 
         API.post('dashboard/addcodewordset', data, { headers: headers }).then(response => {
             console.log('👉 Returned data in :', response);
+            setNewCodewordsetName()
             if (response.data.code == 200) {
                 //setOpenReport(true)
                 setStatus({
@@ -215,8 +216,10 @@ export default function InstructorDashboard(props) {
         setOpen(true)
     }
 
-    const handleClose = value => {
+    const handleClose = (value) => {
         setOpen(false)
+        console.log('value')
+        console.log(value)
         setRender(!render)
     };
 
@@ -477,6 +480,15 @@ export default function InstructorDashboard(props) {
         return r
     }
 
+    const handleDialogClose = name => (event) =>{
+        console.log('Dialog')
+        console.log(name)
+        if(name=='clone'){
+            setOpenCloneCodewordset({ open: false })
+            setNewCodewordsetName()
+        }
+    }
+
     return (
         <div>
 
@@ -512,7 +524,7 @@ export default function InstructorDashboard(props) {
                     Add Course
                 </Button> */}
                         <Grid container>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Box style={{ width: '100%' }} display="flex" flexDirection="row">
                                     <LightTooltip title="Add Course" placement="right">
                                         <Fab aria-label="add" className={classes.button} onClick={handleClickOpen}>
@@ -521,7 +533,7 @@ export default function InstructorDashboard(props) {
                                     </LightTooltip>
                                 </Box>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Box style={{ width: '100%' }} display="flex" flexDirection="row" justifyContent="flex-end">
                                     <FormControl variant="outlined" className={classes.formControl}>
                                         <InputLabel ref={inputLabel} htmlFor="outlined-filterCourse-simple">
@@ -648,7 +660,7 @@ export default function InstructorDashboard(props) {
 
                     <Dialog
                         open={openCloneCodewordset.open}
-                        onClose={handleCloneCodewordsetClose}
+                        onClose={handleDialogClose('clone')}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
@@ -670,7 +682,7 @@ export default function InstructorDashboard(props) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleCloneCodewordsetClose} color="secondary">
+                            <Button onClick={handleDialogClose('clone')} color="secondary">
                                 Cancel
           </Button>
                             <Button onClick={handleCloneCodewordset} color="primary" autoFocus>
