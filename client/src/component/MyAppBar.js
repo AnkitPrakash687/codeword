@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import {Link, Divider} from '@material-ui/core'
+import {Link, Grid, Box} from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
@@ -102,43 +102,55 @@ export default function MyAppBar(props) {
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
-        <Toolbar>       
+        <Toolbar>  
+        <Grid container>     
           <Typography variant="caption" className={classes.title}>
             <Link underline="none" href='/'>
           {
             window.innerWidth > 500?
+            
             <img onClick={handleRedirect}
             className={classes.media}
             style={{
-              width:'20%',
+              width:'30%',
               height: 'auto'
             }}
             src={logo}
           />:
+          <Box p={0} style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-start"  >
           <img onClick={handleRedirect}
           className={classes.media}
           style={{
-            width:'100%',
+            width:'50%',
             height: 'auto'
           }}
           src={logo}
         />
+        </Box>
           }
             </Link>
       
           </Typography>
+          
+            <Grid item xs={12} sm={6}>
+            <Box p={1} style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-end"  >
           {token != null &&
+          <Box p={1}item>
           <Button
             color="inherit"
             className={classes.button}
           >
             {'Hi '+name}
           </Button>
+          </Box>
           }
-             {token != null && isInstructor && !disableStudentView &&
+             {/* {token != null && isInstructor && !disableStudentView &&
+              <Box p={2} item>
           <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
-             }
+          </Box>
+             } */}
           {token != null && isInstructor && !disableStudentView &&
+           <Box p={1}item>
           <Button 
           color="inherit"
           onClick={handleStudentView}
@@ -146,11 +158,13 @@ export default function MyAppBar(props) {
           >
             Student View
           </Button>
+          </Box>
           }
-           {token != null &&
+           {/* {token != null &&
            <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
-           }
+           } */}
           {token != null &&
+           <Box p={1}item>
           <Button 
           color="inherit"
           className={classes.button}
@@ -158,8 +172,11 @@ export default function MyAppBar(props) {
           >
             Logout
           </Button>
+          </Box>
           }
-
+          </Box>
+          </Grid>
+</Grid>
         </Toolbar>
         
       </AppBar>
