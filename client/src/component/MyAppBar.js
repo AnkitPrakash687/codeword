@@ -118,7 +118,7 @@ export default function MyAppBar(props) {
           <img onClick={handleRedirect}
           className={classes.media}
           style={{
-            width:'80%',
+            width:'100%',
             height: 'auto'
           }}
           src={logo}
@@ -135,7 +135,9 @@ export default function MyAppBar(props) {
             {'Hi '+name}
           </Button>
           }
+             {token != null && isInstructor && !disableStudentView &&
           <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
+             }
           {token != null && isInstructor && !disableStudentView &&
           <Button 
           color="inherit"
@@ -145,7 +147,9 @@ export default function MyAppBar(props) {
             Student View
           </Button>
           }
+           {token != null &&
            <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
+           }
           {token != null &&
           <Button 
           color="inherit"
