@@ -768,8 +768,14 @@ export default function AddCourse(props) {
                     <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
                     <Divider />
                     <DialogContent>
+                   Note: <ul>
+                               <li>Name or Email cannot be blank </li>
+                               <li>Name should only contain letters or numbers</li>
+                               <li>Name cannot exceed 50 characters</li>
+                               <li>Email id should not be in wrong format</li>
+                            </ul>
                         <DialogContentText id="alert-dialog-slide-description">
-                            Duplicate Records: <p>{invalidRecord.duplicateEmails.length}</p>
+                            Duplicate Records: {invalidRecord.duplicateEmails.length}
                         </DialogContentText>
                         <Grid container >
                             {invalidRecord.duplicateEmails.map((item) => {
@@ -784,6 +790,7 @@ export default function AddCourse(props) {
 
                         <DialogContentText id="alert-dialog-slide-description">
                             Invalid records: {invalidRecord.invalidRecords.length}
+                           
                         </DialogContentText>
                         <Grid container >
                             {
