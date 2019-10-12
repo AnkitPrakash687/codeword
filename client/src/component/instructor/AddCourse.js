@@ -145,6 +145,7 @@ export default function AddCourse(props) {
 
         };
     }
+    
     const [modalStyle] = React.useState(getModalStyle);
     const inputLabel = React.useRef(null);
     const fileLabel = React.useRef(null)
@@ -153,7 +154,7 @@ export default function AddCourse(props) {
         validRecords: []
     })
     const [file, setFile] = useState({
-        filename: '',
+        filename: 'Student name, email(.csv file with no header)',
         selectedFile: null,
     })
     const [wrongFileExtn, setWrongFileExtn] = useState(false)
@@ -513,7 +514,7 @@ export default function AddCourse(props) {
                                         disabled="true"
                                         margin="dense"
                                         value={file.filename}
-                                        helperText="only .csv file is allowed - name and email with no header"
+                                        helperText="Example: John Smith, johnsmith@abc.com"
                                         style={{
                                             color: red[500]
                                         }}
