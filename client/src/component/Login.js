@@ -116,7 +116,8 @@ class SignIn extends Component {
           'auth/signin', data)
         .then(response => {
           sessionStorage.setItem('token', response.data.token)
-          
+        //  sessionStorage.setItem('name', response.data.name)
+        console.log(response.data)
           // console.log('👉 Returned data:', response);
           console.log(response.data)
           if (response.data.code == 200) {

@@ -94,6 +94,8 @@ var signIn = (req,res) => {
                             code: 200, 
                             message: 'Signed in successfully. Redirecting.', 
                             token: newToken,
+                            firstName: User.first_name,
+                            lastName: User.last_name,
                             role: User.role });
                         })
                    
@@ -114,7 +116,8 @@ var details = (req,res) => {
     }
     console.log('user'+user);        
     return res.send({email_id: user.email_id, 
-        name: user.first_name + ' '+ user.last_name, 
+        firstName: user.first_name,
+        lastName: user.last_name, 
         role:user.role,
         instructorRequest: user.instructor_role_request,
         role: user.role

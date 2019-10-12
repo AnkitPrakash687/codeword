@@ -33,6 +33,7 @@ import Student from './student/StudentDashboard';
               role: response.data.role,
               name: response.data.first_name + ' ' + response.data.last_name
             })
+            
             console.log('dashbaord : '+ this.state.role)
             
         }else {

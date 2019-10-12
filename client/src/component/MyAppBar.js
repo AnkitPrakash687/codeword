@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import {Link} from '@material-ui/core'
+import {Link, Divider} from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
     background: green[500]
   },
   button:{
-    margin: theme.spacing(1)
+    margin: theme.spacing(0),
+    textTransform: 'none'    
   }
 }));
 
@@ -49,6 +50,7 @@ export default function MyAppBar(props) {
   const [token, setToken] = useState(sessionStorage.getItem('token'))
   const [isInstructor, setIsInstructor] = useState(false)
   const [redirect, setRedirect] = useState(false)
+  const [name, setName] = useState()
   const handleLogout = () =>{
  
     sessionStorage.clear()
@@ -76,6 +78,7 @@ export default function MyAppBar(props) {
     console.log(response.data)
    
           var user = response.data
+          setName(user.firstName)
           if(user.role == 'instructor'){
               setIsInstructor(true)
           }
@@ -124,6 +127,15 @@ export default function MyAppBar(props) {
             </Link>
       
           </Typography>
+          {token != null &&
+          <Button
+            color="inherit"
+            className={classes.button}
+          >
+            {'Hi '+name}
+          </Button>
+          }
+          <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
           {token != null && isInstructor && !disableStudentView &&
           <Button 
           color="inherit"
@@ -133,6 +145,7 @@ export default function MyAppBar(props) {
             Student View
           </Button>
           }
+           <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
           {token != null &&
           <Button 
           color="inherit"
@@ -142,6 +155,7 @@ export default function MyAppBar(props) {
             Logout
           </Button>
           }
+
         </Toolbar>
         
       </AppBar>
