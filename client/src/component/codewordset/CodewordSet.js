@@ -53,6 +53,7 @@ const tableIcons = {
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: 20,
+        paddingBottom: theme.spacing(4),
         flexGrow: 1,
         //  background: theme.palette.background.paper,
         background: lightGreen[200],
@@ -658,8 +659,8 @@ export default function CodewordSet(props) {
                             </div>
                             <Grid container>
                                 <Grid item sm={3}></Grid>
-                                <Grid item >
-                                    <div className={classes.table}>
+                                <Grid item xs={12} sm={6}>
+                                   
                                         <MaterialTable
                                             icons={tableIcons}
                                             title="Codewords"
@@ -692,7 +693,7 @@ export default function CodewordSet(props) {
                                             }}
 
                                         />
-                                    </div>
+
                                 </Grid>
                             </Grid>
                             <Snackbar
