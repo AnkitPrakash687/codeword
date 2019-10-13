@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   button:{
     margin: theme.spacing(0),
     textTransform: 'none'    
+  },
+  navTool:{
+    margin: theme.spacing(1)
   }
 }));
 
@@ -50,6 +53,7 @@ export default function MyAppBar(props) {
   const [token, setToken] = useState(sessionStorage.getItem('token'))
   const [isInstructor, setIsInstructor] = useState(false)
   const [redirect, setRedirect] = useState(false)
+  const [response, setResponse] = useState()
   const [name, setName] = useState()
   const handleLogout = () =>{
  
@@ -66,7 +70,15 @@ export default function MyAppBar(props) {
  }
 
  useEffect(()=>{
-
+  if(window.innerWidth > 500){
+    setResponse({
+      logoAlignment: 'flex-end',
+    })
+  }else{
+    setResponse({
+      logoAlignment: 'flex-start',
+    })
+  }
   console.log(token)
   if(token != null){
   const headers = {
@@ -112,7 +124,7 @@ export default function MyAppBar(props) {
             <img onClick={handleRedirect}
             className={classes.media}
             style={{
-              width:'30%',
+              width:'25%',
               height: 'auto'
             }}
             src={logo}
@@ -121,7 +133,7 @@ export default function MyAppBar(props) {
           <img onClick={handleRedirect}
           className={classes.media}
           style={{
-            width:'50%',
+            width:'40%',
             height: 'auto'
           }}
           src={logo}
@@ -132,25 +144,27 @@ export default function MyAppBar(props) {
       
           </Typography>
           
-            <Grid item xs={12} sm={6}>
-            <Box p={1} style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-end"  >
+            <Grid className={classes.navTool} item xs={12} sm={6}>
+            <Box p={0} style={{width:'100%', margin:0}} display="flex" flexDirection="row" justifyContent="flex-end"  >
           {token != null &&
-          <Box p={1}item>
+          <Box item display="flex" flexDirection="row">
           <Button
             color="inherit"
             className={classes.button}
-          >
-            {'Hi '+name}
+          > 
+            { name? 'Hi '+name:null}
           </Button>
+          <div style={{marginTop:8, width: 0, height: 20, color: green[600],borderLeft:'2px solid'}}></div>
           </Box>
           }
+          
              {/* {token != null && isInstructor && !disableStudentView &&
               <Box p={2} item>
           <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
           </Box>
              } */}
           {token != null && isInstructor && !disableStudentView &&
-           <Box p={1}item>
+           <Box item  item display="flex" flexDirection="row">
           <Button 
           color="inherit"
           onClick={handleStudentView}
@@ -158,13 +172,15 @@ export default function MyAppBar(props) {
           >
             Student View
           </Button>
+          <div style={{marginTop:8, width: 0, height: 20, color: green[600], borderLeft:'2px solid'}}></div>
           </Box>
+           
           }
            {/* {token != null &&
            <div style={{height: 24, borderLeft: '2px solid', borderColor: green[600]}}></div>
            } */}
           {token != null &&
-           <Box p={1}item>
+           <Box item>
           <Button 
           color="inherit"
           className={classes.button}
