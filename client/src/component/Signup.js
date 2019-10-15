@@ -170,12 +170,12 @@ export default function Signup() {
       }
     },[password])
 
-    if(redirect && sessionStorage.getItem('token')){
-      return <Redirect to={{
-        pathname: '/'
-      }}
-      />
-    }
+    // if(redirect && sessionStorage.getItem('token')){
+    //   return <Redirect to={{
+    //     pathname: '/'
+    //   }}
+    //   />
+    // }
 
   return (
     <div 
