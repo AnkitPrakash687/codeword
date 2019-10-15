@@ -14,7 +14,7 @@ import PrivateRoute from './component/PrivateRoute'
 import StudentDashboard from './component/student/StudentDashboard';
 import ResetPassword from './component/ResetPassword'
 import ForgotPassword from './component/ForgotPassword'
-
+import VerifyEmail from './component/VerifyEmail'
 
 export default function App() {
 
@@ -35,6 +35,7 @@ useEffect(()=>{
         <Route exact path="/signup" component={Signup} />
         <Route path="/forgotPassword/" component={ForgotPassword} />
         <Route path="/resetPassword/:token" component={ResetPassword} />
+        <Route path="/verifyEmail/:token" component={VerifyEmail} />
     </Router>
   );
 }

@@ -39,8 +39,7 @@ router.get('/getStudentCourses', courseController.getStudentCourses)
 // router.post('/addnewcodewords', codewordController.addcodewords);
 router.post('/updateCourse', courseController.updateCourse);
 router.post('/reset', usersController.sendResetEmail)
-router.get('/resetpassword', usersController.resetPassword)
-router.post('/resetpassword', usersController.reset)
+router.post('/resetpassword', usersController.resetPassword)
 router.get('/getcourse/:id',instructordasrboard.getcourse)
 router.get('/getacodewordset/:id',codewordsetController.getacodewordset)
 router.post('/reveal', courseController.revealCodeword)
@@ -56,4 +55,5 @@ router.post('/acceptRequest', usersController.acceptRequest)
 router.post('/declineRequest', usersController.declineRequest)
 router.get('/getAllUsers', usersController.getAllUsers)
 router.post('/deleteUser', usersController.deleteUser)
+
 module.exports = router;

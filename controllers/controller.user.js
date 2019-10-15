@@ -7,7 +7,13 @@ var mailController = require('../config/user.mail.js')
 const crypto = require('crypto');
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-
+const transporter = nodemailer.createTransport({
+    service: 'gmail', 
+    auth: {
+            user: 'codeword.group03@gmail.com',
+            pass: 'Aug@2019'
+         }
+});
 
 var signUp = (req,res) => {
     console.log('working')
@@ -16,7 +22,9 @@ var signUp = (req,res) => {
     // body.token = gen_token;
     var date = new Date()
     console.log("controller signup"+ body.email+" "+body.password+" "+body.instructor);
-   
+    const token = crypto.randomBytes(20).toString('hex'); 
+    console.log(token)
+    console.log(token);
     bcrypt.genSalt(10, (err,salt) => {
         bcrypt.hash(body.password,salt,(err,hash) => {
             body.password = hash;
@@ -25,6 +33,7 @@ var signUp = (req,res) => {
                 last_name: body.lastName.trim(),
                 email_id: body.email.toLowerCase(),
                 password: body.password,
+                emailVerificationToken: token,
                 instructor_role_request: body.instructor,
                 role: 'student',
                 create_at: date.toISOString(),
@@ -32,6 +41,28 @@ var signUp = (req,res) => {
             });
             userModel.save().then((user) => {
                 if(user){
+
+                    const mailoptions = {
+                        from: 'codeword.group03@gmail.com', 
+                        to: body.email, 
+                        subject: "Link To Reset Password", 
+                        text:'Hi, \n\n'+
+                            'You are receiving this because you(or someone else) have requested the reset'+ 
+                            'of the password for your account.\n\nPlease click on the following link,'+
+                            'or paste this into your browser to complete the process within one hour of' +
+                            ' receiving it:\n\n' + 'https://codeword-group03.herokuapp.com/verifyEmail/'+token+'\n\n' + 
+                            'If you did not request this, please ignore this email and your password will remain unchanged.\n\n'+
+                            'Thank you!\n'+
+                            'Team codeword group03'
+                    }
+                console.log('sending mail')
+    
+                        transporter.sendMail(mailoptions, function (err, response) {
+                            if (err) {
+                                res.json({code: 400, message:err});
+                            }
+                    })
+
                     var newToken = jwt.sign({email: body.email, id: user.id },'codewordnwmsu',{expiresIn:  10000 * 3000 }).toString();
                     console.log(newToken)
                     UserModel.updateOne({emailKey: body.email},
@@ -48,7 +79,7 @@ var signUp = (req,res) => {
                     
                             return res.json({ 
                                 code: 200, 
-                                message: 'Signed up successfully. Redirecting.', 
+                                message: 'Signed up successfully. Please verify your email before signing in', 
                                 token: newToken,
                                 role: user.role });
                             })
@@ -64,6 +95,43 @@ var signUp = (req,res) => {
 }
 module.exports.signUp = signUp;
 
+const verifyEmail = (req, res) => {
+   console.log('working email verify')
+    let body = _.pick(req.body, ['token', 'password'])
+    console.log(body.token)
+    UserModel.findOne({emailVerificationToken: body.token},
+       (error, user)=>{
+          if(error){
+              res.json({code: 400, message:'Something went wrong'})
+          }
+          console.log(user)
+        if(user){
+
+          UserModel.updateOne({emailVerificationToken: body.token}, 
+            {
+                $set: {
+                    emailVerificationToken: null,
+                    isEmailVerified: true
+                }
+            }, (err, User)=>{
+                if(err){
+                    res.json({code: 400, message:'Something went wrong'})
+                }
+                res.json({code: 200, message:'Email Verified'})
+
+            })
+        }else{
+            res.json({code: 400, message:'invalid code'})
+        }
+
+        }
+    )
+       
+   
+}
+
+module.exports.verifyEmail = verifyEmail
+
 var signIn = (req,res) => {
     console.log('signIn working')
     var body = _.pick(req.body,['email','password']);
@@ -71,12 +139,16 @@ var signIn = (req,res) => {
     var email = body.email.toLowerCase()
     UserModel.findOne({email_id: email}, function (err, User) {
         if(User == null){
-            return res.json({ code: 401, message: 'Email id not registered!!'});
+            return res.json({ code: 401, message: 'Invalid Email or Password'});
         }
         //console.log(User.role+"Instructor status signIn controller user");
         return bcrypt.compare(body.password,User.password,(err,result) => {
             console.log(result)
             if(result){
+
+                if(!User.isEmailVerified){
+                    return res.json({ code: 401, message: 'Verify the email before signing in'})
+                }
                 var newToken = jwt.sign({email: email, id: User.id },'codewordnwmsu',{expiresIn:  10000 * 3000 }).toString();
                 console.log(newToken)
                 UserModel.updateOne({emailKey: email},{$set: {token: newToken}}, (err) =>{
@@ -103,7 +175,7 @@ var signIn = (req,res) => {
                    
                 })
             }else{
-                return res.json({ code: 401, message: 'Invalid Password'})
+                return res.json({ code: 401, message: 'Invalid Email or Password'})
             }
         })
     })
