@@ -214,7 +214,6 @@ export default function Signup() {
             id="first-name"
             label="First Name"
             name="firstName"
-            autoComplete="firstName"
             autoFocus
             margin="dense"
             onChange={handleChange('firstName')}
@@ -228,7 +227,6 @@ export default function Signup() {
             id="last-name"
             label="Last Name"
             name="lastName"
-            autoComplete="lastName"
             margin="dense"
             onChange={handleChange('lastName')}
             value={state.lastName}
@@ -244,7 +242,6 @@ export default function Signup() {
             id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
             margin="dense"
             onChange={handleChange('email')}
             value={state.email}
@@ -260,8 +257,7 @@ export default function Signup() {
             label="Password"
             type="password"
             id="password"
-            margin="dense"
-            autoComplete="current-password"  
+            margin="dense" 
             onChange={handleChange('password')}
             value={password}
 
@@ -314,7 +310,6 @@ export default function Signup() {
             type="password"
             id="confirm-password"
             margin="dense"
-            autoComplete="current-password"
             onChange={handleChange('confirmPass')}
             value={state.confirmPass}
           />
