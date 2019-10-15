@@ -16,13 +16,14 @@ var signUp = (req,res) => {
     // body.token = gen_token;
     var date = new Date()
     console.log("controller signup"+ body.email+" "+body.password+" "+body.instructor);
+   
     bcrypt.genSalt(10, (err,salt) => {
         bcrypt.hash(body.password,salt,(err,hash) => {
             body.password = hash;
             var userModel = new UserModel({
                 first_name: body.firstName.trim(),
                 last_name: body.lastName.trim(),
-                email_id: body.email,
+                email_id: body.email.toLowerCase(),
                 password: body.password,
                 instructor_role_request: body.instructor,
                 role: 'student',
@@ -67,7 +68,8 @@ var signIn = (req,res) => {
     console.log('signIn working')
     var body = _.pick(req.body,['email','password']);
     console.log(body.email+"Controller user signin");
-    UserModel.findOne({email_id: body.email}, function (err, User) {
+    var email = body.email.toLowerCase()
+    UserModel.findOne({email_id: email}, function (err, User) {
         if(User == null){
             return res.json({ code: 401, message: 'Email id not registered!!'});
         }
@@ -75,13 +77,13 @@ var signIn = (req,res) => {
         return bcrypt.compare(body.password,User.password,(err,result) => {
             console.log(result)
             if(result){
-                var newToken = jwt.sign({email: body.email, id: User.id },'codewordnwmsu',{expiresIn:  10000 * 3000 }).toString();
+                var newToken = jwt.sign({email: email, id: User.id },'codewordnwmsu',{expiresIn:  10000 * 3000 }).toString();
                 console.log(newToken)
-                UserModel.updateOne({emailKey: body.email},{$set: {token: newToken}}, (err) =>{
+                UserModel.updateOne({emailKey: email},{$set: {token: newToken}}, (err) =>{
                     if(err){
                         return res.json({ code: 401, message: 'Unable to generate and update Token'});
                     }
-                    UserModel.updateOne({email_id: body.email}, 
+                    UserModel.updateOne({email_id: email}, 
                         {
                             $set: {
                                 last_login: new Date()
