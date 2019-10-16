@@ -7,6 +7,19 @@ var mailController = require('../config/user.mail.js')
 const crypto = require('crypto');
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const fs = require('fs')
+var handlebars = require('handlebars');
+var readHTMLFile = function(path, callback) {
+    fs.readFile(path, {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+            throw err;
+            callback(err);
+        }
+        else {
+            callback(null, html);
+        }
+    });
+};
 const transporter = nodemailer.createTransport({
     service: 'gmail', 
     auth: {
@@ -512,7 +525,12 @@ var requests = (req,res) =>{
                     if(error){
                         res.json({code: 400, message:'Something went wrong'});
                     }
-
+                    readHTMLFile(__dirname + '/resetPassword.html', function(err, html) {
+                        var template = handlebars.compile(html);
+                        var replacements = {
+                            username: user.first_name + ' ' + user.last_name,
+                            url:'https://codeword-group03.herokuapp.com/resetPassword/'+token
+                       };
                     const transporter = nodemailer.createTransport({
                         service: 'gmail', 
                         auth: {
@@ -532,7 +550,8 @@ var requests = (req,res) =>{
                         ' receiving it:\n\n' + 'https://codeword-group03.herokuapp.com/resetPassword/'+token+'\n\n' + 
                         'If you did not request this, please ignore this email and your password will remain unchanged.\n\n'+
                         'Thank you!\n'+
-                        'Team codeword group03'
+                        'Team codeword group03',
+                    html: template(replacements)
                 }
             console.log('sending mail')
 
@@ -545,11 +564,14 @@ var requests = (req,res) =>{
                         }
                 })
             })
+            })
 
         }else{
         res.json({code: 404, message:'User is not registered'});
         }
+        
     })
+
 }
 
 module.exports.forgotPassword = forgotPassword
