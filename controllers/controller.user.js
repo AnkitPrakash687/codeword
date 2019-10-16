@@ -529,7 +529,7 @@ var requests = (req,res) =>{
 
     const body = _.pick(req.body, ['email'])
     console.log(body)
-    UserModel.findOne({email_id: body.email}, (error, user)=>{
+    UserModel.findOne({email_id: body.email.toLowerCase()}, (error, user)=>{
         if(error){
             res.json({code: 400, message:'Some went wrong'});
         }
