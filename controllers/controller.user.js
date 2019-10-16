@@ -529,7 +529,9 @@ var requests = (req,res) =>{
                         var template = handlebars.compile(html);
                         var replacements = {
                             username: user.first_name + ' ' + user.last_name,
-                            url:'https://codeword-group03.herokuapp.com/resetPassword/'+token
+                            url:'https://codeword-group03.herokuapp.com/resetPassword/'+token,
+                            message1: 'There was a request to change your password!',
+                            message2: 'If did not make this request, just ignore this email. Otherwise, please click the button below to change your password:'
                        };
                     const transporter = nodemailer.createTransport({
                         service: 'gmail', 
