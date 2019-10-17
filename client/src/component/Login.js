@@ -228,10 +228,10 @@ class SignIn extends Component {
                   value={this.state.password}
                   onChange={handleChange('password')}
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
-                />
+                /> */}
                  <div className={classes.wrapper}>
                 <Button
                   type="submit"
