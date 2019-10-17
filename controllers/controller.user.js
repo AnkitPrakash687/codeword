@@ -61,11 +61,11 @@ var signUp = (req,res) => {
                         var template = handlebars.compile(html);
                         var replacements = {
                             username: user.first_name + ' ' + user.last_name,
-                            image1: '/images/forget_password.png',
+                            image1: 'https://i.ibb.co/HF4ZQBF/codeword-favi.png',
                             url:'https://codeword-group03.herokuapp.com/verifyEmail/'+token,
                             type: 'Verify Email',
                             message1: 'There\'s just one more step before you get to the fun part.',
-                            message2: 'Verify we have the right email address by clicking on the button below:'
+                            message2: 'Please verify that we have the right email address by clicking on the link below:'
                        };
                     const transporter = nodemailer.createTransport({
                         service: 'gmail', 
@@ -553,7 +553,7 @@ var requests = (req,res) =>{
                         var template = handlebars.compile(html);
                         var replacements = {
                             username: user.first_name + ' ' + user.last_name,
-                            image1: '/images/forget_password.png',
+                            image1: 'https://i.ibb.co/HF4ZQBF/codeword-favi.png',
                             url:'https://codeword-group03.herokuapp.com/resetPassword/'+token,
                             type: 'Reset Password',
                             message1: 'There was a request to change your password!',

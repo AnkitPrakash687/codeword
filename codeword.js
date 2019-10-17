@@ -46,9 +46,6 @@ app.get("/",function(req,res){
 });
 
 
-
-
-
 // initialize data ............................................
 require('./utils/seeder.js')(app)  // load seed data
 
