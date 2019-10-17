@@ -27,8 +27,9 @@ const useStyles = makeStyles(theme => ({
     },
     paper2: {
         padding: 10,
-        margin: 10,
-        minWidth: 200,
+        margin: theme.spacing(2,0,2,0),
+        minWidth: 220,
+        minHeight: 55,
         background: lightGreen[200]
     },
     title: {
@@ -152,19 +153,19 @@ export default function CourseCard(props) {
                         <Box display="flex" justifyContent="space-between">
                         <Box display="flex">
                         { props.startSurvey != 'Unpublished'?
-                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.startSurvey} variant="body1" className={classes.startSurvey}>
-                         Start Survey
+                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.startSurvey} variant="caption" className={classes.startSurvey}>
+                         Start Survey Link
                       </Link>
-                        :<Typography className={classes.startSurvey} variant="body1">Start Survey</Typography>
+                        :<Typography className={classes.startSurvey} variant="body1"></Typography>
                         }
                         </Box>
                         <Box display="flex">
                         { props.endSurvey != 'Unpublished'?
-                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.endSurvey} variant="body1" className={classes.link}>
-                         End Survey
+                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.endSurvey} variant="caption" className={classes.link}>
+                         End Survey Link
                       </Link>
                        
-                        :<Typography className={classes.startSurvey} variant="body1">End Survey</Typography>
+                        :<Typography className={classes.startSurvey} variant="body1"></Typography>
                         }
                         </Box>
                       </Box>
