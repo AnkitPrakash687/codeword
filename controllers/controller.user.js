@@ -78,7 +78,7 @@ var signUp = (req,res) => {
                 const mailoptions = {
                     from: 'codeword.group03@gmail.com', 
                     to: body.email, 
-                    subject: "Link To Reset Password", 
+                    subject: "Codeword email verification", 
                     text:'Hi, \n\n'+
                         'You are receiving this because you(or someone else) have requested the reset'+ 
                         'of the password for your account.\n\nPlease click on the following link,'+
