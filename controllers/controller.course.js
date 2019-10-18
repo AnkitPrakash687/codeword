@@ -80,7 +80,7 @@ let addCourse = (req, res) => {
        )
     }
   var codewordSet = _.pick(body.codewordSet[0], ['codewordSetName', 'codewords'])
-console.log(codewordSet)
+    console.log(codewordSet)
     var courseModel = new CourseModel({
         courseNameKey: body.courseNameKey,
         students: students,
@@ -90,12 +90,10 @@ console.log(codewordSet)
         isAssigned: false,
         createdBy: req.session.email,
         Enddate: body.endDate,
-        PreSurveyURL: body.preSurveyURL,
-        PostSurveyURL: body.postSurveyURL
+        PreSurveyURL: formatUrl(body.preSurveyURL),
+        PostSurveyURL: formatUrl(body.postSurveyURL)
     });
    
-
-
     courseModel.save().then((user) => {
         if (user)
             return res.status(200).json({ code: '200', message: "Course created successfully." });
@@ -111,7 +109,16 @@ console.log(codewordSet)
 }
 
 
+const formatUrl = (url) =>{
 
+    var result = url
+    if (!/^https?:\/\//i.test(url)) {
+        result = 'http://' + url;
+    }
+    console.log('format url')
+    console.log(result)
+    return result
+}
 
 const checkInput = (name, email) => {
 
@@ -349,8 +356,8 @@ const updateCourseData = (students, course, req, res) => {
                 codewordSet: course.codewordSet,
                 Startdate: course.Startdate,
                 Enddate: course.Enddate,
-                PreSurveyURL: course.PreSurveyURL,
-                PostSurveyURL: course.PostSurveyURL
+                PreSurveyURL: formatUrl(course.PreSurveyURL),
+                PostSurveyURL: formatUrl(course.PostSurveyURL)
             }
         }, (error, updatedCourse) => {
 
