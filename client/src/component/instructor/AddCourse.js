@@ -139,6 +139,7 @@ export default function AddCourse(props) {
         alertOpen: true
     })
 
+    const [openCodeowrdStudentCountError, setCodewordStudentCountError] = useState(false)
     function getModalStyle() {
 
         return {
@@ -154,13 +155,21 @@ export default function AddCourse(props) {
         validRecords: []
     })
     const [file, setFile] = useState({
-        filename: 'Student name, email(.csv file with no header)',
+        filename: 'Upload student list as .csv file with no header',
         selectedFile: null,
     })
     const [wrongFileExtn, setWrongFileExtn] = useState(false)
     React.useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
+
+    const codewordStudentCount = () =>{
+        console.log('Calc')
+        var studentCount = students.validRecords.length
+        var codewordCount = state.values.substring(state.values.indexOf('('), state.values.indexOf(')'))
+        console.log(studentCount)
+        console.log(codewordCount)
+    }
 
     const [codeword, setCodeword] = useState([{
         codewordSetName: '',
@@ -301,6 +310,8 @@ export default function AddCourse(props) {
             } else {
                 setWrongFileExtn(true)
             }
+
+            codewordStudentCount()
         }
     }, [file, wrongFileExtn])
 
@@ -309,6 +320,7 @@ export default function AddCourse(props) {
             setFile({ filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });
 
         }
+        
     }
 
     const handleDateChange = name => (date) => {
@@ -411,7 +423,7 @@ export default function AddCourse(props) {
         }
     }
 
-    const handleDelete = () => {
+    const handleCodewordStudentErrorClose = () => {
 
     }
     AddCourse.propTypes = {
@@ -443,6 +455,7 @@ export default function AddCourse(props) {
         )
     }
 
+    
 
     const handleReportClose = () => {
 
@@ -814,6 +827,46 @@ export default function AddCourse(props) {
 
                 </Paper>
             </Modal>
+
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={openCodeowrdStudentCountError}
+                onClose={handleCodewordStudentErrorClose}
+                disableBackdropClick
+                className={classes.modal}
+            >
+                <Paper className={classes.report}>
+                    <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
+                    <Divider />
+                    <DialogContent>
+
+                        <DialogContentText id="alert-dialog-slide-description">
+                           
+                        </DialogContentText>
+                        <Grid container >
+                           
+                        </Grid>
+
+                        <DialogContentText id="alert-dialog-slide-description">
+                           
+                           
+                        </DialogContentText>
+                        <Grid container >
+                          
+                        </Grid>
+
+                    </DialogContent>
+                    <Divider />
+                    <DialogActions>
+                        <Button onClick={handleReportClose} color="primary">
+                            OK
+           </Button>
+                    </DialogActions>
+
+                </Paper>
+            </Modal>
+
         </div>
     );
 }
