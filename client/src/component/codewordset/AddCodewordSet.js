@@ -396,7 +396,7 @@ export default function AddCodewordSet(props) {
                                     name="filename"
                                     disabled="true"
                                     margin="dense"
-                                    helperText="*only .txt file is allowed. One Codeword per line"
+                                    helperText="*only .txt or .csv file is allowed. One Codeword per line"
                                     value={state.filename}
                                 />
                             </Grid>
