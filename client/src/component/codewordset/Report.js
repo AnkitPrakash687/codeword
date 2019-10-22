@@ -52,7 +52,7 @@ export default function Report(props) {
     const [similarCodewords, setSimilarCodewords] = useState([]);
     const [anagrams, setAnagrams] = useState([])
     const [loading, setLoading] = useState()
-    const [level, setLevel] = useState(2)
+    const [level, setLevel] = useState(1)
 
     const inputLabel = React.useRef(null);
     const [disableUpdate, setDisableUpdate] = useState('true')
@@ -180,15 +180,13 @@ export default function Report(props) {
                                     onChange={handleChange}
                                     input={<OutlinedInput labelWidth={labelWidth} name="level" id="outlined-age-simple" />}
                                 >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
+                                 
 
-                                    <MenuItem value={0}>Level 1 - Lowest</MenuItem>
-                                    <MenuItem value={1}>Level 2 - Low</MenuItem>
-                                    <MenuItem value={2}>Level 3 - Medium</MenuItem>
-                                    <MenuItem value={3}>Level 3 - High</MenuItem>
-                                    <MenuItem value={4}>Level 4 - Highest</MenuItem>
+                                    {/* <MenuItem value={0}>Level 1 - Lowest</MenuItem> */}
+                                    <MenuItem value={1}>Low</MenuItem>
+                                    <MenuItem value={2}>Medium</MenuItem>
+                                    {/* <MenuItem value={3}>Level 3 - High</MenuItem> */}
+                                    <MenuItem value={4}>High</MenuItem>
 
                                 </Select>
                             </FormControl>

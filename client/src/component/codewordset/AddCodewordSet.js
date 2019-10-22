@@ -165,7 +165,7 @@ export default function AddCodewordSet(props) {
                     console.log('********CSV file******')
                     console.log(results)
                     var codewordSetData = results.data.map((item)=>{
-                        return item[0]
+                        return item[0].trim().toLowerCase()
                     })
                     console.log(codewordSetData)
 
@@ -183,7 +183,7 @@ export default function AddCodewordSet(props) {
                      var result = reader.result.split('\n')
                      console.log(result)
                      var codewordSetData = result.map((item)=>{
-                         return item.replace(/[\r]+/g,"")
+                         return item.replace(/[\r]+/g,"").trim().toLowerCase()
                      })
                      console.log(codewordSetData)
 

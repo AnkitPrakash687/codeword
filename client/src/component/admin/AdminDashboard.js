@@ -520,7 +520,6 @@ export default function AdminDashboard() {
            
             <Dialog  fullWidth={true} disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>    
                  <div>
-                 <DialogTitle id="simple-dialog-title">Add Codeword Set</DialogTitle>
                 <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
                 </div>         
             </Dialog>
