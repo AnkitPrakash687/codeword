@@ -139,7 +139,12 @@ export default function AddCourse(props) {
         alertOpen: true
     })
 
-    const [openCodeowrdStudentCountError, setCodewordStudentCountError] = useState(false)
+    const [codewordStudentCountError, setCodewordStudentCountError] = useState({
+        open: false,
+        message: ''
+    })
+    const [codewordSetCount, setCodewordSetCount] = useState()
+    const [studentCount, setStudentCount] = useState()
     function getModalStyle() {
 
         return {
@@ -181,8 +186,6 @@ export default function AddCourse(props) {
         duplicateEmails: []
     })
     const [openReport, setOpenReport] = useState(false)
-    const [studentCount, setStudentCount] = useState('empty')
-    const [codewordCount, SetCodewordCount] = useState('empty')
     const [publishedCodewordset, SetPublishedCodewordset] = useState([{
         codeWordSetName: ''
     }])
@@ -233,17 +236,24 @@ export default function AddCourse(props) {
         setState({ ...state, [name]: event.target.value });
         if ([name] == 'values') {
             console.log('inise code')
-            var count = codeword.filter((item) => {
+            var selectedCodewordset = codeword.filter((item) => {
                 if (item.codewordSetName == event.target.value) {
                     return item.count
                 }
             })
-
-            if (count.length > 0) {
-                SetCodewordCount(count[0].count)
-            } else {
-                SetCodewordCount('empty')
+            console.log('selected codeword set count')
+            console.log(selectedCodewordset[0].count)
+            setCodewordSetCount(selectedCodewordset[0].count)
+            if(students.validRecords && students.validRecords.length > 0){
+                console.log('calculate')
+                console.log(students.validRecords.length - selectedCodewordset[0].count)
+              
+                countAlert(students.validRecords.length, selectedCodewordset[0].count)
             }
+
+           
+
+
 
         }
 
@@ -257,6 +267,7 @@ export default function AddCourse(props) {
 
 
         if (file.selectedFile !== null) {
+            let removeDuplicateEmails
             if (fileExtn === 'csv') {
                 setWrongFileExtn(false)
                 Papa.parse(file.selectedFile, {
@@ -290,7 +301,7 @@ export default function AddCourse(props) {
                             return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) !== pos;
                         });
                         console.log(duplicateEmails)
-                        let removeDuplicateEmails = validRecords.filter((obj, pos, arr) => {
+                         removeDuplicateEmails = validRecords.filter((obj, pos, arr) => {
                             return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) === pos;
                         });
                         console.log(removeDuplicateEmails)
@@ -304,14 +315,23 @@ export default function AddCourse(props) {
                             duplicateEmails: duplicateEmails
                         }
                         )
+                       
+                            console.log(removeDuplicateEmails.length)
+                            setStudentCount(removeDuplicateEmails.length)
+                            if(state.values != ""){
+                               countAlert(removeDuplicateEmails.length, codewordSetCount)
+                            }
 
                     }
+
+
                 })
             } else {
                 setWrongFileExtn(true)
             }
 
             codewordStudentCount()
+           
         }
     }, [file, wrongFileExtn])
 
@@ -323,6 +343,12 @@ export default function AddCourse(props) {
         
     }
 
+    const handleStudentCountErrorClose = () =>{
+        setCodewordStudentCountError({
+            open:false,
+            message: ''
+        })
+    }
     const handleDateChange = name => (date) => {
         setState({ ...state, [name]: date });
     }
@@ -431,28 +457,13 @@ export default function AddCourse(props) {
     };
 
 
-    function countAlert(props) {
-        const { message, open, handleClose } = props
-        return (
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Warning"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        {message}
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary" autoFocus>
-                        OK
-            </Button>
-                </DialogActions>
-            </Dialog>
-        )
+    function countAlert(studentcount, codewordCount) {
+        if((codewordCount - studentCount) < 0){
+            setCodewordStudentCountError({
+                open: true,
+                message: 'Codeword count is less than the student count'
+            })
+        }
     }
 
     
@@ -831,27 +842,20 @@ export default function AddCourse(props) {
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
-                open={openCodeowrdStudentCountError}
-                onClose={handleCodewordStudentErrorClose}
+                open={codewordStudentCountError.open}
+                onClose={handleStudentCountErrorClose}
                 disableBackdropClick
                 className={classes.modal}
             >
                 <Paper className={classes.report}>
-                    <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-slide-title">{"Warning"}</DialogTitle>
                     <Divider />
                     <DialogContent>
 
                         <DialogContentText id="alert-dialog-slide-description">
-                           
+                           {codewordStudentCountError.message}
                         </DialogContentText>
-                        <Grid container >
-                           
-                        </Grid>
-
-                        <DialogContentText id="alert-dialog-slide-description">
-                           
-                           
-                        </DialogContentText>
+                      
                         <Grid container >
                           
                         </Grid>
@@ -859,7 +863,7 @@ export default function AddCourse(props) {
                     </DialogContent>
                     <Divider />
                     <DialogActions>
-                        <Button onClick={handleReportClose} color="primary">
+                        <Button onClick={handleStudentCountErrorClose} color="primary">
                             OK
            </Button>
                     </DialogActions>
