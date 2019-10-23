@@ -269,13 +269,13 @@ export default function CodewordSet(props) {
     const addCodewordRow = (resolve, newData) => {
         var data = {
             id: props.match.params.id,
-            codeword: newData.codeword,
+            codeword: newData.codeword.trim().toLowerCase(),
         }
         const headers = {
             'token': sessionStorage.getItem('token')
         };
         console.log(newData)
-        var check = checkCodeword(newData.codeword)
+        var check = checkCodeword(data.codeword)
         if (check === 'true') {
             API.post('dashboard/addcodeword', data, { headers: headers }).then(response => {
                 console.log(response.data)

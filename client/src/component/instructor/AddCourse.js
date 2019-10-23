@@ -457,13 +457,29 @@ export default function AddCourse(props) {
     };
 
 
-    function countAlert(studentcount, codewordCount) {
-        if((codewordCount - studentCount) < 0){
+    function countAlert(studentCount, codewordCount) {
+        var diff = codewordCount - studentCount
+        var ratio = (diff)/(studentCount * 100)
+        var x = ((diff ) == 0 ? null:(diff ))
+        console.log(ratio + ' ' + diff)
+        if(diff < 0){
             setCodewordStudentCountError({
                 open: true,
-                message: 'Codeword count is less than the student count'
+                message: 'Codeword count is less than the student count. You will not be able to finalize this course'
             })
         }
+        else if(diff >= 0 && (ratio) < 0.2 ){
+            setCodewordStudentCountError({
+                open: true,
+                message: ''+ 
+                (x==null?'There is no difference between codewords and students. There will be problem if you try to add any more student':'The difference between codeword and student is less.There will be problem if you try to add more than '+  x +' student')
+            })
+        }
+
+      
+        console.log('ratio')
+        console.log(ratio)
+      
     }
 
     
