@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 
     },
     formControl: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(2),
     },
     input: {
         display: 'none',
@@ -98,6 +98,16 @@ const useStyles = makeStyles(theme => ({
         minWidth: 300,
         maxWidth: 800,
         maxHeight: 500,
+        overflow: 'auto',
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+
+
+    },
+    alertreport: {
+
+        position: 'absolute',
+        maxWidth: 400,
         overflow: 'auto',
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
@@ -649,7 +659,7 @@ export default function AddCourse(props) {
                         <FormControl margin='dense' fullWidth="true" variant="outlined" className={classes.formControl}>
                             <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
                                 Codeword Set
-        </InputLabel>
+                            </InputLabel>
                             <Select
                                 value={state.values}
                                 onChange={handleChange('values')}
@@ -863,7 +873,7 @@ export default function AddCourse(props) {
                 disableBackdropClick
                 className={classes.modal}
             >
-                <Paper className={classes.report}>
+                <Paper className={classes.alertreport}>
                     <DialogTitle id="alert-dialog-slide-title">{"Warning"}</DialogTitle>
                     <Divider />
                     <DialogContent>

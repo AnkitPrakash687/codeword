@@ -1,10 +1,10 @@
 const Datastore = require('nedb')
 
 const userController = require('../controllers/controller.user')
-const datacourse = require('../data/data.Course.json')
+const datacourse = require('../data/courseData.json')
 const datacodeword = require('../data/data.codeword.json')
 const user = require('../data/data.user.json')
-const dataCodewordset = require('../data/data.codewordset.json')
+const dataCodewordset = require('../data/codewordsetData.json')
 const dataCoursestudent = require('../data/data.coursestudent.json')
 const hootoriginal=require('../data/hootoriginal.json')
 const largeset=require('../data/largeset.json')

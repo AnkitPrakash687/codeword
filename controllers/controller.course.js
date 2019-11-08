@@ -1,14 +1,7 @@
 
 const _ = require('lodash');
-const bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
 var { CourseModel } = require('../model/model.course');
 var { UserModel } = require('../model/model.user');
-var CodewordSet = require('../model/model.codewordset');
-var { mongoose } = require('./../config/database')
-var mailController = require('../config/user.mail.js')
-let XLSX = require('xlsx')
-var { CourseStudentModel } = require('../model/model.coursestudent');
 const multer = require('multer')
 const csv = require('csvtojson')
 
