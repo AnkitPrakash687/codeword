@@ -645,7 +645,7 @@ export default function Course(props) {
                                     <Grid container direction="column">
                                         <Grid item xs={12} >
 
-                                            {state.startSurvey != 'Unpublished' &&
+                                            {(state.startSurvey != 'Unpublished' || state.startSurvey != 'Unpublished') &&
                                                 <Link onClick={event => event.stopPropagation()} target="_blank" href={state.startSurvey} variant="body2" className={classes.link}>
                                                     <Typography component="div">
                                                         <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
@@ -655,7 +655,7 @@ export default function Course(props) {
                                                 </Link>}
                                         </Grid>
                                         <Grid item xs={12}>
-                                            {state.endSurvey != 'Unpublished' &&
+                                            {(state.endSurvey != 'Unpublished'  || state.endSurvey != 'Unpublished') &&
                                                 <Link onClick={event => event.stopPropagation()} target="_blank" href={state.endSurvey} variant="body2" className={classes.link}>
                                                     <Typography component="div">
                                                         <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>

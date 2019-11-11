@@ -351,8 +351,8 @@ const updateCourseData = (students, course, req, res) => {
                 codewordSet: course.codewordSet,
                 Startdate: course.Startdate,
                 Enddate: course.Enddate,
-                PreSurveyURL: formatUrl(course.PreSurveyURL),
-                PostSurveyURL: formatUrl(course.PostSurveyURL)
+                PreSurveyURL: course.PreSurveyURL != ''? formatUrl(course.PreSurveyURL):'',
+                PostSurveyURL: course.PostSurveyURL != ''? formatUrl(course.PostSurveyURL):''
             }
         }, (error, updatedCourse) => {
 
@@ -376,6 +376,9 @@ let updateCourse = (req, res) => {
         console.log('body--------------------------------------------------------------------/n' + body.courseNameKey)
         //var body = req.
         //    console.log(body)
+
+        var formattedPostSurveyUrl = body.postSurveyURL != ''?formatUrl(body.postSurveyURL):''
+        var formattedPreSurveyUrl = body.preSurveyURL != ''?formatUrl(body.preSurveyURL):''   
         Codewordset.findOne({ codewordSetName: body.codewordSetName }, (error, codewordSet) => {
             if (error) {
                 return res.json({ code: 400, message: err });
@@ -429,11 +432,11 @@ let updateCourse = (req, res) => {
                 }
 
                 console.log(course.PreSurveyURL + '!=' + formatUrl(body.preSurveyURL))
-                if (course.PreSurveyURL != formatUrl(body.preSurveyURL)) {
-                    courseData.PreSurveyURL = formatUrl(body.preSurveyURL)
+                if (course.PreSurveyURL != formattedPreSurveyUrl) {
+                    courseData.PreSurveyURL = formattedPreSurveyUrl
                 }
-                if (course.PostSurveyURL != formatUrl(body.postSurveyURL)) {
-                    courseData.PostSurveyURL = formatUrl(body.postSurveyURL)
+                if (course.PostSurveyURL != formattedPostSurveyUrl) {
+                    courseData.PostSurveyURL = formattedPostSurveyUrl
                 }
 
                 var studentList = req.file;
