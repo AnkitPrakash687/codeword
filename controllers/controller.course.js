@@ -2,6 +2,7 @@
 const _ = require('lodash');
 var { CourseModel } = require('../model/model.course');
 var { UserModel } = require('../model/model.user');
+var Codewordset = require('../model/model.codewordset');
 const multer = require('multer')
 const csv = require('csvtojson')
 
@@ -72,6 +73,7 @@ let addCourse = (req, res) => {
        }
        )
     }
+    console.log(body)
   var codewordSet = _.pick(body.codewordSet[0], ['codewordSetName', 'codewords'])
     console.log(codewordSet)
     var courseModel = new CourseModel({
@@ -83,8 +85,8 @@ let addCourse = (req, res) => {
         isAssigned: false,
         createdBy: req.session.email,
         Enddate: body.endDate,
-        PreSurveyURL: formatUrl(body.preSurveyURL),
-        PostSurveyURL: formatUrl(body.postSurveyURL)
+        PreSurveyURL: body.preSurveyURL != ''?formatUrl(body.preSurveyURL):'',
+        PostSurveyURL: body.postSurveyURL != ''?formatUrl(body.postSurveyURL):''
     });
    
     courseModel.save().then((user) => {
@@ -103,7 +105,7 @@ let addCourse = (req, res) => {
 
 
 const formatUrl = (url) =>{
-
+    
     var result = url
     if (!/^https?:\/\//i.test(url)) {
         result = 'http://' + url;
@@ -374,7 +376,7 @@ let updateCourse = (req, res) => {
         console.log('body--------------------------------------------------------------------/n' + body.courseNameKey)
         //var body = req.
         //    console.log(body)
-        CodewordSet.findOne({ codewordSetName: body.codewordSetName }, (error, codewordSet) => {
+        Codewordset.findOne({ codewordSetName: body.codewordSetName }, (error, codewordSet) => {
             if (error) {
                 return res.json({ code: 400, message: err });
             }
@@ -426,12 +428,12 @@ let updateCourse = (req, res) => {
                     courseData.Enddate = new Date(body.endDate)
                 }
 
-                console.log(course.PreSurveyURL + '!=' + body.preSurveyURL)
-                if (course.PreSurveyURL != body.preSurveyURL) {
-                    courseData.PreSurveyURL = body.preSurveyURL
+                console.log(course.PreSurveyURL + '!=' + formatUrl(body.preSurveyURL))
+                if (course.PreSurveyURL != formatUrl(body.preSurveyURL)) {
+                    courseData.PreSurveyURL = formatUrl(body.preSurveyURL)
                 }
-                if (course.PostSurveyURL != body.postSurveyURL) {
-                    courseData.PostSurveyURL = body.postSurveyURL
+                if (course.PostSurveyURL != formatUrl(body.postSurveyURL)) {
+                    courseData.PostSurveyURL = formatUrl(body.postSurveyURL)
                 }
 
                 var studentList = req.file;
