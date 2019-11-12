@@ -1,5 +1,9 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Box, Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Modal, OutlinedInput, Paper, Select, Slide, Snackbar, Tooltip } from '@material-ui/core';
+import { Box, Button, Chip, CircularProgress, Dialog, 
+    DialogActions, DialogContent, DialogContentText, DialogTitle, 
+    Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, 
+    Modal, OutlinedInput, Paper, Select, Slide, Snackbar, Tooltip,
+    SnackbarContent } from '@material-ui/core';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -146,7 +150,10 @@ export default function AddCourse(props) {
         error: false,
         message: '',
         reRender: false,
-        alertOpen: true
+        alertOpen: true,
+        snackcolor:{
+            backgroundColor: grey[800]
+        }
     })
 
     const [codewordStudentCountError, setCodewordStudentCountError] = useState({
@@ -396,7 +403,10 @@ export default function AddCourse(props) {
                 setState({
                     status: true,
                     message: 'Course Created Successfully',
-                    reRender: true
+                    reRender: true,
+                    snackcolor:{
+                        backgroundColor: lightGreen[800]
+                    }
                 })
 
             } else {
@@ -408,6 +418,9 @@ export default function AddCourse(props) {
                     status: true,
                     error: true,
                     message: response.data.message,
+                    snackcolor:{
+                        backgroundColor: red[800]
+                    }
                 })
             }
             setLoading(false)
@@ -421,7 +434,10 @@ export default function AddCourse(props) {
                     endDate: state.endDate,
                     status: true,
                     error: true,
-                    message: error.message
+                    message: error.message,
+                    snackcolor:{
+                        backgroundColor: red[800]
+                    }
                 })
             });
 
@@ -786,6 +802,7 @@ export default function AddCourse(props) {
                         vertical: 'bottom',
                         horizontal: 'left',
                     }}
+                 
                     open={state.status}
                     autoHideDuration={2000}
                     variant="success"
@@ -802,7 +819,11 @@ export default function AddCourse(props) {
                             <CloseIcon />
                         </IconButton>,
                     ]}
-                ></Snackbar>
+                >
+                    <SnackbarContent style={state.snackcolor}
+                        message={<span id="client-snackbar">{state.message}</span>}
+                    />
+                </Snackbar>
             </div>
 
 

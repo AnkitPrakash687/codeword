@@ -2,7 +2,7 @@ import { CircularProgress, Divider } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import { green, grey, lightGreen } from '@material-ui/core/colors';
+import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import {Typography, SnackbarContent} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { Component } from 'react';
 import { Link, Redirect, withRouter } from "react-router-dom";
@@ -91,7 +91,10 @@ class SignIn extends Component {
       isLoggedIn: false,
       message: '',
       error: false,
-      loading: false
+      loading: false,
+      snackcolor:{
+        backgroundColor:grey[800]
+      }
     }
   
   }
@@ -129,7 +132,10 @@ class SignIn extends Component {
             this.setState({
               isLoggedIn: false,
               message: response.data.message,
-              error: true
+              error: true,
+              snackcolor:{
+                backgroundColor: red[800]
+              }
             })
           }
           this.setState({...this.state, loading:false})
@@ -270,6 +276,10 @@ class SignIn extends Component {
               vertical: 'bottom',
               horizontal: 'left',
             }}
+            style={{
+              color:[green]
+          }}
+          
             open={this.state.error}
             autoHideDuration={6000}
             variant="success"
@@ -287,7 +297,9 @@ class SignIn extends Component {
               </IconButton>,
             ]}
           >
-
+              <SnackbarContent style={this.state.snackcolor}
+                message={<span id="client-snackbar">{this.state.message}</span>}
+              />
           </Snackbar>
 
         </Container>

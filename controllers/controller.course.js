@@ -355,9 +355,16 @@ const updateCourseData = (students, course, req, res) => {
                 PostSurveyURL: course.PostSurveyURL != ''? formatUrl(course.PostSurveyURL):''
             }
         }, (error, updatedCourse) => {
-
+            console.log('---------update course error--------')
+            console.log(error)
             if (error) {
-                return res.json({ code: 400, message: err });
+                if(error.code === 11000){
+                    return res.json({ code: 400, message: 'Course name already taken' });
+                }
+                else if(error.name && error.name == 'MongoError'){
+                return res.json({ code: 400, message: error.errmsg });
+                }
+                return res.json({ code: 400, message: 'Something went wrong!' });
             }
             return res.json({ code: 200, message: 'Course updated successfully' })
 

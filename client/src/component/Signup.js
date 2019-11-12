@@ -1,8 +1,8 @@
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress, SnackbarContent } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import { green, grey } from '@material-ui/core/colors';
+import { green, grey, red, lightGreen } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -79,7 +79,10 @@ export default function Signup() {
     const [success, setSuccess] = useState({
         status: false,
         message: '',
-        code:null
+        code:null,
+        snackcolor:{
+          backgroundColor: grey[800]
+        }
     })
     const [redirect, setRedirect] = useState(false)
     async function handleSubmit(event){
@@ -98,14 +101,20 @@ export default function Signup() {
             setSuccess({
                 status:true,
                 message: response.data.message,
-                code: 200
+                code: 200,
+                snackcolor:{
+                  backgroundColor: lightGreen[800]
+                }
             })
             sessionStorage.setItem('token',response.data.token)
         }else if(response.data.code == 400){
             setSuccess({
                 status:true,
                 message: 'Account already exists',
-                code: 400
+                code: 400,
+                snackcolor:{
+                  backgroundColor: red[800]
+                }
             })
         }
           } catch (e) {
@@ -358,6 +367,9 @@ export default function Signup() {
             </IconButton>,
           ]}
       >
+              <SnackbarContent style={success.snackcolor}
+                        message={<span id="client-snackbar">{success.message}</span>}
+                    />
        
       </Snackbar>
           <Grid container>
