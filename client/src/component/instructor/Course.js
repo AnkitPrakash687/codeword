@@ -1,5 +1,7 @@
-import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Link, Snackbar, Tooltip } from '@material-ui/core';
-import { green, grey, lightGreen, red } from '@material-ui/core/colors';
+import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, DialogActions, 
+    DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Link, Snackbar, 
+    Tooltip, Fab, ButtonGroup } from '@material-ui/core';
+import { green, grey, lightGreen, red, amber  } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddBox from '@material-ui/icons/AddBox';
@@ -125,14 +127,20 @@ const useStyles = makeStyles(theme => ({
 
     },
     iconButton: {
-        background: grey[300],
-        margin: theme.spacing(1),
-        color: grey[900]
+        background: green[500],
+        margin: theme.spacing(2,0,0,2),
+        color: grey[800],
+        "&:hover": {
+            backgroundColor: green[700]
+        }
     },
     iconButtonDelete: {
-        background: grey[300],
-        margin: theme.spacing(1),
-        color: red[900]
+        background: green[500],
+        margin: theme.spacing(2,2,2,2),
+        "&:hover": {
+            backgroundColor: green[700]
+        },
+        color: red[800]
     }
 }));
 export default function Course(props) {
@@ -564,14 +572,16 @@ export default function Course(props) {
                                     
                                     assign
                                 </Button> */}
-                                    <Tooltip title="Assign Course">
-                                        <IconButton
+                                    <Tooltip title="Finalize Course">
+                                    <Fab
+                                            variant="extended"
                                             className={classes.iconButton}
                                             onClick={handleAssign}
                                             disabled={disableEdit}
                                         >
-                                            <LockIcon fontSize="large" />
-                                        </IconButton>
+                                            <LockIcon style={{color: grey[800]}}/>
+                                            Finalize
+                                        </Fab>
                                     </Tooltip>
 
                                     {/* <Button
@@ -586,13 +596,15 @@ export default function Course(props) {
                                     edit
                                 </Button> */}
                                     <Tooltip title="Edit course">
-                                        <IconButton
+                                    <Fab
+                                            variant="extended"
                                             className={classes.iconButton}
                                             onClick={handleClickOpen}
                                         // disabled={disableEdit}
                                         >
-                                            <EditIcon fontSize="large" />
-                                        </IconButton>
+                                            <EditIcon  style={{color: grey[800]}}/>
+                                            <Typography variant="body2" style={{fontWeight:500}}>Edit</Typography>
+                                        </Fab>
                                     </Tooltip>
                                     <SimpleDialog data={state} open={open} onClose={handleClickClose} render={render} />
 
@@ -607,12 +619,14 @@ export default function Course(props) {
                                 </Button> */}
 
                                     <Tooltip title="Delete course">
-                                        <IconButton
+                                        <Fab
+                                            variant="extended"
                                             className={classes.iconButtonDelete}
                                             onClick={handleDeleteConfirmation}
                                         >
-                                            <DeleteForeverIcon fontSize="large" />
-                                        </IconButton>
+                                            <DeleteForeverIcon style={{color: red[800]}}/>
+                                            <Typography variant="body2" style={{fontWeight:700}}>Delete</Typography>
+                                        </Fab>
                                     </Tooltip>
                                    
                               
