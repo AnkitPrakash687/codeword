@@ -339,7 +339,7 @@ let addcodeword = (req, res) => {
       // console.log(Array.from(new Set(final.map(JSON.stringify)), JSON.parse))
      
      var anagrams = anagramFinder.find(codewords).filter((item)=>{
-         if(item.length > 1){
+         if(item.length > 0){
              return item
          }
      })
