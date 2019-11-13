@@ -391,11 +391,7 @@ let generateReport = (req, res) => {
                 console.log(result)
                 var data = {
                     similars: Array.from(new Set(final.map(JSON.stringify)), JSON.parse),
-                    anagrams: result.filter((item) => {
-                        if (item.length > 1) {
-                            return item
-                        }
-                    })
+                    anagrams: result
                 }
                 // console.log('************ANAGRAMS******************')
                 //console.log(anagrams)
