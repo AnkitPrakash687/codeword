@@ -45,7 +45,11 @@ const anagramFinder = function (keywords) {
             if (keywordsGrp.hasOwnProperty(keyword))
                 result.push(keywordsGrp[keyword]);
         }
-
+        result = result.filter((item)=>{
+            if(item.length > 1){
+                return item
+            }
+        })
         resolve(result);
     })
 
@@ -384,6 +388,7 @@ let generateReport = (req, res) => {
 
         var anagrams = anagramFinder(codewords)
             .then(result => {
+                console.log(result)
                 var data = {
                     similars: Array.from(new Set(final.map(JSON.stringify)), JSON.parse),
                     anagrams: result.filter((item) => {
