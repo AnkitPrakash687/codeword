@@ -8,7 +8,47 @@ var mailController = require('../config/user.mail.js')
 let xlsx2json = require('xlsx2json'); // added by Ujjawal Kumar
 multer = require('multer')
 const stringSimilarity = require('string-similarity')
-const anagramFinder = require('anagram-finder')
+//var anagramFinder = require('anagram-finder')
+
+
+const anagramFinder = function(keywords) {
+
+    // Finds the anagrams by the given keywords
+   
+  
+      if(!keywords || !(keywords instanceof Array))
+        return false;
+  
+      var result       = [],
+          keywordsLen  = keywords.length,
+          keywordsSort = function(a, b) { return a > b; };
+  
+      // Find
+      var keywordsGrp = {},
+          keywordKey,
+          i;
+  
+      for(i = 0; i < keywordsLen; i++) {
+        if(typeof keywords[i] !== 'string')
+          continue;
+  
+        keywordKey = keywords[i].split('').sort(keywordsSort).join('');
+  
+        if(!keywordsGrp.hasOwnProperty(keywordKey))
+          keywordsGrp[keywordKey] = [];
+  
+        keywordsGrp[keywordKey].push(keywords[i]);
+      }
+  
+      var keyword;
+      for(keyword in keywordsGrp) {
+        if(keywordsGrp.hasOwnProperty(keyword))
+          result.push(keywordsGrp[keyword]);
+      }
+  
+      return result;
+  
+  }
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -338,7 +378,7 @@ let addcodeword = (req, res) => {
        })
       // console.log(Array.from(new Set(final.map(JSON.stringify)), JSON.parse))
      
-     var anagrams = anagramFinder.find(codewords).filter((item)=>{
+     var anagrams = anagramFinder(codewords).filter((item)=>{
          if(item.length > 1){
              return item
          }
