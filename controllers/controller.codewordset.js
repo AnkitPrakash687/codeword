@@ -50,7 +50,10 @@ const anagramFinder = function (keywords) {
                 return item
             }
         })
-        resolve(result);
+        setTimeout(function(){
+            resolve(result);
+        }, 1000)
+        
     })
 
 
@@ -389,6 +392,9 @@ let generateReport = (req, res) => {
         var anagrams = anagramFinder(codewords)
             .then(result => {
                 console.log(result)
+                if(!result){
+                    return res.json({ code: 400, data: 'error' });
+                }
                 var data = {
                     similars: Array.from(new Set(final.map(JSON.stringify)), JSON.parse),
                     anagrams: result
