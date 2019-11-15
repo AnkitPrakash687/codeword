@@ -110,17 +110,7 @@ export default function Report(props) {
 
             <Container component="main" >
                 <CssBaseline />
-                {
 
-                    loading ?
-                        <Grid container
-                            spacing={0}
-                            alignItems="center"
-                            justify="center"
-                            style={{ minHeight: '100vh' }}>
-                            <CircularProgress className={classes.progress} />
-                        </Grid> : false
-                }
 
                 <div>
                     <Paper className={classes.report}>
@@ -183,19 +173,29 @@ export default function Report(props) {
                                  
 
                                     {/* <MenuItem value={0}>Level 1 - Lowest</MenuItem> */}
-                                    <MenuItem value={1}>Low</MenuItem>
-                                    <MenuItem value={2}>Medium</MenuItem>
+                                    <MenuItem value={0}>Low</MenuItem>
+                                    <MenuItem value={1}>Medium</MenuItem>
                                     {/* <MenuItem value={3}>Level 3 - High</MenuItem> */}
-                                    <MenuItem value={4}>High</MenuItem>
+                                    <MenuItem value={2}>High</MenuItem>
 
                                 </Select>
                             </FormControl>
                         
                             <Grid container >
+                                {
 
+                                    loading ?
+                                        <Grid container
+                                            spacing={0}
+                                            alignItems="center"
+                                            justify="center"
+                                            >
+                                            <CircularProgress className={classes.progress} />
+                                        </Grid> : false
+                                }
                                 {listCodeword.length > 0 ?
                                     listCodeword
-                                    :
+                                    : !loading?
                                     <Grid container>
                                         <Box p={1} width="100%" display="flex" justifyContent="center">
                                             <Typography component="div">
@@ -204,7 +204,7 @@ export default function Report(props) {
                                         </Box>
                                             </Typography>
                                         </Box>
-                                    </Grid>
+                                    </Grid> : null
                                 }
 
                             </Grid>
@@ -224,11 +224,21 @@ export default function Report(props) {
                             </Box>
                         </Paper>
                         <Paper className={classes.paper}>
+                            {
 
+                                loading ?
+                                    <Grid container
+                                        spacing={0}
+                                        alignItems="center"
+                                        justify="center"
+                                       >
+                                        <CircularProgress className={classes.progress} />
+                                    </Grid> : false
+                            }
                             <Grid container >
                                 {listAnagrams.length > 0 ?
                                     listAnagrams
-                                    :
+                                    : !loading?
                                     <Grid container>
                                         <Box p={1} width="100%" display="flex" justifyContent="center">
                                             <Typography component="div">
@@ -237,7 +247,7 @@ export default function Report(props) {
                                             </Box>
                                             </Typography>
                                         </Box>
-                                    </Grid>
+                                    </Grid> : null
                                 }
 
                             </Grid>

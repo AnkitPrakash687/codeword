@@ -323,25 +323,17 @@ let generateReport = (req, res) => {
     var body = _.pick(req.body, ['id', 'level']);
     console.log('********LEVEL**********')
     console.log(body.level)
-    var similarityLevel
+    var similarityLevel = 0.6
     switch (body.level) {
         case 0:
-            similarityLevel = 0.3
+            similarityLevel = 0.5
             break;
         case 1:
-            similarityLevel = 0.5
+            similarityLevel = 0.6
             break;
         case 2:
             similarityLevel = 0.7
             break;
-        case 3:
-            similarityLevel = 0.8
-            break;
-        case 4:
-            similarityLevel = 0.9
-            break;
-        default:
-            similarityLevel = 0.5
     }
     console.log(similarityLevel)
     Codewordset.findOne({ _id: body.id }, (error, codewordset) => {
