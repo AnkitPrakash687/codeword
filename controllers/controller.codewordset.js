@@ -32,8 +32,8 @@ const anagramFinder = function (keywords) {
             if (typeof keywords[i] !== 'string')
                 continue;
 
-            keywordKey = keywords[i].split('').sort(keywordsSort).join('');
-
+            keywordKey = keywords[i].split('').sort().join('');
+          //  console.log('keywordKey', keywordKey)
             if (!keywordsGrp.hasOwnProperty(keywordKey))
                 keywordsGrp[keywordKey] = [];
 
