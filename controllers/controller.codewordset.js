@@ -50,9 +50,9 @@ const anagramFinder = function (keywords) {
                 return item
             }
         })
-        setTimeout(function(){
+     
             resolve(result);
-        }, 1000)
+     
         
     })
 
