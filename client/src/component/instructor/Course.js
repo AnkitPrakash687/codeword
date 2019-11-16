@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, DialogActions, 
     DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Link, Snackbar, 
-    Tooltip, Fab, ButtonGroup } from '@material-ui/core';
+    Tooltip, Fab, TextField } from '@material-ui/core';
 import { green, grey, lightGreen, red, amber  } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 10,
         minHeight: 100,
         maxWidth: 800,
-        padding: theme.spacing(2)
+        padding: theme.spacing(1)
     },
     table: {
 
@@ -141,6 +141,14 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: green[700]
         },
         color: red[800]
+    },
+    form: {
+        width: '100%', 
+        padding: theme.spacing(2),
+    
+      },
+    textField:{
+        margin: theme.spacing(1)
     }
 }));
 export default function Course(props) {
@@ -191,12 +199,22 @@ export default function Course(props) {
     })
     const [open, setOpen] = useState(false)
     const [render, setRender] = useState(false)
-    const [disableEdit, setDisableEdit] = useState(false)
+    const [disableEdit, setDisableEdit] = useState()
     const [cannotAssignError, setCannotAssignError] = useState(false)
     const [deleteConfirmation, setDeleteConfirmation] = useState()
     const [loading, setLoading] = useState(false)
+    const [newStudent, setNewStudent] = useState({
+        name: '',
+        email: ''
+    })
+    const [addStudent, setAddStudent] = useState({
+        open: false
+    })
+    const [error, setError] = useState()
+    const [autoFocus, setAutoFocus] = useState()
     //const [users, setUsers] = useState()
     useEffect(() => {
+       
         setLoading(true)
         const headers = {
             'token': sessionStorage.getItem('token')
@@ -210,7 +228,7 @@ export default function Course(props) {
             }
         }).then(response => {
             API.get('dashboard/getcourse/' + state.id, { headers: headers }).then(response => {
-                console.log('👉 Returned data in :', response);
+                console.log('?? Returned data in :', response);
 
                 if (response.status == 200) {
                     console.log(response.data)
@@ -257,6 +275,7 @@ export default function Course(props) {
         }).catch(error => {
             console.log(error)
         })
+    
     }, [render])
 
     window.onbeforeunload = function () {
@@ -287,9 +306,32 @@ export default function Course(props) {
     const handleDeleteClose = value => {
         setDeleteConfirmation(false)
     }
+
+    const handleDialogClose = name => () =>{
+        if(name == 'addStudent'){
+            setAddStudent({
+                open: false
+            })
+        }
+    }
+
+    
+    const handleChange = name => (event) => {
+        console.log({ [name]: event.target.value })
+        setNewStudent({ ...newStudent, [name]: event.target.value });
+  
+      }
+
     const addCourseRow = (resolve, newData) => {
 
-
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        if (!emailRegex.test(newData.email)) {
+            resolve()
+            setSnack({
+                message: 'Invalid Email',
+                open: true
+            })
+        }else{
         var data = {
             id: state.id,
             email: newData.email,
@@ -298,7 +340,7 @@ export default function Course(props) {
         const headers = {
             'token': sessionStorage.getItem('token')
         };
-        console.log(newData)
+       // console.log(newData)
         API.post('dashboard/addstudent', data, { headers: headers }).then(response => {
             console.log(response.data)
             if (response.data.code == 200) {
@@ -309,18 +351,62 @@ export default function Course(props) {
                 const data = [...table.data];
                 data.push(newData);
                 setTable({ ...table, data });
-                console.log('render' + render)
+               // console.log('render' + render)
                 setRender(!render)
                 resolve()
+            } else {
+                resolve()
+                setSnack({
+                    message: response.data.message,
+                    open: true
+                })
+                
+            }
+        })
+    }
+    }
+
+    const addCourseRowNew = () => {
+
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        if (!emailRegex.test(newStudent.email)) {
+            setSnack({
+                message: 'Invalid Email',
+                open: true,
+                error: true
+            })
+        }else{
+        var data = {
+            id: state.id,
+            email: newStudent.email,
+            name: newStudent.name
+        }
+        const headers = {
+            'token': sessionStorage.getItem('token')
+        };
+       // console.log(newData)
+        API.post('dashboard/addstudent', data, { headers: headers }).then(response => {
+            console.log(response.data)
+            if (response.data.code == 200) {
+                setSnack({
+                    message: response.data.message,
+                    open: true
+                })
+                const data = [...table.data];
+                data.push(data);
+                setTable({ ...table, data });
+               // console.log('render' + render)
+                //setRender(!render)
+               // resolve()
             } else {
                 setSnack({
                     message: response.data.message,
                     open: true
                 })
-                resolve()
+              //  resolve()
             }
         })
-
+    }
     }
 
     const updateCourseRow = (resolve, newData, oldData) => {
@@ -388,6 +474,9 @@ export default function Course(props) {
         })
     }
 
+    const handleClickEdit = (rowData) =>{
+
+    }
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -471,8 +560,8 @@ export default function Course(props) {
         const { data, onClose, open, render } = props;
 
         const handleClose = (error) => {
-            console.log('render   ' + render)
-            setRender(!render)
+           // console.log('render   ' + render)
+           // setRender(!render)
             onClose();
         }
 
@@ -501,7 +590,7 @@ export default function Course(props) {
     return (
         <div>
 
-            <MyAppBar />
+            <MyAppBar backButton={true} from="course"/>
             {loading ? <Grid container
                 spacing={0}
                 alignItems="center"
@@ -519,7 +608,7 @@ export default function Course(props) {
                                 <Grid item sm={6}>
                                     <Grid container direction="column" >
                                         <Box display="flex" flexDirection="row" justifyContent="flex-start">
-                                            <Box p={1}>
+                                            {/* <Box p={1}>
                                                 <Tooltip title="Back to dasboard">
                                                     <IconButton
                                                         className={classes.backButton}
@@ -529,7 +618,7 @@ export default function Course(props) {
                                                         <ArrowBackIosIcon fontSize="large" />
                                                     </IconButton>
                                                 </Tooltip>
-                                            </Box>
+                                            </Box> */}
                                             <Box p={2} display="flex" flexDirection="column" justifyContent="flex-start">
                                                 <Box >
                                                     <Typography component="div">
@@ -657,33 +746,43 @@ export default function Course(props) {
                                 </Grid>
                                 <Grid item sm={6} md={6} lg={6}>
                                     <Grid container direction="column">
-                                        <Grid item xs={12} >
+                                        <Grid item xs={12} sm={12} md={12} lg={12} >
 
-                                            {(state.startSurvey != 'Unpublished' || state.startSurvey != 'Unpublished') &&
-                                                <Link onClick={event => event.stopPropagation()} target="_blank" href={state.startSurvey} variant="body2" className={classes.link}>
-                                                    <Typography component="div">
+                                            
+                                            <div>
+                                                     <Typography  component="div">
                                                         <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
-                                                            Start Survey
-                                            </Box>
+                                                            Start Survey Link: &nbsp;
+                                                            {(state.startSurvey != 'Unpublished' || state.startSurvey != 'Unpublished') ?
+                                                            <Link onClick={event => event.stopPropagation()} target="_blank" href={state.startSurvey} variant="body2" className={classes.link}>
+                                                             Click here
+                                                            </Link>: 'N/A'}
+                                                        </Box>
                                                     </Typography>
-                                                </Link>}
+                                                </div>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            {(state.endSurvey != 'Unpublished'  || state.endSurvey != 'Unpublished') &&
-                                                <Link onClick={event => event.stopPropagation()} target="_blank" href={state.endSurvey} variant="body2" className={classes.link}>
-                                                    <Typography component="div">
+                                           
+                                            <div>
+                                                  <Typography  component="div">
                                                         <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
-                                                            End Survey
-                                            </Box>
+                                                        End Survey Link: &nbsp;
+                                                        {(state.endSurvey != 'Unpublished'  || state.endSurvey != 'Unpublished') ?
+                                                        <Link onClick={event => event.stopPropagation()} target="_blank" href={state.endSurvey} variant="body2" className={classes.link}>                                                
+                                                         Click here
+                                                        </Link>: 'N/A'}
+                                                        </Box>
                                                     </Typography>
-                                                </Link>}
+
+                                                </div>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
 
                         </div>
-                        <div className={classes.table}>
+                        <Box display="flex" justifyContent="center">
+                        <Grid className={classes.table} xs={12} sm={8}>
                             <MaterialTable
                                 icons={tableIcons}
                                 title="Students"
@@ -715,6 +814,20 @@ export default function Course(props) {
                                         }) : null,
 
                                 }}
+                                actions={[
+                                 
+                                    {
+                                      icon: AddBox,
+                                      isFreeAction: true,
+                                      onClick: () => {
+                                        // open dialog to save new one
+                                        setAddStudent({
+                                            open:true
+                                        })
+
+                                      }
+                                    }
+                                  ]}
                             />
                             <Snackbar
                                 anchorOrigin={{
@@ -739,7 +852,8 @@ export default function Course(props) {
                                 ]}
                             ></Snackbar>
 
-                        </div>
+                        </Grid>
+                        </Box>
                     </div>
                     <Dialog
                         open={cannotAssignError}
@@ -759,6 +873,7 @@ export default function Course(props) {
                          </Button>
                         </DialogActions>
                     </Dialog>
+
                     <Dialog
                         open={deleteConfirmation}
                         onClose={handleDeleteClose}
@@ -779,6 +894,61 @@ export default function Course(props) {
                                 YES
                         </Button>
                         </DialogActions>
+                    </Dialog>
+
+                    <Dialog
+                        open={addStudent.open}
+                        onClose={handleDialogClose('addStudent')}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Add Student"}</DialogTitle>
+                      
+                        <form onSubmit={addCourseRowNew} className={classes.form} >
+                       
+                            <TextField
+                                className={classes.textField}
+                              
+                                required
+                                variant="outlined"
+                                margin="normal"
+                                margin="dense"
+                                name="newStudentName"
+                                label="Student Name"
+                                type="text"
+                                id="newStudentName"
+                                value={newStudent.name}
+                                onChange={handleChange('name')}
+                            />
+                       
+                            <TextField
+                                className={classes.textField}
+                                error={snack.error}
+                                helperText={snack.error?'Invalid Email':''}
+                                required
+                                variant="outlined"
+                                margin="normal"
+                                margin="dense"
+                                name="newStudentEmail"
+                                label="Student Email"
+                                type="text"
+                                id="newStudentEmail"
+                                value={newStudent.email}
+                                onChange={handleChange('email')}
+                            />
+                            
+                           
+                           
+                    
+                        <DialogActions>
+                        <Button onClick={handleDialogClose('addStudent')} color="secondary">
+                                Cancel
+                            </Button>
+                            <Button type="submit" color="primary" autoFocus>
+                                Add
+                            </Button>
+                        </DialogActions>
+                        </form>
                     </Dialog>
 
 

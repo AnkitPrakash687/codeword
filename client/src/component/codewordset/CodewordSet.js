@@ -500,7 +500,7 @@ export default function CodewordSet(props) {
 
     return (
         <div>
-            <MyAppBar></MyAppBar>
+            <MyAppBar backButton={true} from="codewordset"></MyAppBar>
             <div>
 
                 {loading ? <Grid container
@@ -520,7 +520,7 @@ export default function CodewordSet(props) {
                                     <Grid item sm={6}>
 
                                         <Box display="flex" flexDirection="row" justifyContent="flex-start">
-                                            <Box p={1}>
+                                            {/* <Box p={1}>
                                                 <Tooltip title="Back to dasboard">
                                                     <IconButton
                                                         className={classes.backButton}
@@ -530,7 +530,7 @@ export default function CodewordSet(props) {
                                                         <ArrowBackIosIcon fontSize="large" />
                                                     </IconButton>
                                                 </Tooltip>
-                                            </Box>
+                                            </Box> */}
                                             <Box p={2}>
                                                 <Typography component="div">
                                                     <Box fontSize="h6.fontSize" fontWeight="fontWeightBold" m={1}>

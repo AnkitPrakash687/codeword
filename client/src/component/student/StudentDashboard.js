@@ -190,7 +190,7 @@ export default function StudentDashboard() {
 
     return (
         <div>
-            <MyAppBar disableStudentView={true}/>
+            <MyAppBar disableStudentView={true} backButton={true} from="course" view={view}/>
             <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="flex-start">
                 <Typography component="div">
                     <Box fontSize={24} color={grey[800]} fontWeight="fontWeightBold" m={1}>
@@ -210,7 +210,7 @@ export default function StudentDashboard() {
             <div className={classes.root} minWidth='xs'>
                     <CssBaseline />
                     <Paper className={classes.menuBar}>
-                        { view == 'instructor' &&
+                        { /*view == 'instructor' &&
                         <Box p={1}>
                             <Tooltip title="Back to dasboard" placement="right">
                                 <IconButton
@@ -222,7 +222,7 @@ export default function StudentDashboard() {
                                 </IconButton>
                             </Tooltip>
                             </Box>
-                        }
+             */ }
                         <Grid container >
                            <Grid item sm={12}> 
                         <Box display="flex" justifyContent="flex-end">

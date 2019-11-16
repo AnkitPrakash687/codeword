@@ -139,7 +139,7 @@ export default function CourseCard(props) {
                          Start Survey
                       </Link>
                       </Box>
-                        :<Typography variant="body">Start Survey</Typography>
+                        :<Typography variant="body">Start Survey: N/A</Typography>
                         }
                         { props.endSurvey != 'Unpublished'?
                      <Box display="flex" >
@@ -147,7 +147,7 @@ export default function CourseCard(props) {
                          End Survey
                       </Link>
                    </Box>
-                        :<Typography variant="body">End Survey</Typography>
+                        :<Typography variant="body">End Survey: N/A</Typography>
                         }
                      
                      </Box>

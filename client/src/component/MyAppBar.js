@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import {Link, Grid, Box} from '@material-ui/core'
+import {Link, Grid, Box, Tooltip, Fab} from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
@@ -12,6 +12,8 @@ import {Redirect} from 'react-router-dom'
 import history from '../history'
 import API from '../utils/API'
 import logo from '../static/images/logo_2.png'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -31,6 +33,13 @@ const useStyles = makeStyles(theme => ({
   },
   navTool:{
     margin: theme.spacing(1)
+  },
+  backButton:{   
+   
+    "&:hover": {
+      backgroundColor: green[500]
+  },
+    
   }
 }));
 
@@ -55,6 +64,7 @@ export default function MyAppBar(props) {
   const [redirect, setRedirect] = useState(false)
   const [response, setResponse] = useState()
   const [name, setName] = useState()
+  const [view, setView] = useState()
   const handleLogout = () =>{
  
     sessionStorage.clear()
@@ -93,12 +103,18 @@ export default function MyAppBar(props) {
           setName(user.firstName)
           if(user.role == 'instructor'){
               setIsInstructor(true)
+              setView('instructor')
+
           }
         
         
     })
   }
   },[])
+
+  const handleBackButton = () => {
+    setRedirect(true)
+}
     
     if(logout){
       return <Redirect to="/"></Redirect>
@@ -109,27 +125,45 @@ export default function MyAppBar(props) {
     }else if(redirect){
       // history.push('/')
       // return <Redirect to="/"></Redirect>
+      var value
+      if(props.from == "course"){
+        value = 0
+      }else{
+        value = 1
+      }
+      history.push('/', {value: value})
+      return <Redirect to="/"></Redirect>
     }
 
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
+
         <Toolbar>  
-        <Grid container>     
+        <Grid container>
+           
           <Typography variant="caption" className={classes.title}>
-            <Link underline="none" href='/'>
+          {
+            
+          } 
+          
           {
             window.innerWidth > 500?
-            
-            <img onClick={handleRedirect}
-            className={classes.media}
-            style={{
-              width:'25%',
-              height: 'auto'
-            }}
-            src={logo}
-          />:
-          <Box p={0} style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-start"  >
+            <Box style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-start"   >
+             {props.backButton && view == "instructor" &&
+          
+            <Tooltip title="Back to dasboard">
+              <IconButton
+              size="small"
+                className={classes.backButton}
+                onClick={handleBackButton}
+              >
+                <ArrowBackIosIcon fontSize="large" />
+              </IconButton>
+          </Tooltip>
+     
+          }
+          <Link underline="none" href='/'>
           <img onClick={handleRedirect}
           className={classes.media}
           style={{
@@ -138,9 +172,35 @@ export default function MyAppBar(props) {
           }}
           src={logo}
         />
+        </Link>
+        </Box>:
+          <Box style={{width:'100%'}} display="flex" flexDirection="row" justifyContent="flex-start"   >
+             {props.backButton && view == "instructor" &&
+          
+            <Tooltip title="Back to dasboard">
+              <IconButton
+              size="small"
+                className={classes.backButton}
+                onClick={handleBackButton}
+              >
+                <ArrowBackIosIcon fontSize="inherit" />
+              </IconButton>
+          </Tooltip>
+     
+          }
+          <Link underline="none" href='/'>
+          <img onClick={handleRedirect}
+          className={classes.media}
+          style={{
+            width:'40%',
+            height: 'auto'
+          }}
+          src={logo}
+        />
+        </Link>
         </Box>
           }
-            </Link>
+          
       
           </Typography>
           
