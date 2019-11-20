@@ -167,7 +167,12 @@ export default function AddCourse(props) {
         startSurvey:{
             status: false,
             helperText: ''
+        },
+        endSurvey:{
+            status: false,
+            helperText: ''
         }
+        
     })
     function getModalStyle() {
 
@@ -259,12 +264,28 @@ export default function AddCourse(props) {
         //console.log({[name]: event.target.value})
         setState({ ...state, [name]: event.target.value });
         if(name == 'startSurvey'){
-            if(!Validator.isURL(event.target.value)){
-                setError({startSurvey:{
-                    status: true,
-                    helperText: 'Invalid URL'
-                }})
-            }
+            //console.log(event.target.value+' '+Validator.isURL(event.target.value))
+                var isUrl = Validator.isURL(event.target.value)
+                setError({
+                    startSurvey:{
+                    status: !isUrl,
+                    helperText: !isUrl?'Invalid Url':''
+                },
+                endSurvey: error.endSurvey
+            })
+            
+        }
+        if(name == 'endSurvey'){
+            //console.log(event.target.value+' '+Validator.isURL(event.target.value))
+                var isUrl = Validator.isURL(event.target.value)
+                setError({
+                    endSurvey:{
+                    status: !isUrl,
+                    helperText: !isUrl?'Invalid Url':''
+                },
+                startSurvey: error.startSurvey
+            })
+            
         }
         if ([name] == 'values') {
             console.log('inise code')
@@ -745,18 +766,20 @@ export default function AddCourse(props) {
                             <Grid container spacing={2}>
                                 
                                 <Grid item xs={8} sm={8} md={8} lg={8}>
-                                <TextField 
-                                style={{marginTop: 25}}
-                            variant="outlined"
-                            fullWidth
-                            id="endSurvey"
-                            label="End Survey"
-                            name="endSurvey"
-                            autoComplete="endSurvey"
-                            margin="dense"
-                            onChange={handleChange('endSurvey')}
-                            value={state.endSurvey}
-                        />
+                                    <TextField
+                                        error={error.endSurvey.status}
+                                        helperText={error.endSurvey.helperText}
+                                        style={{ marginTop: 25 }}
+                                        variant="outlined"
+                                        fullWidth
+                                        id="endSurvey"
+                                        label="End Survey"
+                                        name="endSurvey"
+                                        autoComplete="endSurvey"
+                                        margin="dense"
+                                        onChange={handleChange('endSurvey')}
+                                        value={state.endSurvey}
+                                    />
                                 </Grid>
                                 <Grid item xs={4} sm={4} md={4} lg={4}>
                                 <KeyboardDatePicker
@@ -801,7 +824,7 @@ export default function AddCourse(props) {
                                 color="primary"
                                 size="inherit"
                                 className={classes.submit}
-                                disabled={wrongFileExtn || loading}
+                                disabled={state.courseName == ''||wrongFileExtn || loading || error.endSurvey.status || error.startSurvey.status}
                             >
                                 Add
           </Button>
