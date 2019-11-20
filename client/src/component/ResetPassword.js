@@ -1,4 +1,4 @@
-import Box from '@material-ui/core/Box';
+import {Box, LinearProgress} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { green, grey } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import logo from '../static/images/logo_1.png';
 import API from "../utils/API";
@@ -60,18 +60,37 @@ export default function ResetPassword(props) {
         password: "",
         confirmPass: "",
     })
+    const [password, setPassword] = useState('')
+    const [passStrength, setPassStrength] = useState({
+        value: 0, text: '',  color:grey[100]
+      })
     const [success, setSuccess] = useState({
         status: false,
         message: '',
         code: null
     })
 
+    useEffect(()=>{
+        var strongPassRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{8,})")
+        var mediumPassRegex = RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})")
+        var weakPassRegex = RegExp('(?=.{6,})')
+        
+        if(strongPassRegex.test(password)){
+          setPassStrength({value:100, text: 'strong', color: 'primary'})
+        }else if(mediumPassRegex.test(password)){
+          setPassStrength({value:60, text: 'medium', color: 'primary'})
+        }else if(weakPassRegex.test(password)){
+          setPassStrength({value:30, text: 'weak', color:'secondary'})
+        }else{
+          setPassStrength({value:10, text: '', color:grey[100]})
+        }
+      },[password])
 
     function handleSubmit(event) {
         event.preventDefault()
         var data = {
             resetToken: props.match.params.token,
-            password: state.password
+            password: password
         }
         API
             .post('auth/resetPassword', data)
@@ -121,16 +140,22 @@ export default function ResetPassword(props) {
 
     }
 
+
+
     const handleChange = name => (event, isChecked) => {
         //console.log({[name]: event.target.value})
         setState({ ...state, [name]: event.target.value });
+        if(name == 'password'){
+            setPassword(event.target.value)
+        }
     }
 
+   
     function handleClose(event, reason) {
         setSuccess({ status: false })
     }
 
-    let passwordMatch = (confirmation, state) => (state.confirmPass && state.password === confirmation)
+    let passwordMatch = (confirmation, state) => (state.confirmPass && password === confirmation)
 
     const validator = new FormValidator([
         {
@@ -174,6 +199,8 @@ export default function ResetPassword(props) {
 
                         <form onSubmit={handleSubmit.bind(this)} className={classes.form} >
                             <TextField
+                                error={(password.length > 0 && passStrength.value < 11) ? true : false}
+                                helperText={(password.length > 0 && passStrength.value < 11) ? 'Password should be minimun 6 character' : ''}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -184,9 +211,47 @@ export default function ResetPassword(props) {
                                 margin="dense"
                                 autoComplete="current-password"
                                 onChange={handleChange('password')}
-                                value={state.password}
+                                value={password}
 
                             />
+
+                            {passStrength.value > 10 &&
+                                <div >
+                                    <Grid container style={{ marginBottom: 5 }}>
+                                        <Grid item xs={4} sm={4}>
+                                            <Box display="flex" flexDirection="row" >
+
+                                                <Typography component="div">
+                                                    <Box fontSize={12} fontWeight="italic">
+                                                        Password Strength
+                                                    </Box>
+                                                </Typography>
+                                            </Box>
+                                            <Box>
+
+
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={6} sm={6} m={1}>
+
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={passStrength.value}
+                                                className={classes.passStrengthBar}
+                                                color={passStrength.color}
+                                            />
+
+                                        </Grid>
+                                        <Grid item xs={2} sm={2}>
+                                            <Typography style={{ marginLeft: 5 }} component="div">
+                                                <Box fontSize={12}>
+                                                    {passStrength.text}
+                                                </Box>
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            }
                             <TextField
                                 error={validation.confirmPass.isInvalid && state.confirmPass.length > 0 ? true : false}
                                 helperText={validation.confirmPass.isInvalid && state.confirmPass.length > 0 ? 'Password do not match' : ''}
@@ -208,6 +273,10 @@ export default function ResetPassword(props) {
                                 fullWidth
                                 variant="contained"
                                 className={classes.submit}
+                                disabled={
+                                    (password.length>0 && passStrength.value < 11 ) ||
+                                    (validation.confirmPass.isInvalid && state.confirmPass.length > 0 )
+                                }
                             >
                                 <Typography component="div">
                                     <Box fontWeight="bold">
