@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 import API from '../../utils/API';
 
 const Papa = require('papaparse')
+const Validator = require('validator')
 var moment = require('moment');
 var _ = require("underscore");
 const useStyles = makeStyles(theme => ({
@@ -162,6 +163,12 @@ export default function AddCourse(props) {
     })
     const [codewordSetCount, setCodewordSetCount] = useState()
     const [studentCount, setStudentCount] = useState()
+    const [error, setError] = useState({
+        startSurvey:{
+            status: false,
+            helperText: ''
+        }
+    })
     function getModalStyle() {
 
         return {
@@ -251,6 +258,14 @@ export default function AddCourse(props) {
     const handleChange = name => (event, isChecked) => {
         //console.log({[name]: event.target.value})
         setState({ ...state, [name]: event.target.value });
+        if(name == 'startSurvey'){
+            if(!Validator.isURL(event.target.value)){
+                setError({startSurvey:{
+                    status: true,
+                    helperText: 'Invalid URL'
+                }})
+            }
+        }
         if ([name] == 'values') {
             console.log('inise code')
             var selectedCodewordset = codeword.filter((item) => {
@@ -692,19 +707,21 @@ export default function AddCourse(props) {
                         </FormControl>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Grid container spacing={2}>
-                                
+
                                 <Grid item xs={8} sm={8} md={8} lg={8}>
-                                <TextField style={{marginTop: 25}}
-                            variant="outlined"
-                            fullWidth
-                            id="startSurvey"
-                            label="Start Survey"
-                            name="startSurvey"
-                            autoComplete="startSurvey"
-                            margin="dense"
-                            onChange={handleChange('startSurvey')}
-                            value={state.startSurvey}
-                        />
+                                    <TextField style={{ marginTop: 25 }}
+                                        error={error.startSurvey.status}
+                                        helperText={error.startSurvey.helperText}
+                                        variant="outlined"
+                                        fullWidth
+                                        id="startSurvey"
+                                        label="Start Survey"
+                                        name="startSurvey"
+                                        autoComplete="startSurvey"
+                                        margin="dense"
+                                        onChange={handleChange('startSurvey')}
+                                        value={state.startSurvey}
+                                    />
                                 </Grid>
                                 <Grid item xs={4} sm={4} md={4} lg={4}>
                                     <KeyboardDatePicker
