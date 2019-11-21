@@ -12,10 +12,11 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import logo from '../static/images/logo_1.png';
 import API from "../utils/API";
 import FormValidator from '../utils/FormValidator';
+
 const useStyles = makeStyles(theme => ({
     '@global': {
         body: {
@@ -70,6 +71,8 @@ export default function ResetPassword(props) {
         code: null
     })
 
+    const [redirect, setRedirect] = useState()
+
     useEffect(()=>{
         var strongPassRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{8,})")
         var mediumPassRegex = RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})")
@@ -101,6 +104,7 @@ export default function ResetPassword(props) {
                         message: response.data.message,
                         code: 200
                     })
+                    
                 }else{
                     setSuccess({
                         status: true,
@@ -152,7 +156,12 @@ export default function ResetPassword(props) {
 
    
     function handleClose(event, reason) {
+        if(success.code == 200){
+            setRedirect(true)
         setSuccess({ status: false })
+        }else{
+            setSuccess({ status: false })
+        }
     }
 
     let passwordMatch = (confirmation, state) => (state.confirmPass && password === confirmation)
@@ -167,6 +176,10 @@ export default function ResetPassword(props) {
     )
 
     let validation = validator.validate(state)  //
+    if(redirect){
+        return (<Redirect to='/'></Redirect>)
+    }
+
 
     return (
         <div 
