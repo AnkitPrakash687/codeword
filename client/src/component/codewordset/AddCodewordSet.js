@@ -1,4 +1,5 @@
-import { Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, IconButton, Modal, Paper, Slide, Snackbar, Tooltip } from '@material-ui/core';
+import { Box, Button, Chip, DialogActions, DialogContent, DialogContentText, DialogTitle, 
+    Divider, Grid, IconButton, Modal, Paper, Slide, Snackbar, Tooltip } from '@material-ui/core';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -567,9 +568,13 @@ export default function AddCodewordSet(props) {
       </Dialog> */}
             <Snackbar
                 anchorOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'left',
-                }}
+                  }}
+                  TransitionComponent={Slide}
+                  TransitionProps={
+                    { direction: "right" }
+                  }
                 open={state.status}
                 autoHideDuration={2000}
                 variant="success"

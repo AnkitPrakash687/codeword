@@ -1,4 +1,4 @@
-import { CircularProgress, Container, CssBaseline, Fab, Grid, IconButton, Snackbar, Tooltip } from '@material-ui/core';
+import { CircularProgress, Slide, Container, CssBaseline, Fab, Grid, IconButton, Snackbar, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { green, lightGreen, red } from '@material-ui/core/colors';
 import Dialog from '@material-ui/core/Dialog';
@@ -103,24 +103,24 @@ export default function AdminDashboard() {
 
     const LightTooltip = withStyles(theme => ({
         tooltip: {
-          backgroundColor: lightGreen[200],
-          color: 'rgba(0, 0, 0, 0.87)',
-          boxShadow: theme.shadows[1],
-          fontSize: 13,
+            backgroundColor: lightGreen[200],
+            color: 'rgba(0, 0, 0, 0.87)',
+            boxShadow: theme.shadows[1],
+            fontSize: 13,
         },
-      }))(Tooltip);
+    }))(Tooltip);
 
     const CheckIconGreen = withStyles(theme => ({
         root: {
             color: green[500]
         },
-      }))(CheckCircleIcon);
+    }))(CheckCircleIcon);
 
-      const CancelIconRed = withStyles(theme => ({
+    const CancelIconRed = withStyles(theme => ({
         root: {
             color: red[500]
         },
-      }))(CancelIcon);
+    }))(CancelIcon);
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
 
@@ -157,36 +157,37 @@ export default function AdminDashboard() {
     const [instructorRequest, setInstructorRequest] = useState();
     const [table, setTable] = useState({
         columns: [
-            { title: 'id', field: 'id', hidden:true, export:false},
-            { title: 'Name', field: 'name', cellStyle: {width: 100} },
-            { title: 'Email', field: 'email', cellStyle: {width: 100} }
+            { title: 'id', field: 'id', hidden: true, export: false },
+            { title: 'Name', field: 'name', cellStyle: { width: 100 } },
+            { title: 'Email', field: 'email', cellStyle: { width: 100 } }
         ],
         data: [],
     })
 
     const [tableUsers, setTableUsers] = useState({
         columns: [
-            { title: 'id', field: 'id', hidden:true, export:false},
-            { title: 'Name', field: 'name', cellStyle: {width: 100} },
-            { title: 'Email', field: 'email', cellStyle: {width: 100} },
-            { title: 'Role', field: 'role', cellStyle: {width: 100}},
-            { title: 'Status', field: 'status', cellStyle: {width: 100},
-              render: rowData => {
-                    if(rowData.status){
+            { title: 'id', field: 'id', hidden: true, export: false },
+            { title: 'Name', field: 'name', cellStyle: { width: 100 } },
+            { title: 'Email', field: 'email', cellStyle: { width: 100 } },
+            { title: 'Role', field: 'role', cellStyle: { width: 100 } },
+            {
+                title: 'Status', field: 'status', cellStyle: { width: 100 },
+                render: rowData => {
+                    if (rowData.status) {
                         return <Typography component="div">
                             <Box color="green" fontWeight="bold">
                                 Active
                             </Box>
                         </Typography>
                     }
-                    else{
+                    else {
                         return (<Typography component="div">
-                        <Box color="red" fontWeight="bold">
-                            Inactive
+                            <Box color="red" fontWeight="bold">
+                                Inactive
                         </Box>
-                    </Typography>)
+                        </Typography>)
                     }
-              }  
+                }
             }
 
         ],
@@ -208,8 +209,8 @@ export default function AdminDashboard() {
     const [courseData, setCourseData] = useState([{}])
     const [render, setRender] = useState(false)
     const [openCodeword, setOpenCodeword] = useState()
-  
-    const handleCodewordClickOpen = () =>{
+
+    const handleCodewordClickOpen = () => {
         setOpenCodeword(true)
     }
 
@@ -218,69 +219,69 @@ export default function AdminDashboard() {
     }
     useEffect(() => {
 
-        if(value == 0){
-        setLoading(true)
-        console.log('inside effect')
-        const headers = {
-            'token': sessionStorage.getItem('token')
-        };
+        if (value == 0) {
+            setLoading(true)
+            console.log('inside effect')
+            const headers = {
+                'token': sessionStorage.getItem('token')
+            };
 
-        API.get('dashboard/requests', { headers: headers }).then(response => {
-            console.log("me***********")
-            var data = response.data.data
-            console.log(data)
-            
-            setTable({
-                ...table,
-                data: data.map((user)=>{
-                    return {id: user.id, name: user.name, email: user.email}
-                })
-            })
-            setLoading(false)
+            API.get('dashboard/requests', { headers: headers }).then(response => {
+                console.log("me***********")
+                var data = response.data.data
+                console.log(data)
 
-        })
-        .catch(error => {
-                        console.log(error)
-
+                setTable({
+                    ...table,
+                    data: data.map((user) => {
+                        return { id: user.id, name: user.name, email: user.email }
                     })
-    }
-    else if(value == 1){
-        setLoading(true)
-        console.log('inside effect')
-        const headers = {
-            'token': sessionStorage.getItem('token')
-        };
-
-        API.get('dashboard/getAllUsers', { headers: headers }).then(response => {
-            console.log("me***********")
-            var data = response.data.data
-            console.log(data)
-            console.log('*********MOMENT***************')
-           // var date = moment(data[1].last_login)
-           // console.log(date)
-           // console.log( moment(moment() - moment(data[1].last_login)).format('D'))
-            setTableUsers({
-                ...tableUsers,
-                data: data.map((user)=>{
-                    return {
-                        id: user._id, 
-                        name: user.first_name + ' '+user.last_name, 
-                        email: user.email_id,
-                        role: user.role,
-                        status: moment().diff(moment(user.last_login), 'days') < 365 ? true: false
-                    }
                 })
-              
+                setLoading(false)
+
             })
-           
-            setLoading(false)
+                .catch(error => {
+                    console.log(error)
 
-        })
-        .catch(error => {
-                        console.log(error)
+                })
+        }
+        else if (value == 1) {
+            setLoading(true)
+            console.log('inside effect')
+            const headers = {
+                'token': sessionStorage.getItem('token')
+            };
 
+            API.get('dashboard/getAllUsers', { headers: headers }).then(response => {
+                console.log("me***********")
+                var data = response.data.data
+                console.log(data)
+                console.log('*********MOMENT***************')
+                // var date = moment(data[1].last_login)
+                // console.log(date)
+                // console.log( moment(moment() - moment(data[1].last_login)).format('D'))
+                setTableUsers({
+                    ...tableUsers,
+                    data: data.map((user) => {
+                        return {
+                            id: user._id,
+                            name: user.first_name + ' ' + user.last_name,
+                            email: user.email_id,
+                            role: user.role,
+                            status: moment().diff(moment(user.last_login), 'days') < 365 ? true : false
+                        }
                     })
-    }  
+
+                })
+
+                setLoading(false)
+
+            })
+                .catch(error => {
+                    console.log(error)
+
+                })
+        }
 
     }, [render, value])
 
@@ -296,7 +297,7 @@ export default function AdminDashboard() {
             let result = []
             console.log('********* Codeword Set admin')
             console.log(data)
-            data.map((item)=>{
+            data.map((item) => {
                 console.log(item)
                 result.push({
                     id: item.id,
@@ -309,7 +310,7 @@ export default function AdminDashboard() {
         })
             .catch(error => {
                 console.log(error)
-          
+
             })
 
     }, [])
@@ -319,7 +320,7 @@ export default function AdminDashboard() {
             'token': sessionStorage.getItem('token')
         };
 
-        API.post('dashboard/acceptRequest', {id: rowData.id}, { headers: headers }).then(response => {
+        API.post('dashboard/acceptRequest', { id: rowData.id }, { headers: headers }).then(response => {
             console.log(response.data)
             if (response.data.code == '200') {
                 setSnack({
@@ -368,7 +369,7 @@ export default function AdminDashboard() {
             'token': sessionStorage.getItem('token')
         };
 
-        API.post('dashboard/declineRequest', {id: rowData.id}, { headers: headers }).then(response => {
+        API.post('dashboard/declineRequest', { id: rowData.id }, { headers: headers }).then(response => {
             console.log(response.data)
             if (response.data.code == '200') {
                 setSnack({
@@ -390,18 +391,18 @@ export default function AdminDashboard() {
         return <CodewordsetCard id={item.id}
             codewordSetName={item.codewordSetName}
             count={item.count}
-            isPublished = {item.isPublished}
+            isPublished={item.isPublished}
         ></CodewordsetCard>
     })
 
     return (
         <div>
             <MyAppBar></MyAppBar>
-        <div className={classes.root}>
-            
+            <div className={classes.root}>
+
                 <Container component="main" maxWidth='lg'>
                     <CssBaseline />
-                   
+
                     <ContainedTabs
                         style={{ alignSelf: 'flex-center', }}
                         tabs={[
@@ -413,160 +414,164 @@ export default function AdminDashboard() {
                         onChange={handleChange}
                     >
                     </ContainedTabs>
-             
+
 
                     <TabPanel value={value} index={0}>
 
 
-                   { loading ? <Grid container
-                spacing={0}
-                alignItems="center"
-                justify="center"
-                style={{ minHeight: '100vh' }}>
-                <CircularProgress className={classes.progress} />
-            </Grid>:
-                    <Grid container>
-                        <Grid item sm={3}></Grid>
-                        <Grid item xs={12} sm={5}>
-                        <MaterialTable
-                            icons={tableIcons}
-                            title="Requests"
-                            columns={table.columns}
-                            data={table.data}
-                            options={{
-                                actionsColumnIndex: 0,
-                                headerStyle: {
-                                    fontSize: 15
-                                },
-                                emptyRowsWhenPaging: false,
-                                exportButton: true,
-                                exportAllData: true
-                            }}
-                            actions={[
-                                {
-                                    icon: CheckIconGreen,
-                                    tooltip: 'Accept',
-                                    onClick: (event, rowData) =>
-                                        new Promise(resolve =>{
-                                            handleAcceptRequest(resolve, rowData)
-                                        })
-                                    
-                                },
-                                {
-                                    icon: CancelIconRed,
-                                    tooltip: 'Decline',
-                                    onClick: (event, rowData) =>
-                                        new Promise(resolve =>{
-                                            handleDeclineRequest(resolve, rowData)  
-                                        })
-                                    
-                                }
-                            ]}
-                               
-                        />
-                        </Grid>
-                        <Grid item sm={3}></Grid>
-                        </Grid>
-                   }
+                        {loading ? <Grid container
+                            spacing={0}
+                            alignItems="center"
+                            justify="center"
+                            style={{ minHeight: '100vh' }}>
+                            <CircularProgress className={classes.progress} />
+                        </Grid> :
+                            <Grid container>
+                                <Grid item sm={3}></Grid>
+                                <Grid item xs={12} sm={5}>
+                                    <MaterialTable
+                                        icons={tableIcons}
+                                        title="Requests"
+                                        columns={table.columns}
+                                        data={table.data}
+                                        options={{
+                                            actionsColumnIndex: 0,
+                                            headerStyle: {
+                                                fontSize: 15
+                                            },
+                                            emptyRowsWhenPaging: false,
+                                            exportButton: true,
+                                            exportAllData: true
+                                        }}
+                                        actions={[
+                                            {
+                                                icon: CheckIconGreen,
+                                                tooltip: 'Accept',
+                                                onClick: (event, rowData) =>
+                                                    new Promise(resolve => {
+                                                        handleAcceptRequest(resolve, rowData)
+                                                    })
+
+                                            },
+                                            {
+                                                icon: CancelIconRed,
+                                                tooltip: 'Decline',
+                                                onClick: (event, rowData) =>
+                                                    new Promise(resolve => {
+                                                        handleDeclineRequest(resolve, rowData)
+                                                    })
+
+                                            }
+                                        ]}
+
+                                    />
+                                </Grid>
+                                <Grid item sm={3}></Grid>
+                            </Grid>
+                        }
                     </TabPanel>
                     <TabPanel value={value} index={1}>
 
-                  {  loading ? <Grid container
-                spacing={0}
-                alignItems="center"
-                justify="center"
-                style={{ minHeight: '100vh' }}>
-                <CircularProgress className={classes.progress} />
-            </Grid>:
+                        {loading ? <Grid container
+                            spacing={0}
+                            alignItems="center"
+                            justify="center"
+                            style={{ minHeight: '100vh' }}>
+                            <CircularProgress className={classes.progress} />
+                        </Grid> :
 
-                    <Grid container>
-                        <Grid item sm={2}></Grid>
-                        <Grid item xs={12} sm={8}>
-                        <MaterialTable
-                            icons={tableIcons}
-                            title="Users"
-                            columns={tableUsers.columns}
-                            data={tableUsers.data}
-                            options={{
-                                actionsColumnIndex: -1,
-                                headerStyle: {
-                                    fontSize: 15
-                                },
-                                emptyRowsWhenPaging: false,
-                                exportButton: true,
-                                exportAllData: true
-                            }}
-                            editable={{
-                                isDeletable: rowData => !rowData.status,
-                                onRowDelete: oldData => 
-                                    new Promise(resolve => {
-                                        deleteUserRow(resolve, oldData)
-                                    }),
-                            }}
-                               
-                        />
-                        </Grid>
-                        <Grid item sm={2}></Grid>
-                        </Grid>
-                  }
+                            <Grid container>
+                                <Grid item sm={2}></Grid>
+                                <Grid item xs={12} sm={8}>
+                                    <MaterialTable
+                                        icons={tableIcons}
+                                        title="Users"
+                                        columns={tableUsers.columns}
+                                        data={tableUsers.data}
+                                        options={{
+                                            actionsColumnIndex: -1,
+                                            headerStyle: {
+                                                fontSize: 15
+                                            },
+                                            emptyRowsWhenPaging: false,
+                                            exportButton: true,
+                                            exportAllData: true
+                                        }}
+                                        editable={{
+                                            isDeletable: rowData => !rowData.status,
+                                            onRowDelete: oldData =>
+                                                new Promise(resolve => {
+                                                    deleteUserRow(resolve, oldData)
+                                                }),
+                                        }}
+
+                                    />
+                                </Grid>
+                                <Grid item sm={2}></Grid>
+                            </Grid>
+                        }
                     </TabPanel>
                     <TabPanel value={value} index={2}>
 
-            <LightTooltip title="Add Codeword set" placement="right">
-            <Fab  aria-label="add" className={classes.button} onClick={handleCodewordClickOpen}>
-                <AddIcon />
-            </Fab>
-            </LightTooltip>
-           
-            <Dialog  fullWidth={true} disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>    
-                 <div>
-                <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
-                </div>         
-            </Dialog>
-            {loading ? <Grid container
-                spacing={0}
-                alignItems="center"
-                justify="center"
-                style={{ minHeight: '100vh' }}>
-                <CircularProgress className={classes.progress} />
-            </Grid>:
-               <Grid container spacing={3}>
+                        <LightTooltip title="Add Codeword set" placement="right">
+                            <Fab aria-label="add" className={classes.button} onClick={handleCodewordClickOpen}>
+                                <AddIcon />
+                            </Fab>
+                        </LightTooltip>
 
-                    {
-                        listCodewordSet.length > 0 &&
-                        listCodewordSet
-                    }
+                        <Dialog fullWidth={true} disableBackdropClick={true} onClose={handleCodewordClose} aria-labelledby="simple-dialog-title" open={openCodeword}>
+                            <div>
+                                <AddCodewordSet onClose={handleCodewordClose}></AddCodewordSet>
+                            </div>
+                        </Dialog>
+                        {loading ? <Grid container
+                            spacing={0}
+                            alignItems="center"
+                            justify="center"
+                            style={{ minHeight: '100vh' }}>
+                            <CircularProgress className={classes.progress} />
+                        </Grid> :
+                            <Grid container spacing={3}>
 
-                </Grid>
-            }
+                                {
+                                    listCodewordSet.length > 0 &&
+                                    listCodewordSet
+                                }
+
+                            </Grid>
+                        }
                     </TabPanel>
 
                 </Container>
-            
 
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                open={snack.status}
-                autoHideDuration={2000}
-                variant="success"
-                onClose={handleMessageClose}
-                message={snack.message}
-                action={[
-                    <IconButton
-                        key="close"
-                        aria-label="Close"
-                        color="inherit"
-                        className={classes.close}
-                        onClick={handleMessageClose}
-                    >
-                        <CloseIcon />
-                    </IconButton>,
-                ]}
-            ></Snackbar>
-        </div>
+
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
+                    TransitionComponent={Slide}
+                    TransitionProps={
+                        { direction: "right" }
+                    }
+                    open={snack.status}
+                    autoHideDuration={2000}
+                    variant="success"
+                    onClose={handleMessageClose}
+                    message={snack.message}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={handleMessageClose}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                ></Snackbar>
+            </div>
         </div>
 
     );

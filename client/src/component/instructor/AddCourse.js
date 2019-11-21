@@ -1,9 +1,10 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Box, Button, Chip, CircularProgress, Dialog, 
-    DialogActions, DialogContent, DialogContentText, DialogTitle, 
-    Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, 
+import {
+    Box, Button, Chip, CircularProgress, Dialog,
+    DialogActions, DialogContent, DialogContentText, DialogTitle,
+    Divider, FormControl, Grid, IconButton, InputLabel, MenuItem,
     Modal, OutlinedInput, Paper, Select, Slide, Snackbar, Tooltip,
-    SnackbarContent } from '@material-ui/core';
+    SnackbarContent} from '@material-ui/core';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,8 +27,8 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(2),
     },
     form: {
-       
-        
+
+
     },
     appBar: {
         background: green[600]
@@ -124,7 +125,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    reportButton:{
+    reportButton: {
         margin: theme.spacing(2)
     }
 }));
@@ -152,7 +153,7 @@ export default function AddCourse(props) {
         message: '',
         reRender: false,
         alertOpen: true,
-        snackcolor:{
+        snackcolor: {
             backgroundColor: grey[800]
         }
     })
@@ -164,15 +165,15 @@ export default function AddCourse(props) {
     const [codewordSetCount, setCodewordSetCount] = useState()
     const [studentCount, setStudentCount] = useState()
     const [error, setError] = useState({
-        startSurvey:{
+        startSurvey: {
             status: false,
             helperText: ''
         },
-        endSurvey:{
+        endSurvey: {
             status: false,
             helperText: ''
         }
-        
+
     })
     function getModalStyle() {
 
@@ -180,7 +181,7 @@ export default function AddCourse(props) {
 
         };
     }
-    
+
     const [modalStyle] = React.useState(getModalStyle);
     const inputLabel = React.useRef(null);
     const fileLabel = React.useRef(null)
@@ -197,7 +198,7 @@ export default function AddCourse(props) {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
 
-    const codewordStudentCount = () =>{
+    const codewordStudentCount = () => {
         console.log('Calc')
         var studentCount = students.validRecords.length
         var codewordCount = state.values.substring(state.values.indexOf('('), state.values.indexOf(')'))
@@ -263,29 +264,29 @@ export default function AddCourse(props) {
     const handleChange = name => (event, isChecked) => {
         //console.log({[name]: event.target.value})
         setState({ ...state, [name]: event.target.value });
-        if(name == 'startSurvey'){
+        if (name == 'startSurvey') {
             //console.log(event.target.value+' '+Validator.isURL(event.target.value))
-                var isUrl = Validator.isURL(event.target.value)
-                setError({
-                    startSurvey:{
+            var isUrl = Validator.isURL(event.target.value)
+            setError({
+                startSurvey: {
                     status: !isUrl,
-                    helperText: !isUrl?'Invalid Url':''
+                    helperText: !isUrl ? 'Invalid Url' : ''
                 },
                 endSurvey: error.endSurvey
             })
-            
+
         }
-        if(name == 'endSurvey'){
+        if (name == 'endSurvey') {
             //console.log(event.target.value+' '+Validator.isURL(event.target.value))
-                var isUrl = Validator.isURL(event.target.value)
-                setError({
-                    endSurvey:{
+            var isUrl = Validator.isURL(event.target.value)
+            setError({
+                endSurvey: {
                     status: !isUrl,
-                    helperText: !isUrl?'Invalid Url':''
+                    helperText: !isUrl ? 'Invalid Url' : ''
                 },
                 startSurvey: error.startSurvey
             })
-            
+
         }
         if ([name] == 'values') {
             console.log('inise code')
@@ -297,14 +298,14 @@ export default function AddCourse(props) {
             console.log('selected codeword set count')
             console.log(selectedCodewordset[0].count)
             setCodewordSetCount(selectedCodewordset[0].count)
-            if(students.validRecords && students.validRecords.length > 0){
+            if (students.validRecords && students.validRecords.length > 0) {
                 console.log('calculate')
                 console.log(students.validRecords.length - selectedCodewordset[0].count)
-              
+
                 countAlert(students.validRecords.length, selectedCodewordset[0].count)
             }
 
-           
+
 
 
 
@@ -354,7 +355,7 @@ export default function AddCourse(props) {
                             return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) !== pos;
                         });
                         console.log(duplicateEmails)
-                         removeDuplicateEmails = validRecords.filter((obj, pos, arr) => {
+                        removeDuplicateEmails = validRecords.filter((obj, pos, arr) => {
                             return arr.map(mapObj => mapObj[1]).indexOf(obj[1]) === pos;
                         });
                         console.log(removeDuplicateEmails)
@@ -368,12 +369,12 @@ export default function AddCourse(props) {
                             duplicateEmails: duplicateEmails
                         }
                         )
-                       
-                            console.log(removeDuplicateEmails.length)
-                            setStudentCount(removeDuplicateEmails.length)
-                            if(state.values != ""){
-                               countAlert(removeDuplicateEmails.length, codewordSetCount)
-                            }
+
+                        console.log(removeDuplicateEmails.length)
+                        setStudentCount(removeDuplicateEmails.length)
+                        if (state.values != "") {
+                            countAlert(removeDuplicateEmails.length, codewordSetCount)
+                        }
 
                     }
 
@@ -384,7 +385,7 @@ export default function AddCourse(props) {
             }
 
             codewordStudentCount()
-           
+
         }
     }, [file, wrongFileExtn])
 
@@ -393,12 +394,12 @@ export default function AddCourse(props) {
             setFile({ filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });
 
         }
-        
+
     }
 
-    const handleStudentCountErrorClose = () =>{
+    const handleStudentCountErrorClose = () => {
         setCodewordStudentCountError({
-            open:false,
+            open: false,
             message: ''
         })
     }
@@ -440,7 +441,7 @@ export default function AddCourse(props) {
                     status: true,
                     message: 'Course Created Successfully',
                     reRender: true,
-                    snackcolor:{
+                    snackcolor: {
                         backgroundColor: lightGreen[800]
                     }
                 })
@@ -454,7 +455,7 @@ export default function AddCourse(props) {
                     status: true,
                     error: true,
                     message: response.data.message,
-                    snackcolor:{
+                    snackcolor: {
                         backgroundColor: red[800]
                     }
                 })
@@ -471,7 +472,7 @@ export default function AddCourse(props) {
                     status: true,
                     error: true,
                     message: error.message,
-                    snackcolor:{
+                    snackcolor: {
                         backgroundColor: red[800]
                     }
                 })
@@ -521,30 +522,30 @@ export default function AddCourse(props) {
 
     function countAlert(studentCount, codewordCount) {
         var diff = codewordCount - studentCount
-        var ratio = (diff)/(studentCount * 100)
-        var x = ((diff ) == 0 ? null:(diff ))
+        var ratio = (diff) / (studentCount * 100)
+        var x = ((diff) == 0 ? null : (diff))
         console.log(ratio + ' ' + diff)
-        if(diff < 0){
+        if (diff < 0) {
             setCodewordStudentCountError({
                 open: true,
                 message: 'Codeword count is less than the student count. You will not be able to finalize this course'
             })
         }
-        else if(diff >= 0 && (ratio) < 0.2 ){
+        else if (diff >= 0 && (ratio) < 0.2) {
             setCodewordStudentCountError({
                 open: true,
-                message: ''+ 
-                (x==null?'There is no difference between codewords and students. There will be problem if you try to add any more student':'The difference between codeword and student is less.There will be problem if you try to add more than '+  x +' student')
+                message: '' +
+                    (x == null ? 'There is no difference between codewords and students. There will be problem if you try to add any more student' : 'The difference between codeword and student is less.There will be problem if you try to add more than ' + x + ' student')
             })
         }
 
-      
+
         console.log('ratio')
         console.log(ratio)
-      
+
     }
 
-    
+
 
     const handleReportClose = () => {
 
@@ -764,7 +765,7 @@ export default function AddCourse(props) {
 
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Grid container spacing={2}>
-                                
+
                                 <Grid item xs={8} sm={8} md={8} lg={8}>
                                     <TextField
                                         error={error.endSurvey.status}
@@ -782,7 +783,7 @@ export default function AddCourse(props) {
                                     />
                                 </Grid>
                                 <Grid item xs={4} sm={4} md={4} lg={4}>
-                                <KeyboardDatePicker
+                                    <KeyboardDatePicker
                                         variant="normal"
                                         format="MM/dd/yyyy"
                                         margin="normal"
@@ -801,8 +802,8 @@ export default function AddCourse(props) {
                             </Grid>
                         </MuiPickersUtilsProvider>
 
-                     
-                     
+
+
                     </div>
 
                     <Box display="flex" justifyContent="flex-end">
@@ -824,7 +825,7 @@ export default function AddCourse(props) {
                                 color="primary"
                                 size="inherit"
                                 className={classes.submit}
-                                disabled={state.courseName == ''||wrongFileExtn || loading || error.endSurvey.status || error.startSurvey.status}
+                                disabled={state.courseName == '' || wrongFileExtn || loading || error.endSurvey.status || error.startSurvey.status}
                             >
                                 Add
           </Button>
@@ -839,10 +840,13 @@ export default function AddCourse(props) {
 
                 <Snackbar
                     anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
+                        vertical: 'top',
+                        horizontal: 'center',
                     }}
-                 
+                    TransitionComponent={Slide}
+                    TransitionProps={
+                        { direction: "right" }
+                    }
                     open={state.status}
                     autoHideDuration={2000}
                     variant="success"
@@ -879,12 +883,12 @@ export default function AddCourse(props) {
                     <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
                     <Divider />
                     <DialogContent>
-                   Note: <ul>
-                               <li>Name or Email cannot be blank </li>
-                               <li>Name should only contain letters or numbers</li>
-                               <li>Name cannot exceed 50 characters</li>
-                               <li>Email id should not be in wrong format</li>
-                            </ul>
+                        Note: <ul>
+                            <li>Name or Email cannot be blank </li>
+                            <li>Name should only contain letters or numbers</li>
+                            <li>Name cannot exceed 50 characters</li>
+                            <li>Email id should not be in wrong format</li>
+                        </ul>
                         <DialogContentText id="alert-dialog-slide-description">
                             Duplicate Records: {invalidRecord.duplicateEmails.length}
                         </DialogContentText>
@@ -901,7 +905,7 @@ export default function AddCourse(props) {
 
                         <DialogContentText id="alert-dialog-slide-description">
                             Invalid records: {invalidRecord.invalidRecords.length}
-                           
+
                         </DialogContentText>
                         <Grid container >
                             {
@@ -940,11 +944,11 @@ export default function AddCourse(props) {
                     <DialogContent>
 
                         <DialogContentText id="alert-dialog-slide-description">
-                           {codewordStudentCountError.message}
+                            {codewordStudentCountError.message}
                         </DialogContentText>
-                      
+
                         <Grid container >
-                          
+
                         </Grid>
 
                     </DialogContent>

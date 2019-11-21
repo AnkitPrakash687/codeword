@@ -1,4 +1,4 @@
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Slide } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { green, grey } from '@material-ui/core/colors';
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     root: {
-     
+
     },
     paper: {
         padding: theme.spacing(1, 1),
@@ -37,15 +37,15 @@ const useStyles = makeStyles(theme => ({
     wrapper: {
         margin: theme.spacing(1),
         position: 'relative',
-      },
-      buttonProgress: {
+    },
+    buttonProgress: {
         color: green[700],
         position: 'absolute',
         top: '38%',
         left: '50%',
         marginTop: -12,
         marginLeft: -12,
-      },
+    },
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
@@ -89,7 +89,7 @@ export default function ForgotPassword(props) {
                         status: true,
                         message: response.data.message,
                     })
-                }else{
+                } else {
                     setSuccess({
                         status: true,
                         message: response.data.message,
@@ -97,7 +97,7 @@ export default function ForgotPassword(props) {
                 }
                 setLoading(false)
             })
-        
+
 
     }
 
@@ -126,8 +126,8 @@ export default function ForgotPassword(props) {
 
     return (
         <div
-        style={{background: 'linear-gradient(180deg, #388e3c, #c8e6c9)'}}
-         className={classes.root}>
+            style={{ background: 'linear-gradient(180deg, #388e3c, #c8e6c9)' }}
+            className={classes.root}>
 
             <Grid container
                 spacing={0}
@@ -171,28 +171,32 @@ export default function ForgotPassword(props) {
 
                             />
 
-                        <div className={classes.wrapper}>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                className={classes.submit}
-                                disabled={loading}
-                            >
-                        
-                                <Typography component="div">
-                                    <Box fontWeight="bold">
-                                        Send Reset Link
+                            <div className={classes.wrapper}>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    className={classes.submit}
+                                    disabled={loading}
+                                >
+
+                                    <Typography component="div">
+                                        <Box fontWeight="bold">
+                                            Send Reset Link
                                     </Box>
-                                </Typography>
-                            </Button>
-                            {loading && <CircularProgress size={30} className={classes.buttonProgress} />}
+                                    </Typography>
+                                </Button>
+                                {loading && <CircularProgress size={30} className={classes.buttonProgress} />}
                             </div>
                             <Snackbar
                                 anchorOrigin={{
-                                    vertical: 'bottom',
+                                    vertical: 'top',
                                     horizontal: 'left',
                                 }}
+                                TransitionComponent={Slide}
+                                TransitionProps={
+                                    { direction: "right" }
+                                }
                                 open={success.status}
                                 autoHideDuration={6000}
                                 variant="success"

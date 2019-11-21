@@ -1,7 +1,7 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Box, Button, CircularProgress, FormControl, Grid, 
     IconButton, InputLabel, MenuItem, OutlinedInput, Select, 
-    Snackbar, SnackbarContent } from '@material-ui/core';
+    Snackbar, SnackbarContent, Slide } from '@material-ui/core';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -494,9 +494,13 @@ export default function EditCourse(props) {
             </div>
             <Snackbar
                 anchorOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'left',
-                }}
+                  }}
+                  TransitionComponent={Slide}
+                  TransitionProps={
+                    { direction: "right" }
+                  }
                 open={state.status}
                 autoHideDuration={2000}
                 variant="success"

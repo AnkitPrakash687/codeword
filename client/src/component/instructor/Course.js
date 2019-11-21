@@ -1,7 +1,9 @@
-import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, DialogActions, 
-    DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Link, Snackbar, 
-    Tooltip, Fab, TextField } from '@material-ui/core';
-import { green, grey, lightGreen, red, amber  } from '@material-ui/core/colors';
+import {
+    Box, Button, CircularProgress, Container, CssBaseline, Dialog, DialogActions,
+    DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Link, Snackbar,
+    Tooltip, Fab, TextField, Slide
+} from '@material-ui/core';
+import { green, grey, lightGreen, red, amber } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddBox from '@material-ui/icons/AddBox';
@@ -128,7 +130,7 @@ const useStyles = makeStyles(theme => ({
     },
     iconButton: {
         background: green[500],
-        margin: theme.spacing(2,0,0,2),
+        margin: theme.spacing(2, 0, 0, 2),
         color: grey[800],
         "&:hover": {
             backgroundColor: green[700]
@@ -136,18 +138,18 @@ const useStyles = makeStyles(theme => ({
     },
     iconButtonDelete: {
         background: green[500],
-        margin: theme.spacing(2,2,2,2),
+        margin: theme.spacing(2, 2, 2, 2),
         "&:hover": {
             backgroundColor: green[700]
         },
         color: red[800]
     },
     form: {
-        width: '100%', 
+        width: '100%',
         padding: theme.spacing(2),
-    
-      },
-    textField:{
+
+    },
+    textField: {
         margin: theme.spacing(1)
     }
 }));
@@ -214,7 +216,7 @@ export default function Course(props) {
     const [autoFocus, setAutoFocus] = useState()
     //const [users, setUsers] = useState()
     useEffect(() => {
-       
+
         setLoading(true)
         const headers = {
             'token': sessionStorage.getItem('token')
@@ -254,8 +256,8 @@ export default function Course(props) {
                         courseName: course.courseNameKey,
                         startDate: (course.Startdate.toString()).substring(0, 10),
                         endDate: (course.Enddate.toString()).substring(0, 10),
-                        startSurvey: course.PreSurveyURL == '' ? 'Unpublished' : course.PreSurveyURL,
-                        endSurvey: course.PostSurveyURL == '' ? 'Unpublished' : course.PostSurveyURL,
+                        startSurvey: !course.PreSurveyURL  ? '' : course.PreSurveyURL,
+                        endSurvey: !course.PostSurveyURL ? '' : course.PostSurveyURL,
                         isAssigned: course.isAssigned,
                         codewordCount: (course.codewordSet.codewords && course.codewordSet.codewords.length > 0) ?
                             course.codewordSet.codewords.length : 0,
@@ -275,14 +277,14 @@ export default function Course(props) {
         }).catch(error => {
             console.log(error)
         })
-    
+
     }, [render])
 
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
-      }
-    useEffect(()=>{
-        window.scrollTo(0,0)
+    }
+    useEffect(() => {
+        window.scrollTo(0, 0)
     }, [])
     const [redirect, setRedirect] = useState(false);
     const handleCardClick = () => {
@@ -291,7 +293,7 @@ export default function Course(props) {
 
     }
     if (redirect) {
-        history.push('/', {value: 0})
+        history.push('/', { value: 0 })
         return <Redirect to="/"></Redirect>
     }
 
@@ -307,20 +309,20 @@ export default function Course(props) {
         setDeleteConfirmation(false)
     }
 
-    const handleDialogClose = name => () =>{
-        if(name == 'addStudent'){
+    const handleDialogClose = name => () => {
+        if (name == 'addStudent') {
             setAddStudent({
                 open: false
             })
         }
     }
 
-    
+
     const handleChange = name => (event) => {
         console.log({ [name]: event.target.value })
         setNewStudent({ ...newStudent, [name]: event.target.value });
-  
-      }
+
+    }
 
     const addCourseRow = (resolve, newData) => {
 
@@ -331,39 +333,39 @@ export default function Course(props) {
                 message: 'Invalid Email',
                 open: true
             })
-        }else{
-        var data = {
-            id: state.id,
-            email: newData.email,
-            name: newData.name
-        }
-        const headers = {
-            'token': sessionStorage.getItem('token')
-        };
-       // console.log(newData)
-        API.post('dashboard/addstudent', data, { headers: headers }).then(response => {
-            console.log(response.data)
-            if (response.data.code == 200) {
-                setSnack({
-                    message: response.data.message,
-                    open: true
-                })
-                const data = [...table.data];
-                data.push(newData);
-                setTable({ ...table, data });
-               // console.log('render' + render)
-                setRender(!render)
-                resolve()
-            } else {
-                resolve()
-                setSnack({
-                    message: response.data.message,
-                    open: true
-                })
-                
+        } else {
+            var data = {
+                id: state.id,
+                email: newData.email,
+                name: newData.name
             }
-        })
-    }
+            const headers = {
+                'token': sessionStorage.getItem('token')
+            };
+            // console.log(newData)
+            API.post('dashboard/addstudent', data, { headers: headers }).then(response => {
+                console.log(response.data)
+                if (response.data.code == 200) {
+                    setSnack({
+                        message: response.data.message,
+                        open: true
+                    })
+                    const data = [...table.data];
+                    data.push(newData);
+                    setTable({ ...table, data });
+                    // console.log('render' + render)
+                    setRender(!render)
+                    resolve()
+                } else {
+                    resolve()
+                    setSnack({
+                        message: response.data.message,
+                        open: true
+                    })
+
+                }
+            })
+        }
     }
 
     const addCourseRowNew = () => {
@@ -375,38 +377,38 @@ export default function Course(props) {
                 open: true,
                 error: true
             })
-        }else{
-        var data = {
-            id: state.id,
-            email: newStudent.email,
-            name: newStudent.name
-        }
-        const headers = {
-            'token': sessionStorage.getItem('token')
-        };
-       // console.log(newData)
-        API.post('dashboard/addstudent', data, { headers: headers }).then(response => {
-            console.log(response.data)
-            if (response.data.code == 200) {
-                setSnack({
-                    message: response.data.message,
-                    open: true
-                })
-                const data = [...table.data];
-                data.push(data);
-                setTable({ ...table, data });
-               // console.log('render' + render)
-                //setRender(!render)
-               // resolve()
-            } else {
-                setSnack({
-                    message: response.data.message,
-                    open: true
-                })
-              //  resolve()
+        } else {
+            var data = {
+                id: state.id,
+                email: newStudent.email,
+                name: newStudent.name
             }
-        })
-    }
+            const headers = {
+                'token': sessionStorage.getItem('token')
+            };
+            // console.log(newData)
+            API.post('dashboard/addstudent', data, { headers: headers }).then(response => {
+                console.log(response.data)
+                if (response.data.code == 200) {
+                    setSnack({
+                        message: response.data.message,
+                        open: true
+                    })
+                    const data = [...table.data];
+                    data.push(data);
+                    setTable({ ...table, data });
+                    // console.log('render' + render)
+                    //setRender(!render)
+                    // resolve()
+                } else {
+                    setSnack({
+                        message: response.data.message,
+                        open: true
+                    })
+                    //  resolve()
+                }
+            })
+        }
     }
 
     const updateCourseRow = (resolve, newData, oldData) => {
@@ -474,7 +476,7 @@ export default function Course(props) {
         })
     }
 
-    const handleClickEdit = (rowData) =>{
+    const handleClickEdit = (rowData) => {
 
     }
     const handleClickOpen = () => {
@@ -560,8 +562,8 @@ export default function Course(props) {
         const { data, onClose, open, render } = props;
 
         const handleClose = (error) => {
-           // console.log('render   ' + render)
-           // setRender(!render)
+            // console.log('render   ' + render)
+            // setRender(!render)
             onClose();
         }
 
@@ -590,7 +592,7 @@ export default function Course(props) {
     return (
         <div>
 
-            <MyAppBar backButton={true} from="course"/>
+            <MyAppBar backButton={true} from="course" />
             {loading ? <Grid container
                 spacing={0}
                 alignItems="center"
@@ -646,11 +648,11 @@ export default function Course(props) {
                                     </Grid>
                                 </Grid>
                                 <Grid item sm={6}>
-                                <Box display="flex" flexDirection="row" justifyContent="flex-end">
-                             
-                                  
+                                    <Box display="flex" flexDirection="row" justifyContent="flex-end">
 
-                                    {/* <Button
+
+
+                                        {/* <Button
                                     variant="contained"
                                     color="primary"
                                     size="medium"
@@ -661,19 +663,19 @@ export default function Course(props) {
                                     
                                     assign
                                 </Button> */}
-                                    <Tooltip title="Finalize Course">
-                                    <Fab
-                                            variant="extended"
-                                            className={classes.iconButton}
-                                            onClick={handleAssign}
-                                            disabled={disableEdit}
-                                        >
-                                            <LockIcon style={{color: grey[800]}}/>
-                                            Finalize
+                                        <Tooltip title="Finalize Course">
+                                            <Fab
+                                                variant="extended"
+                                                className={classes.iconButton}
+                                                onClick={handleAssign}
+                                                disabled={disableEdit}
+                                            >
+                                                <LockIcon style={{ color: grey[800] }} />
+                                                Finalize
                                         </Fab>
-                                    </Tooltip>
+                                        </Tooltip>
 
-                                    {/* <Button
+                                        {/* <Button
                                     type="submit"
                                     variant="contained"
                                     color="primary"
@@ -684,20 +686,20 @@ export default function Course(props) {
                                     >
                                     edit
                                 </Button> */}
-                                    <Tooltip title="Edit course">
-                                    <Fab
-                                            variant="extended"
-                                            className={classes.iconButton}
-                                            onClick={handleClickOpen}
-                                        // disabled={disableEdit}
-                                        >
-                                            <EditIcon  style={{color: grey[800]}}/>
-                                            <Typography variant="body2" style={{fontWeight:500}}>Edit</Typography>
-                                        </Fab>
-                                    </Tooltip>
-                                    <SimpleDialog data={state} open={open} onClose={handleClickClose} render={render} />
+                                        <Tooltip title="Edit course">
+                                            <Fab
+                                                variant="extended"
+                                                className={classes.iconButton}
+                                                onClick={handleClickOpen}
+                                            // disabled={disableEdit}
+                                            >
+                                                <EditIcon style={{ color: grey[800] }} />
+                                                <Typography variant="body2" style={{ fontWeight: 500 }}>Edit</Typography>
+                                            </Fab>
+                                        </Tooltip>
+                                        <SimpleDialog data={state} open={open} onClose={handleClickClose} render={render} />
 
-                                    {/* <Button
+                                        {/* <Button
                                     type="submit"
                                     variant="contained"
                                     color="primary"
@@ -707,19 +709,19 @@ export default function Course(props) {
                                     delete
                                 </Button> */}
 
-                                    <Tooltip title="Delete course">
-                                        <Fab
-                                            variant="extended"
-                                            className={classes.iconButtonDelete}
-                                            onClick={handleDeleteConfirmation}
-                                        >
-                                            <DeleteForeverIcon style={{color: red[800]}}/>
-                                            <Typography variant="body2" style={{fontWeight:700}}>Delete</Typography>
-                                        </Fab>
-                                    </Tooltip>
-                                   
-                              
-                                </Box>
+                                        <Tooltip title="Delete course">
+                                            <Fab
+                                                variant="extended"
+                                                className={classes.iconButtonDelete}
+                                                onClick={handleDeleteConfirmation}
+                                            >
+                                                <DeleteForeverIcon style={{ color: red[800] }} />
+                                                <Typography variant="body2" style={{ fontWeight: 700 }}>Delete</Typography>
+                                            </Fab>
+                                        </Tooltip>
+
+
+                                    </Box>
                                 </Grid>
                             </Grid>
                         </Box>
@@ -748,33 +750,33 @@ export default function Course(props) {
                                     <Grid container direction="column">
                                         <Grid item xs={12} sm={12} md={12} lg={12} >
 
-                                            
+
                                             <div>
-                                                     <Typography  component="div">
-                                                        <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
-                                                            Start Survey Link: &nbsp;
-                                                            {(state.startSurvey != 'Unpublished' || state.startSurvey != 'Unpublished') ?
+                                                <Typography component="div">
+                                                    <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
+                                                        Start Survey Link: &nbsp;
+                                                            {(state.startSurvey != '' ) ?
                                                             <Link onClick={event => event.stopPropagation()} target="_blank" href={state.startSurvey} variant="body2" className={classes.link}>
-                                                             Click here
-                                                            </Link>: 'N/A'}
-                                                        </Box>
-                                                    </Typography>
-                                                </div>
+                                                                Click here
+                                                            </Link> : 'N/A'}
+                                                    </Box>
+                                                </Typography>
+                                            </div>
                                         </Grid>
                                         <Grid item xs={12}>
-                                           
-                                            <div>
-                                                  <Typography  component="div">
-                                                        <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
-                                                        End Survey Link: &nbsp;
-                                                        {(state.endSurvey != 'Unpublished'  || state.endSurvey != 'Unpublished') ?
-                                                        <Link onClick={event => event.stopPropagation()} target="_blank" href={state.endSurvey} variant="body2" className={classes.link}>                                                
-                                                         Click here
-                                                        </Link>: 'N/A'}
-                                                        </Box>
-                                                    </Typography>
 
-                                                </div>
+                                            <div>
+                                                <Typography component="div">
+                                                    <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
+                                                        End Survey Link: &nbsp;
+                                                        {(state.endSurvey != '') ?
+                                                            <Link onClick={event => event.stopPropagation()} target="_blank" href={state.endSurvey} variant="body2" className={classes.link}>
+                                                                Click here
+                                                        </Link> : 'N/A'}
+                                                    </Box>
+                                                </Typography>
+
+                                            </div>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -782,77 +784,81 @@ export default function Course(props) {
 
                         </div>
                         <Box display="flex" justifyContent="center">
-                        <Grid className={classes.table} xs={12} sm={8}>
-                            <MaterialTable
-                                icons={tableIcons}
-                                title="Students"
-                                columns={table.columns}
-                                data={table.data}
-                                options={{
-                                    actionsColumnIndex: -1,
-                                    headerStyle: {
-                                        fontSize: 15
-                                    },
-                                    emptyRowsWhenPaging: false,
-                                    exportButton: true,
-                                    exportAllData: true
-                                }}
-                                editable={{
-                                    onRowAdd: !disableEdit ? newData =>
-                                        new Promise(resolve => {
-                                            addCourseRow(resolve, newData)
+                            <Grid className={classes.table} xs={12} sm={8}>
+                                <MaterialTable
+                                    icons={tableIcons}
+                                    title="Students"
+                                    columns={table.columns}
+                                    data={table.data}
+                                    options={{
+                                        actionsColumnIndex: -1,
+                                        headerStyle: {
+                                            fontSize: 15
+                                        },
+                                        emptyRowsWhenPaging: false,
+                                        exportButton: true,
+                                        exportAllData: true
+                                    }}
+                                    editable={{
+                                        onRowAdd: !disableEdit ? newData =>
+                                            new Promise(resolve => {
+                                                addCourseRow(resolve, newData)
 
-                                        }) : null,
-                                    onRowUpdate: !disableEdit ? (newData, oldData) =>
-                                        new Promise(resolve => {
-                                            updateCourseRow(resolve, newData, oldData)
+                                            }) : null,
+                                        onRowUpdate: !disableEdit ? (newData, oldData) =>
+                                            new Promise(resolve => {
+                                                updateCourseRow(resolve, newData, oldData)
 
-                                        }) : null,
-                                    onRowDelete: !disableEdit ? oldData =>
-                                        new Promise(resolve => {
-                                            deleteCourseRow(resolve, oldData)
-                                        }) : null,
+                                            }) : null,
+                                        onRowDelete: !disableEdit ? oldData =>
+                                            new Promise(resolve => {
+                                                deleteCourseRow(resolve, oldData)
+                                            }) : null,
 
-                                }}
-                                actions={[
-                                 
-                                    {
-                                      icon: AddBox,
-                                      isFreeAction: true,
-                                      onClick: () => {
-                                        // open dialog to save new one
-                                        setAddStudent({
-                                            open:true
-                                        })
+                                    }}
+                                    actions={[
 
-                                      }
+                                        {
+                                            icon: AddBox,
+                                            isFreeAction: true,
+                                            onClick: () => {
+                                                // open dialog to save new one
+                                                setAddStudent({
+                                                    open: true
+                                                })
+
+                                            }
+                                        }
+                                    ]}
+                                />
+                                <Snackbar
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }}
+                                    TransitionComponent={Slide}
+                                    TransitionProps={
+                                        { direction: "right" }
                                     }
-                                  ]}
-                            />
-                            <Snackbar
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                open={snack.open}
-                                autoHideDuration={2000}
-                                variant="success"
-                                onClose={handleMessageClose}
-                                message={snack.message}
-                                action={[
-                                    <IconButton
-                                        key="close"
-                                        aria-label="Close"
-                                        color="inherit"
-                                        className={classes.close}
-                                        onClick={handleMessageClose}
-                                    >
-                                        <CloseIcon />
-                                    </IconButton>,
-                                ]}
-                            ></Snackbar>
+                                    open={snack.open}
+                                    autoHideDuration={2000}
+                                    variant="success"
+                                    onClose={handleMessageClose}
+                                    message={snack.message}
+                                    action={[
+                                        <IconButton
+                                            key="close"
+                                            aria-label="Close"
+                                            color="inherit"
+                                            className={classes.close}
+                                            onClick={handleMessageClose}
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>,
+                                    ]}
+                                ></Snackbar>
 
-                        </Grid>
+                            </Grid>
                         </Box>
                     </div>
                     <Dialog
@@ -903,12 +909,12 @@ export default function Course(props) {
                         aria-describedby="alert-dialog-description"
                     >
                         <DialogTitle id="alert-dialog-title">{"Add Student"}</DialogTitle>
-                      
+
                         <form onSubmit={addCourseRowNew} className={classes.form} >
-                       
+
                             <TextField
                                 className={classes.textField}
-                              
+
                                 required
                                 variant="outlined"
                                 margin="normal"
@@ -920,11 +926,11 @@ export default function Course(props) {
                                 value={newStudent.name}
                                 onChange={handleChange('name')}
                             />
-                       
+
                             <TextField
                                 className={classes.textField}
                                 error={snack.error}
-                                helperText={snack.error?'Invalid Email':''}
+                                helperText={snack.error ? 'Invalid Email' : ''}
                                 required
                                 variant="outlined"
                                 margin="normal"
@@ -936,18 +942,18 @@ export default function Course(props) {
                                 value={newStudent.email}
                                 onChange={handleChange('email')}
                             />
-                            
-                           
-                           
-                    
-                        <DialogActions>
-                        <Button onClick={handleDialogClose('addStudent')} color="secondary">
-                                Cancel
+
+
+
+
+                            <DialogActions>
+                                <Button onClick={handleDialogClose('addStudent')} color="secondary">
+                                    Cancel
                             </Button>
-                            <Button type="submit" color="primary" autoFocus>
-                                Add
+                                <Button type="submit" color="primary" autoFocus>
+                                    Add
                             </Button>
-                        </DialogActions>
+                            </DialogActions>
                         </form>
                     </Dialog>
 

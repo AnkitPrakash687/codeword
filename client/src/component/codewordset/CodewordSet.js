@@ -1,4 +1,6 @@
-import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Slide, Snackbar, Tooltip } from '@material-ui/core';
+import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, 
+    DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, 
+    IconButton, Slide, Snackbar, Tooltip } from '@material-ui/core';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -104,7 +106,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     report: {
-        margin: theme.spacing(2,0,0,0),
+        margin: theme.spacing(2, 0, 0, 0),
     },
     iconButton: {
         background: grey[300],
@@ -216,11 +218,11 @@ export default function CodewordSet(props) {
 
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
-      }
-    useEffect(()=>{
-        window.scrollTo(0,0)
+    }
+    useEffect(() => {
+        window.scrollTo(0, 0)
     }, [])
-   
+
     const handleCardClick = () => {
         console.log('click working')
         setRedirect(true)
@@ -487,14 +489,14 @@ export default function CodewordSet(props) {
         setDeleteConfirmation(false)
     }
 
-    const handleBackButton = () =>{
-       
+    const handleBackButton = () => {
+
         setRedirect(true)
 
     }
 
     if (redirect) {
-        history.push('/', {value: 1})
+        history.push('/', { value: 1 })
         return <Redirect to="/"></Redirect>
     }
 
@@ -515,7 +517,7 @@ export default function CodewordSet(props) {
                         <CssBaseline />
                         <div className={classes.root}>
 
-                            <Box className={classes.header} >   
+                            <Box className={classes.header} >
                                 <Grid container >
                                     <Grid item sm={6}>
 
@@ -660,47 +662,51 @@ export default function CodewordSet(props) {
                             <Grid container>
                                 <Grid item sm={3}></Grid>
                                 <Grid item xs={12} sm={6}>
-                                   
-                                        <MaterialTable
-                                            icons={tableIcons}
-                                            title="Codewords"
-                                            columns={table.columns}
-                                            data={table.data}
-                                            options={{
-                                                actionsColumnIndex: -1,
-                                                headerStyle: {
-                                                    fontSize: 15
-                                                },
-                                                emptyRowsWhenPaging: false,
-                                                exportButton: true,
-                                                exportAllData: true
-                                            }}
-                                            editable={{
-                                                onRowAdd: !disableEdit ? newData =>
-                                                    new Promise(resolve => {
-                                                        addCodewordRow(resolve, newData)
 
-                                                    }):null,
-                                                onRowUpdate: !disableEdit ? (newData, oldData) =>
-                                                    new Promise(resolve => {
-                                                        updateCourseRow(resolve, newData, oldData)
+                                    <MaterialTable
+                                        icons={tableIcons}
+                                        title="Codewords"
+                                        columns={table.columns}
+                                        data={table.data}
+                                        options={{
+                                            actionsColumnIndex: -1,
+                                            headerStyle: {
+                                                fontSize: 15
+                                            },
+                                            emptyRowsWhenPaging: false,
+                                            exportButton: true,
+                                            exportAllData: true
+                                        }}
+                                        editable={{
+                                            onRowAdd: !disableEdit ? newData =>
+                                                new Promise(resolve => {
+                                                    addCodewordRow(resolve, newData)
 
-                                                    }):null,
-                                                onRowDelete: !disableEdit ? oldData =>
-                                                    new Promise(resolve => {
-                                                        deleteCodewordRow(resolve, oldData)
-                                                    }):null,
-                                            }}
+                                                }) : null,
+                                            onRowUpdate: !disableEdit ? (newData, oldData) =>
+                                                new Promise(resolve => {
+                                                    updateCourseRow(resolve, newData, oldData)
 
-                                        />
+                                                }) : null,
+                                            onRowDelete: !disableEdit ? oldData =>
+                                                new Promise(resolve => {
+                                                    deleteCodewordRow(resolve, oldData)
+                                                }) : null,
+                                        }}
+
+                                    />
 
                                 </Grid>
                             </Grid>
                             <Snackbar
                                 anchorOrigin={{
-                                    vertical: 'bottom',
+                                    vertical: 'top',
                                     horizontal: 'left',
                                 }}
+                                TransitionComponent={Slide}
+                                TransitionProps={
+                                    { direction: "right" }
+                                }
                                 open={snack.open}
                                 autoHideDuration={2000}
                                 variant="success"

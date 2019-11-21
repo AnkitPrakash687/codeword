@@ -1,4 +1,6 @@
-import { CircularProgress, DialogActions, DialogContent, Fab, FormControl, FormHelperText, Grid, IconButton, InputLabel, MenuItem, Select, Snackbar, TextField, Tooltip } from '@material-ui/core';
+import { CircularProgress, DialogActions, DialogContent, Fab, FormControl, 
+    FormHelperText, Grid, IconButton, InputLabel, MenuItem, Select, 
+    Snackbar, Slide,TextField, Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { green, grey, lightGreen } from '@material-ui/core/colors';
@@ -21,7 +23,7 @@ import CourseCard from './CourseCard';
 const moment = require('moment')
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(0,3,3,3),
+        padding: theme.spacing(0, 3, 3, 3),
         flexGrow: 1,
         backgroundColor: grey[200],
     },
@@ -480,10 +482,10 @@ export default function InstructorDashboard(props) {
         return r
     }
 
-    const handleDialogClose = name => (event) =>{
+    const handleDialogClose = name => (event) => {
         console.log('Dialog')
         console.log(name)
-        if(name=='clone'){
+        if (name == 'clone') {
             setOpenCloneCodewordset({ open: false })
             setNewCodewordsetName()
         }
@@ -493,15 +495,15 @@ export default function InstructorDashboard(props) {
         <div>
 
             <MyAppBar />
-            <Box p={2} display="flex" style={{width: '100%'}} flexDirection="row" justifyContent="flex-start">
+            <Box p={2} display="flex" style={{ width: '100%' }} flexDirection="row" justifyContent="flex-start">
                 <Typography component="div">
                     <Box fontSize={24} color={grey[800]} fontWeight="fontWeightBold" m={1}>
                         Instructor Dashboard
                     </Box>
                 </Typography>
-                </Box>
+            </Box>
             <div className={classes.root}>
-               
+
 
                 <div>
 
@@ -693,9 +695,13 @@ export default function InstructorDashboard(props) {
 
                     <Snackbar
                         anchorOrigin={{
-                            vertical: 'bottom',
+                            vertical: 'top',
                             horizontal: 'left',
                         }}
+                        TransitionComponent={Slide}
+                        TransitionProps={
+                            { direction: "right" }
+                        }
                         open={status.open}
                         autoHideDuration={2000}
                         variant="success"

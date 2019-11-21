@@ -1,4 +1,7 @@
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, IconButton, Slide, Snackbar } from '@material-ui/core';
+import {
+    Box, Button, Chip, Dialog, DialogActions, DialogContent,
+    DialogContentText, DialogTitle, Divider, Grid, IconButton, Slide, Snackbar
+} from '@material-ui/core';
 import { green, lightGreen, red } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -34,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     title: {
         padding: 10
     },
-    chipContainer:{
+    chipContainer: {
         margin: theme.spacing(2)
     },
     banner1: {
@@ -96,12 +99,13 @@ export default function EditCodewordSet(props) {
         reRender: false,
         alertOpen: true
     })
-   
+
     const [codewordSet, setCodewordSet] = useState(
-        {codewordSetName: props.data.codewordSetName,
-         filename: '',
-         selectedFile: null
-         })
+        {
+            codewordSetName: props.data.codewordSetName,
+            filename: '',
+            selectedFile: null
+        })
     const [openReport, setOpenReport] = useState(false)
     const [hardRuleData, setHardRuleData] = useState({
         moreThanThree: [],
@@ -113,7 +117,7 @@ export default function EditCodewordSet(props) {
 
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
-      });
+    });
 
     const fileLabel = React.useRef(null)
 
@@ -129,13 +133,13 @@ export default function EditCodewordSet(props) {
     const [disableUpdate, setDisableUpdate] = useState(true)
     useEffect(() => {
         console.log(state)
-    //    console.log(course)
-        if(data.codewordSetName == codewordSet.codewordSetName && codewordSet.filename == ''){
-                setDisableUpdate(true)
-            }else{
-                setDisableUpdate(false)
-            }
-    },[codewordSet])
+        //    console.log(course)
+        if (data.codewordSetName == codewordSet.codewordSetName && codewordSet.filename == '') {
+            setDisableUpdate(true)
+        } else {
+            setDisableUpdate(false)
+        }
+    }, [codewordSet])
 
     const handleFileChange = (event) => {
         console.log(props.data)
@@ -143,33 +147,33 @@ export default function EditCodewordSet(props) {
             setCodewordSet({ ...codewordSet, filename: fileLabel.current.files[0].name, selectedFile: event.target.files[0] });
             let file = event.target.files[0]
             let fileExt = file.name.split('.')[1]
-            if(fileExt == 'csv'){
-            // Papa.parse(event.target.files[0], {
-            //     complete: function (results) {
-            //         console.log(results)
-            //         var students = results.data.filter((item) => {
-            //             if (item[0] != '') {
-            //                 return item
-            //             }
-            //         })
-                
-            //     }
-            // })
-            }else if(fileExt == 'txt'){
-                
+            if (fileExt == 'csv') {
+                // Papa.parse(event.target.files[0], {
+                //     complete: function (results) {
+                //         console.log(results)
+                //         var students = results.data.filter((item) => {
+                //             if (item[0] != '') {
+                //                 return item
+                //             }
+                //         })
+
+                //     }
+                // })
+            } else if (fileExt == 'txt') {
+
                 let reader = new FileReader()
                 reader.readAsText(file)
-                reader.onload = () =>{
-                     var result = reader.result.split('\n')
-                     console.log(result)
-                     var codewordSetData = result.map((item)=>{
-                         return item.replace(/[\r]+/g,"")
-                     })
-                     console.log(codewordSetData)
+                reader.onload = () => {
+                    var result = reader.result.split('\n')
+                    console.log(result)
+                    var codewordSetData = result.map((item) => {
+                        return item.replace(/[\r]+/g, "")
+                    })
+                    console.log(codewordSetData)
                     filterData(codewordSetData)
                 }
-               
-            }else{
+
+            } else {
 
             }
 
@@ -181,28 +185,28 @@ export default function EditCodewordSet(props) {
             let moreThanThree = []
             var letters = /[/\s/\t/!@#$%^&*(),.?":;'{}|<>0-9\\\\]/
 
-            let invalidCodewords = result.filter((item)=>{
+            let invalidCodewords = result.filter((item) => {
                 return item.search(letters) != -1
             })
-            let array = result.filter((item, index)=>{
-                 return item.search(letters) == -1
+            let array = result.filter((item, index) => {
+                return item.search(letters) == -1
             })
             console.log('******array********')
             console.log(array)
             console.log(invalidCodewords)
 
-            let duplicateWords = array.filter((item, index) => 
+            let duplicateWords = array.filter((item, index) =>
                 array.indexOf(item) !== index
             )
-    
-            for(let i in array){
-                if(array[i].length < 3){
+
+            for (let i in array) {
+                if (array[i].length < 3) {
                     lessThanThree.push(array[i])
-                }else{
+                } else {
                     moreThanThree.push(array[i])
                 }
             }
-            
+
             let filteredData = Array.from(new Set(moreThanThree))
             console.log(moreThanThree)
             console.log(filteredData)
@@ -214,7 +218,7 @@ export default function EditCodewordSet(props) {
                 invalidCodewords: invalidCodewords
             })
 
-            
+
         }
     }
 
@@ -230,21 +234,21 @@ export default function EditCodewordSet(props) {
             codewords: hardRuleData.filteredData
         }
         console.log(data)
-        
-        API.post('dashboard/upadatecodewordset',  data, { headers: headers }).then(response => {
+
+        API.post('dashboard/upadatecodewordset', data, { headers: headers }).then(response => {
             console.log('👉 Returned data in :', response);
             if (response.data.code == 200) {
-              
-                if(hardRuleData.lessThanThree.length > 0 || hardRuleData.invalidCodewords.length > 0
-                    || hardRuleData.duplicates.length > 0){
-                setOpenReport(true)
-                    }else{
-                        setState({
-                            status: true,
-                            message: "Codeword Set Updated!",
-                            reRender: true
-                        })
-                    }
+
+                if (hardRuleData.lessThanThree.length > 0 || hardRuleData.invalidCodewords.length > 0
+                    || hardRuleData.duplicates.length > 0) {
+                    setOpenReport(true)
+                } else {
+                    setState({
+                        status: true,
+                        message: "Codeword Set Updated!",
+                        reRender: true
+                    })
+                }
             } else {
                 console.log('error')
                 setState({
@@ -276,7 +280,7 @@ export default function EditCodewordSet(props) {
 
     }
 
-    const handleReportClose = () =>{
+    const handleReportClose = () => {
         setOpenReport(false)
         setState({
             status: true,
@@ -285,9 +289,9 @@ export default function EditCodewordSet(props) {
         })
     }
     const handleClose = () => {
-       
+
         props.onClose()
-    
+
     }
 
     const handleMessageClose = () => {
@@ -305,8 +309,8 @@ export default function EditCodewordSet(props) {
         onClose: PropTypes.func.isRequired
     };
 
-    const handleCodewordSetChange = (event) =>{
-        setCodewordSet( {...codewordSet,codewordSetName: event.target.value})
+    const handleCodewordSetChange = (event) => {
+        setCodewordSet({ ...codewordSet, codewordSetName: event.target.value })
     }
 
     return (
@@ -358,45 +362,45 @@ export default function EditCodewordSet(props) {
 
                     </label>
 
-                  
+
                 </div>
                 <Grid container className={classes.chipContainer}>
-                       { (hardRuleData.duplicates.length > 0) &&
-                       <Grid item>
-                        <Chip
-                            label={'No. of duplicate: ' + hardRuleData.duplicates.length}
-                            size="small"
-                            className={classes.chip}
-                            color="primary"
-                            variant="outlined"
-                        /> 
-                        </Grid>
-                       }
-                       { (hardRuleData.lessThanThree.length > 0) &&
+                    {(hardRuleData.duplicates.length > 0) &&
                         <Grid item>
-                        <Chip
-                            label={'Less than 3 letters: ' + hardRuleData.lessThanThree.length}
-                            size="small"
-                            className={classes.chip}
-                            color="primary"
-                            variant="outlined"
-                        /> 
+                            <Chip
+                                label={'No. of duplicate: ' + hardRuleData.duplicates.length}
+                                size="small"
+                                className={classes.chip}
+                                color="primary"
+                                variant="outlined"
+                            />
                         </Grid>
-                       } 
-                       { (hardRuleData.invalidCodewords.length > 0) &&
+                    }
+                    {(hardRuleData.lessThanThree.length > 0) &&
                         <Grid item>
-                        <Chip
-                            label={'Invalid Codewords: ' + hardRuleData.invalidCodewords.length}
-                            size="small"
-                            className={classes.chip}
-                            color="primary"
-                            variant="outlined"
-                        /> 
+                            <Chip
+                                label={'Less than 3 letters: ' + hardRuleData.lessThanThree.length}
+                                size="small"
+                                className={classes.chip}
+                                color="primary"
+                                variant="outlined"
+                            />
                         </Grid>
-                       } 
-                       </Grid>
+                    }
+                    {(hardRuleData.invalidCodewords.length > 0) &&
+                        <Grid item>
+                            <Chip
+                                label={'Invalid Codewords: ' + hardRuleData.invalidCodewords.length}
+                                size="small"
+                                className={classes.chip}
+                                color="primary"
+                                variant="outlined"
+                            />
+                        </Grid>
+                    }
+                </Grid>
                 <Box display="flex" justifyContent="flex-end">
-                   
+
                     <Button
                         variant="contained"
                         color="primary"
@@ -413,84 +417,88 @@ export default function EditCodewordSet(props) {
                         color="primary"
                         size="large"
                         className={classes.submit}
-                        disabled = {disableUpdate}
+                        disabled={disableUpdate}
                     >
                         Update
           </Button>
 
                 </Box>
 
-               
+
             </form>
 
             <Dialog
-           fullWidth={true} 
-        open={openReport}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
-        <Divider />
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Duplicate Codewords: {hardRuleData.duplicates.length}
-            </DialogContentText>
-            <Grid container >
-           { hardRuleData.duplicates.map((item)=>{
-                   return  <Typography component="div">
-                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
-                        {item}
-                    </Box>
-                </Typography>
-                })
-            }
-          </Grid>
-    
-          <DialogContentText id="alert-dialog-slide-description">
-            Codewords with less than three letters: {hardRuleData.lessThanThree.length}
-            </DialogContentText>
-            <Grid container >
-            {
-                hardRuleData.lessThanThree.map((item)=>{
-                   return <Typography component="div">
-                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
-                        {item}
-                    </Box>
-                </Typography>
-                })
-            }
-            </Grid>
-        
-            <DialogContentText id="alert-dialog-slide-description">
-            Invalid codewords: {hardRuleData.invalidCodewords.length}
-            </DialogContentText>
-            <Grid container >
-            { hardRuleData.invalidCodewords.map((item)=>{
-                   return  <Typography component="div">
-                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
-                        {item}
-                    </Box>
-                </Typography>
-                })
-            }
-           </Grid>
-           
-        </DialogContent>
-        <Divider />
-        <DialogActions>
-          <Button onClick={handleReportClose} color="primary">
-            OK
+                fullWidth={true}
+                open={openReport}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">{"Report"}</DialogTitle>
+                <Divider />
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        Duplicate Codewords: {hardRuleData.duplicates.length}
+                    </DialogContentText>
+                    <Grid container >
+                        {hardRuleData.duplicates.map((item) => {
+                            return <Typography component="div">
+                                <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                                    {item}
+                                </Box>
+                            </Typography>
+                        })
+                        }
+                    </Grid>
+
+                    <DialogContentText id="alert-dialog-slide-description">
+                        Codewords with less than three letters: {hardRuleData.lessThanThree.length}
+                    </DialogContentText>
+                    <Grid container >
+                        {
+                            hardRuleData.lessThanThree.map((item) => {
+                                return <Typography component="div">
+                                    <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                                        {item}
+                                    </Box>
+                                </Typography>
+                            })
+                        }
+                    </Grid>
+
+                    <DialogContentText id="alert-dialog-slide-description">
+                        Invalid codewords: {hardRuleData.invalidCodewords.length}
+                    </DialogContentText>
+                    <Grid container >
+                        {hardRuleData.invalidCodewords.map((item) => {
+                            return <Typography component="div">
+                                <Box fontSize="caption.fontSize" fontWeight="fontWeightBold" m={1}>
+                                    {item}
+                                </Box>
+                            </Typography>
+                        })
+                        }
+                    </Grid>
+
+                </DialogContent>
+                <Divider />
+                <DialogActions>
+                    <Button onClick={handleReportClose} color="primary">
+                        OK
           </Button>
-        </DialogActions>
-      </Dialog>
+                </DialogActions>
+            </Dialog>
             <Snackbar
                 anchorOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'left',
                 }}
+                TransitionComponent={Slide}
+                TransitionProps={
+                    { direction: "right" }
+                }
                 open={state.status}
                 autoHideDuration={2000}
                 variant="success"

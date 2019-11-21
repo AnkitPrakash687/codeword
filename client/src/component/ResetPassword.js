@@ -1,4 +1,4 @@
-import {Box, LinearProgress} from '@material-ui/core';
+import { Box, LinearProgress, Slide } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { green, grey } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     root: {
-     
+
     },
     paper: {
         padding: theme.spacing(1, 1),
@@ -63,8 +63,8 @@ export default function ResetPassword(props) {
     })
     const [password, setPassword] = useState('')
     const [passStrength, setPassStrength] = useState({
-        value: 0, text: '',  color:grey[100]
-      })
+        value: 0, text: '', color: grey[100]
+    })
     const [success, setSuccess] = useState({
         status: false,
         message: '',
@@ -73,21 +73,21 @@ export default function ResetPassword(props) {
 
     const [redirect, setRedirect] = useState()
 
-    useEffect(()=>{
+    useEffect(() => {
         var strongPassRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{8,})")
         var mediumPassRegex = RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})")
         var weakPassRegex = RegExp('(?=.{6,})')
-        
-        if(strongPassRegex.test(password)){
-          setPassStrength({value:100, text: 'strong', color: 'primary'})
-        }else if(mediumPassRegex.test(password)){
-          setPassStrength({value:60, text: 'medium', color: 'primary'})
-        }else if(weakPassRegex.test(password)){
-          setPassStrength({value:30, text: 'weak', color:'secondary'})
-        }else{
-          setPassStrength({value:10, text: '', color:grey[100]})
+
+        if (strongPassRegex.test(password)) {
+            setPassStrength({ value: 100, text: 'strong', color: 'primary' })
+        } else if (mediumPassRegex.test(password)) {
+            setPassStrength({ value: 60, text: 'medium', color: 'primary' })
+        } else if (weakPassRegex.test(password)) {
+            setPassStrength({ value: 30, text: 'weak', color: 'secondary' })
+        } else {
+            setPassStrength({ value: 10, text: '', color: grey[100] })
         }
-      },[password])
+    }, [password])
 
     function handleSubmit(event) {
         event.preventDefault()
@@ -97,15 +97,15 @@ export default function ResetPassword(props) {
         }
         API
             .post('auth/resetPassword', data)
-            .then(response =>{
-                if(response.data.code == 200){
+            .then(response => {
+                if (response.data.code == 200) {
                     setSuccess({
                         status: true,
                         message: response.data.message,
                         code: 200
                     })
-                    
-                }else{
+
+                } else {
                     setSuccess({
                         status: true,
                         message: response.data.message,
@@ -149,17 +149,17 @@ export default function ResetPassword(props) {
     const handleChange = name => (event, isChecked) => {
         //console.log({[name]: event.target.value})
         setState({ ...state, [name]: event.target.value });
-        if(name == 'password'){
+        if (name == 'password') {
             setPassword(event.target.value)
         }
     }
 
-   
+
     function handleClose(event, reason) {
-        if(success.code == 200){
+        if (success.code == 200) {
             setRedirect(true)
-        setSuccess({ status: false })
-        }else{
+            setSuccess({ status: false })
+        } else {
             setSuccess({ status: false })
         }
     }
@@ -176,15 +176,15 @@ export default function ResetPassword(props) {
     )
 
     let validation = validator.validate(state)  //
-    if(redirect){
+    if (redirect) {
         return (<Redirect to='/'></Redirect>)
     }
 
 
     return (
-        <div 
-        style={{background: 'linear-gradient(180deg, #388e3c, #c8e6c9)'}}
-        className={classes.root}>
+        <div
+            style={{ background: 'linear-gradient(180deg, #388e3c, #c8e6c9)' }}
+            className={classes.root}>
 
             <Grid container
                 spacing={0}
@@ -287,8 +287,8 @@ export default function ResetPassword(props) {
                                 variant="contained"
                                 className={classes.submit}
                                 disabled={
-                                    (password.length>0 && passStrength.value < 11 ) ||
-                                    (validation.confirmPass.isInvalid && state.confirmPass.length > 0 )
+                                    (password.length > 0 && passStrength.value < 11) ||
+                                    (validation.confirmPass.isInvalid && state.confirmPass.length > 0)
                                 }
                             >
                                 <Typography component="div">
@@ -300,9 +300,13 @@ export default function ResetPassword(props) {
 
                             <Snackbar
                                 anchorOrigin={{
-                                    vertical: 'bottom',
+                                    vertical: 'top',
                                     horizontal: 'left',
                                 }}
+                                TransitionComponent={Slide}
+                                TransitionProps={
+                                    { direction: "right" }
+                                }
                                 open={success.status}
                                 autoHideDuration={6000}
                                 variant="success"
