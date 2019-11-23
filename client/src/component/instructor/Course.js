@@ -197,8 +197,10 @@ export default function Course(props) {
             }
 
         ],
-        data: [],
+        data: []
+        
     })
+    const [pageSize, setPageSize] = useState(5)
     const [open, setOpen] = useState(false)
     const [render, setRender] = useState(false)
     const [disableEdit, setDisableEdit] = useState()
@@ -216,7 +218,7 @@ export default function Course(props) {
     const [autoFocus, setAutoFocus] = useState()
     //const [users, setUsers] = useState()
     useEffect(() => {
-
+        setPageSize(sessionStorage.getItem('pageSizeCourse', 5))
         setLoading(true)
         const headers = {
             'token': sessionStorage.getItem('token')
@@ -787,6 +789,7 @@ export default function Course(props) {
                             <Grid className={classes.table} xs={12} sm={8}>
                                 <MaterialTable
                                     icons={tableIcons}
+                                    pageSizeOptions={table.pageSizeOptions}
                                     title="Students"
                                     columns={table.columns}
                                     data={table.data}
@@ -797,7 +800,9 @@ export default function Course(props) {
                                         },
                                         emptyRowsWhenPaging: false,
                                         exportButton: true,
-                                        exportAllData: true
+                                        exportAllData: true,
+                                        pageSizeOptions:[5,10,20,50],
+                                        pageSize: pageSize
                                     }}
                                     editable={{
                                         onRowAdd: !disableEdit ? newData =>
@@ -830,6 +835,12 @@ export default function Course(props) {
                                             }
                                         }
                                     ]}
+
+                                    onChangeRowsPerPage={(pageSize) =>{
+                                        console.log('*******PageSize***********')
+                                        setPageSize(pageSize)
+                                        sessionStorage.setItem('pageSizeCourse', pageSize)
+                                    }}
                                 />
                                 <Snackbar
                                     anchorOrigin={{

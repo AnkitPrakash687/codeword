@@ -176,7 +176,10 @@ export default function CodewordSet(props) {
     const [deleteConfirmation, setDeleteConfirmation] = useState(false)
     const [loading, setLoading] = useState(false)
     const [redirect, setRedirect] = useState(false)
+    const [pageSize, setPageSize] = useState(5)
     useEffect(() => {
+        var pageSize = parseInt(sessionStorage.getItem('pageSizeCodewordset', 5))
+        setPageSize(pageSize)
         setLoading(true)
         const headers = {
             'token': sessionStorage.getItem('token')
@@ -221,6 +224,12 @@ export default function CodewordSet(props) {
     }
     useEffect(() => {
         window.scrollTo(0, 0)
+        // var pageSize = parseInt(sessionStorage.getItem('pageSizeCodewordset', 5))
+        sessionStorage.setItem('pageSizeCodewordset', 5)
+
+        return function cleanup(){
+            sessionStorage.setItem('pageSizeCodewordset', 5)
+        }
     }, [])
 
     const handleCardClick = () => {
@@ -290,7 +299,7 @@ export default function CodewordSet(props) {
                     data.push(newData);
                     setTable({ ...table, data });
                     console.log('render' + render)
-                    setRender(!render)
+                  //  setRender(!render)
                     resolve()
                 } else {
                     setSnack({
@@ -332,7 +341,7 @@ export default function CodewordSet(props) {
                     const data = [...table.data];
                     data[data.indexOf(oldData)] = newData;
                     setTable({ ...table, data });
-                    setRender(!render)
+                  //  setRender(!render)
                     resolve()
                 } else {
                     setSnack({
@@ -369,7 +378,7 @@ export default function CodewordSet(props) {
                 const data = [...table.data];
                 data.splice(data.indexOf(oldData), 1);
                 setTable({ ...table, data });
-                setRender(!render)
+               // setRender(!render)
                 resolve();
             } else {
                 setSnack({
@@ -673,6 +682,7 @@ export default function CodewordSet(props) {
                                             headerStyle: {
                                                 fontSize: 15
                                             },
+                                            pageSize: pageSize,
                                             emptyRowsWhenPaging: false,
                                             exportButton: true,
                                             exportAllData: true
@@ -693,7 +703,11 @@ export default function CodewordSet(props) {
                                                     deleteCodewordRow(resolve, oldData)
                                                 }) : null,
                                         }}
-
+                                        onChangeRowsPerPage={(pageSize) =>{
+                                            console.log('*******PageSize***********')
+                                            console.log(pageSize)
+                                            sessionStorage.setItem('pageSizeCodewordset', pageSize)
+                                        }}
                                     />
 
                                 </Grid>
