@@ -16,6 +16,9 @@ import Student from './student/StudentDashboard';
     }
 
      async getData(){
+
+      sessionStorage.setItem('pageSizeCourse', 5)
+      sessionStorage.setItem('pageSizeCodewordset', 5)
         console.log('getdata')
         const headers = {
             'Content-Type': 'application/json',
