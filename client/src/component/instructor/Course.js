@@ -172,6 +172,10 @@ export default function Course(props) {
         message: '',
         open: false
     })
+    const [error, setError] = useState({
+        status: false,
+        message: ''
+    })
     const [table, setTable] = useState({
         columns: [
             { title: 'Name', field: 'name' },
@@ -200,7 +204,8 @@ export default function Course(props) {
         data: []
         
     })
-    const [pageSize, setPageSize] = useState(5)
+    const [isLoading, setIsLoading] = useState(false)
+    const [pageSize, setPageSize] = useState(0)
     const [open, setOpen] = useState(false)
     const [render, setRender] = useState(false)
     const [disableEdit, setDisableEdit] = useState()
@@ -214,12 +219,13 @@ export default function Course(props) {
     const [addStudent, setAddStudent] = useState({
         open: false
     })
-    const [error, setError] = useState()
     const [autoFocus, setAutoFocus] = useState()
     //const [users, setUsers] = useState()
     useEffect(() => {
+
         setPageSize(sessionStorage.getItem('pageSizeCourse', 5))
-        setLoading(true)
+       // setLoading(true)
+       setIsLoading(true)
         const headers = {
             'token': sessionStorage.getItem('token')
         };
@@ -273,7 +279,8 @@ export default function Course(props) {
                         setDisableEdit(true)
                     }
 
-                    setLoading(false)
+                  //  setLoading(false)
+                  setIsLoading(false)
                 }
             })
         }).catch(error => {
@@ -287,6 +294,8 @@ export default function Course(props) {
     }
     useEffect(() => {
         window.scrollTo(0, 0)
+        sessionStorage.setItem('pageSizeCourse', 5)
+
     }, [])
     const [redirect, setRedirect] = useState(false);
     const handleCardClick = () => {
@@ -323,6 +332,20 @@ export default function Course(props) {
     const handleChange = name => (event) => {
         console.log({ [name]: event.target.value })
         setNewStudent({ ...newStudent, [name]: event.target.value });
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        if (name == 'email') {
+            if (!emailRegex.test(event.target.value)) {
+                setError({
+                    status: true,
+                    message: 'Invalid Email'
+                })
+            }else{
+                setError({
+                    status: false,
+                    message: ''
+                })
+            }
+        }
 
     }
 
@@ -356,29 +379,31 @@ export default function Course(props) {
                     data.push(newData);
                     setTable({ ...table, data });
                     // console.log('render' + render)
-                    setRender(!render)
+                 //   setRender(!render)
                     resolve()
                 } else {
-                    resolve()
+                    
+
                     setSnack({
                         message: response.data.message,
                         open: true
                     })
+                    resolve()
 
                 }
             })
         }
     }
 
-    const addCourseRowNew = () => {
-
+    const addCourseRowNew = (event) => {
+        event.preventDefault()
         var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         if (!emailRegex.test(newStudent.email)) {
-            setSnack({
-                message: 'Invalid Email',
-                open: true,
-                error: true
-            })
+            // setSnack({
+            //     message: 'Invalid Email',
+            //     open: true,
+            //     error: true
+            // })
         } else {
             var data = {
                 id: state.id,
@@ -400,9 +425,18 @@ export default function Course(props) {
                     data.push(data);
                     setTable({ ...table, data });
                     // console.log('render' + render)
-                    //setRender(!render)
+                    setNewStudent({
+                        name:'',
+                        email: ''
+                    })
+                    setRender(!render)
                     // resolve()
                 } else {
+
+                    setError({
+                        status:true,
+                        message: response.data.message
+                    })
                     setSnack({
                         message: response.data.message,
                         open: true
@@ -789,6 +823,7 @@ export default function Course(props) {
                             <Grid className={classes.table} xs={12} sm={8}>
                                 <MaterialTable
                                     icons={tableIcons}
+                                    isLoading={isLoading}
                                     pageSizeOptions={table.pageSizeOptions}
                                     title="Students"
                                     columns={table.columns}
@@ -802,14 +837,14 @@ export default function Course(props) {
                                         exportButton: true,
                                         exportAllData: true,
                                         pageSizeOptions:[5,10,20,50],
-                                        pageSize: pageSize
+                                        pageSize: pageSize == 0?5:pageSize
                                     }}
                                     editable={{
-                                        onRowAdd: !disableEdit ? newData =>
-                                            new Promise(resolve => {
-                                                addCourseRow(resolve, newData)
+                                        // onRowAdd: !disableEdit ? newData =>
+                                        //     new Promise(resolve => {
+                                        //         addCourseRow(resolve, newData)
 
-                                            }) : null,
+                                        //     }) : null,
                                         onRowUpdate: !disableEdit ? (newData, oldData) =>
                                             new Promise(resolve => {
                                                 updateCourseRow(resolve, newData, oldData)
@@ -821,7 +856,7 @@ export default function Course(props) {
                                             }) : null,
 
                                     }}
-                                    actions={[
+                                    actions={!disableEdit ?[
 
                                         {
                                             icon: AddBox,
@@ -834,7 +869,7 @@ export default function Course(props) {
 
                                             }
                                         }
-                                    ]}
+                                    ]:null}
 
                                     onChangeRowsPerPage={(pageSize) =>{
                                         console.log('*******PageSize***********')
@@ -940,8 +975,8 @@ export default function Course(props) {
 
                             <TextField
                                 className={classes.textField}
-                                error={snack.error}
-                                helperText={snack.error ? 'Invalid Email' : ''}
+                                error={error.status}
+                                helperText={error.message}
                                 required
                                 variant="outlined"
                                 margin="normal"
@@ -961,7 +996,11 @@ export default function Course(props) {
                                 <Button onClick={handleDialogClose('addStudent')} color="secondary">
                                     Cancel
                             </Button>
-                                <Button type="submit" color="primary" autoFocus>
+                                <Button 
+                                disabled={error.status}
+                                type="submit" 
+                                color="primary" 
+                                autoFocus>
                                     Add
                             </Button>
                             </DialogActions>
