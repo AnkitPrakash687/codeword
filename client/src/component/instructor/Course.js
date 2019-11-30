@@ -599,7 +599,7 @@ export default function Course(props) {
 
         const handleClose = (error) => {
             // console.log('render   ' + render)
-            // setRender(!render)
+             setRender(!render)
             onClose();
         }
 
