@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, 
     DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, 
-    IconButton, Slide, Snackbar, Tooltip } from '@material-ui/core';
+    IconButton, Slide, Snackbar, Tooltip, Fab } from '@material-ui/core';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -110,13 +110,19 @@ const useStyles = makeStyles(theme => ({
     },
     iconButton: {
         background: grey[300],
-        margin: theme.spacing(1),
-        color: grey[900]
+        margin: theme.spacing(2, 0, 0, 2),
+        color: grey[800],
+        "&:hover": {
+            backgroundColor: grey[400]
+        }
     },
     iconButtonDelete: {
         background: grey[300],
-        margin: theme.spacing(1),
-        color: red[900]
+        margin: theme.spacing(2, 2, 2, 2),
+        "&:hover": {
+            backgroundColor: grey[400]
+        },
+        color: red[800]
     },
     appBar: {
         borderRadius: 5,
@@ -550,27 +556,14 @@ export default function CodewordSet(props) {
                                                 </Typography>
                                             </Box>
                                         </Box>
-
-
-
                                     </Grid>
                                     <Grid item sm={1}>
 
                                     </Grid>
                                     <Grid item sm={5}>
                                         <Box display="flex" flexDirection="row" justifyContent="flex-end">
-                                            {/* <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="medium"
-                                    className={classes.report}
-                                    onClick={handleReport}
-                                    disabled={disableEdit}
-                                >
 
-                                    Report
-                                </Button> */}
-                                            <Tooltip title="Report">
+                                            {/* <Tooltip title="Report">
                                                 <IconButton
                                                     className={classes.iconButton}
                                                     onClick={handleReport}
@@ -578,9 +571,9 @@ export default function CodewordSet(props) {
                                                 >
                                                     <ListAltIcon fontSize="large" />
                                                 </IconButton>
-                                            </Tooltip>
+                                            </Tooltip> */}
 
-                                            <Tooltip title="Finalize codeword set">
+                                            {/* <Tooltip title="Finalize codeword set">
                                                 <IconButton
                                                     className={classes.iconButton}
                                                     onClick={handleFinalize}
@@ -588,18 +581,44 @@ export default function CodewordSet(props) {
                                                 >
                                                     <LockIcon fontSize="large" />
                                                 </IconButton>
-                                            </Tooltip>
-                                            {/* <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="medium"
-                                    className={classes.assign}
-                                    onClick={handleFinalize}
-                                    disabled={disableEdit}
-                                >
+                                            </Tooltip> */}
 
-                                    Finalize
-                                </Button> */}
+                                        <Tooltip title="Report">
+                                            <Fab
+                                                variant="extended"
+                                                className={classes.iconButton}
+                                                onClick={handleReport}
+                                                disabled={disableEdit}
+                                            >
+                                                <ListAltIcon  style={{ color: grey[800] }} />
+                                                Report
+                                        </Fab>
+                                        </Tooltip>
+
+                                            <Tooltip title="Finalize codeword set">
+                                            <Fab
+                                                variant="extended"
+                                                className={classes.iconButton}
+                                                onClick={handleFinalize}
+                                                disabled={disableEdit}
+                                            >
+                                                <LockIcon style={{ color: grey[800] }} />
+                                                Finalize
+                                        </Fab>
+                                        </Tooltip>
+
+                                        <Tooltip title="Edit codeword set">
+                                            <Fab
+                                                variant="extended"
+                                                className={classes.iconButton}
+                                                onClick={handleClickOpen}
+                                            // disabled={disableEdit}
+                                            >
+                                                <EditIcon style={{ color: grey[800] }} />
+                                                <Typography variant="body2" style={{ fontWeight: 500 }}>Edit</Typography>
+                                            </Fab>
+                                        </Tooltip>
+{/* 
                                             <Tooltip title="Edit codeword set">
                                                 <IconButton
                                                     className={classes.iconButton}
@@ -608,27 +627,30 @@ export default function CodewordSet(props) {
                                                 >
                                                     <EditIcon fontSize="large" />
                                                 </IconButton>
-                                            </Tooltip>
-                                            {/* <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    size="medium"
-                                    className={classes.edit}
-                                    onClick={handleClickOpen}
-                                    disabled={disableEdit}
-                                >
-                                    edit
-                                </Button> */}
+                                            </Tooltip> */}
+
                                             <SimpleDialog data={state} open={open} onClose={handleClickClose} render={render} />
-                                            <Tooltip title="Delete codeword set">
+                                            {/* <Tooltip title="Delete codeword set">
                                                 <IconButton
                                                     className={classes.iconButtonDelete}
                                                     onClick={handleDeleteConfirmation}
                                                 >
                                                     <DeleteForeverIcon fontSize="large" />
                                                 </IconButton>
-                                            </Tooltip>
+                                            </Tooltip> */}
+
+                                            <Tooltip title="Delete codeword set">
+                                            <Fab
+                                                variant="extended"
+                                                className={classes.iconButtonDelete}
+                                                onClick={handleDeleteConfirmation}
+                                            >
+                                                <DeleteForeverIcon style={{ color: red[800] }} />
+                                                <Typography variant="body2" style={{ fontWeight: 700 }}>Delete</Typography>
+                                            </Fab>
+                                        </Tooltip>
+
+                                            
 
                                             {/* <Button
                                     type="submit"

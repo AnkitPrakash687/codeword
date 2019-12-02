@@ -129,18 +129,18 @@ const useStyles = makeStyles(theme => ({
 
     },
     iconButton: {
-        background: green[500],
+        background: grey[300],
         margin: theme.spacing(2, 0, 0, 2),
         color: grey[800],
         "&:hover": {
-            backgroundColor: green[700]
+            backgroundColor: grey[400]
         }
     },
     iconButtonDelete: {
-        background: green[500],
+        background: grey[300],
         margin: theme.spacing(2, 2, 2, 2),
         "&:hover": {
-            backgroundColor: green[700]
+            backgroundColor: grey[400]
         },
         color: red[800]
     },
