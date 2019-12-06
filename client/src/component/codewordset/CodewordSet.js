@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Container, CssBaseline, Dialog, 
     DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, 
-    IconButton, Slide, Snackbar, Tooltip, Fab } from '@material-ui/core';
+    IconButton, Slide, Snackbar, Tooltip, Fab, TextField } from '@material-ui/core';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -157,6 +157,7 @@ export default function CodewordSet(props) {
     const [state, setState] = useState({
         id: props.match.params.id,
         codewordSetName: '',
+        newCodeword: ''
 
     })
 
@@ -167,6 +168,10 @@ export default function CodewordSet(props) {
     const [snack, setSnack] = useState({
         message: '',
         open: false
+    })
+
+    const [addCodewordDialog, setAddCodewordDialog] = useState({
+        open: false,
     })
     const [table, setTable] = useState({
         columns: [
@@ -183,6 +188,7 @@ export default function CodewordSet(props) {
     const [loading, setLoading] = useState(false)
     const [redirect, setRedirect] = useState(false)
     const [pageSize, setPageSize] = useState(5)
+
     useEffect(() => {
         var pageSize = parseInt(sessionStorage.getItem('pageSizeCodewordset', 5))
         setPageSize(pageSize)
@@ -324,6 +330,49 @@ export default function CodewordSet(props) {
         }
     }
 
+    const addCodewordRowNew = (event) => {
+
+        event.preventDefault()
+        var data = {
+            id: props.match.params.id,
+            codeword: state.newCodeword.trim().toLowerCase(),
+        }
+        const headers = {
+            'token': sessionStorage.getItem('token')
+        };
+        
+        var check = checkCodeword(data.codeword)
+        if (check === 'true') {
+            API.post('dashboard/addcodeword', data, { headers: headers }).then(response => {
+                console.log(response.data)
+                if (response.data.code == 200) {
+                    setSnack({
+                        message: response.data.message,
+                        open: true
+                    })
+                    const data = [...table.data];
+                    data.push(state.newCodeword);
+                    setTable({ ...table, data });
+                    console.log('render' + render)
+                  //  setRender(!render)
+                   
+                } else {
+                    setSnack({
+                        message: response.data.message,
+                        open: true
+                    })
+                    
+                }
+            })
+        } else {
+            setSnack({
+                open: true,
+                message: check
+            })
+           
+        }
+    }
+
     const updateCourseRow = (resolve, newData, oldData) => {
         var data = {
             id: props.match.params.id,
@@ -404,7 +453,15 @@ export default function CodewordSet(props) {
         setOpen(false)
     };
 
+    const handleDialogClose = () =>{
+        setAddCodewordDialog(false)
+    }
 
+    const handleChange = name => (event) =>{
+            if([name] == 'newCodeword'){
+                setState({...state, newCodeword: event.target.value})
+            }
+    }
     const handleFinalize = value => {
 
         const headers = {
@@ -711,10 +768,7 @@ export default function CodewordSet(props) {
                                         }}
                                         editable={{
                                             onRowAdd: !disableEdit ? newData =>
-                                                new Promise(resolve => {
-                                                    addCodewordRow(resolve, newData)
-
-                                                }) : null,
+                                                setAddCodewordDialog(true) : null,
                                             onRowUpdate: !disableEdit ? (newData, oldData) =>
                                                 new Promise(resolve => {
                                                     updateCourseRow(resolve, newData, oldData)
@@ -725,6 +779,19 @@ export default function CodewordSet(props) {
                                                     deleteCodewordRow(resolve, oldData)
                                                 }) : null,
                                         }}
+
+                                        actions={!disableEdit ?[
+
+                                            {
+                                                icon: AddBox,
+                                                isFreeAction: true,
+                                                onClick: () => {
+                                                    // open dialog to save new one
+                                                    setAddCodewordDialog(true)
+    
+                                                }
+                                            }
+                                        ]:null}
                                         onChangeRowsPerPage={(pageSize) =>{
                                             console.log('*******PageSize***********')
                                             console.log(pageSize)
@@ -795,6 +862,44 @@ export default function CodewordSet(props) {
                         </Button>
                             </DialogActions>
                         </Dialog>
+
+                        <Dialog
+                        open={addCodewordDialog}
+                        onClose={handleDialogClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Add Codeword"}</DialogTitle>
+
+                        <form onSubmit={addCodewordRowNew} className={classes.form} >
+
+                            <TextField
+                                className={classes.textField}
+                                required
+                                variant="outlined"
+                                margin="normal"
+                                margin="dense"
+                                name="newCodeword"
+                                label="Codeword"
+                                type="text"
+                                id="newCodeword"
+                                value={state.newCodeword}
+                                onChange={handleChange('newCodeword')}
+                            />
+
+                            <DialogActions>
+                                <Button onClick={handleDialogClose} color="secondary">
+                                    Cancel
+                            </Button>
+                                <Button 
+                                type="submit" 
+                                color="primary" 
+                                autoFocus>
+                                    Add
+                            </Button>
+                            </DialogActions>
+                        </form>
+                    </Dialog>
                     </Container>
                 }
             </div>
