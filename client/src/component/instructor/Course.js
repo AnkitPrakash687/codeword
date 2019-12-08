@@ -176,6 +176,7 @@ export default function Course(props) {
         status: false,
         message: ''
     })
+    const [finalizeConfirmation, setFinalizeConfirmation] = useState(false)
     const [table, setTable] = useState({
         columns: [
             { title: 'Name', field: 'name' },
@@ -216,6 +217,9 @@ export default function Course(props) {
         name: '',
         email: ''
     })
+    const handleFinalizeClose = () =>{
+        setFinalizeConfirmation(false)
+    }
     const [addStudent, setAddStudent] = useState({
         open: false
     })
@@ -527,7 +531,8 @@ export default function Course(props) {
         console.log(state.codewordSet)
         setDeleteConfirmation(true)
     }
-    const handleAssign = value => {
+    const handleAssign = (event) => {
+        event.preventDefault()
         console.log(state.codewordset)
 
 
@@ -555,6 +560,7 @@ export default function Course(props) {
                         message: 'Course Assigned'
                     })
                     setDisableEdit(true)
+                    setFinalizeConfirmation(false)
                     setRender(!render)
                 } else {
                     setSnack({
@@ -567,6 +573,7 @@ export default function Course(props) {
     }
 
     const handleAssignErrorClose = () => {
+        setFinalizeConfirmation(false)
         setCannotAssignError(false)
     }
     const handleDeleteCourse = value => {
@@ -703,7 +710,7 @@ export default function Course(props) {
                                             <Fab
                                                 variant="extended"
                                                 className={classes.iconButton}
-                                                onClick={handleAssign}
+                                                onClick={()=>{setFinalizeConfirmation(true)}}
                                                 disabled={disableEdit}
                                             >
                                                 <LockIcon style={{ color: grey[800] }} />
@@ -947,6 +954,28 @@ export default function Course(props) {
                         </Button>
                         </DialogActions>
                     </Dialog>
+
+                    <Dialog
+                            open={finalizeConfirmation}
+                            onClose={handleFinalizeClose}
+                            aria-labelledby="alert-dialog-slide-title"
+                            aria-describedby="alert-dialog-slide-description"
+                        >
+                            <DialogTitle id="alert-dialog-slide-title">{"Warning"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    Are you sure you want to finalize this codeword set?
+                        </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleFinalizeClose} color="secondary">
+                                    NO
+                         </Button>
+                                <Button onClick={handleAssign} color="primary">
+                                    YES
+                        </Button>
+                            </DialogActions>
+                        </Dialog>
 
                     <Dialog
                         open={addStudent.open}
