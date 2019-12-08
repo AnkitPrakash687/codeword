@@ -359,7 +359,7 @@ export default function InstructorDashboard(props) {
         console.log(sortCourse + ' ' + filterCourse)
         var filterData = []
         setsortedData([])
-        let activeDate = moment().subtract(4, 'month')
+        let currentDate = moment()
 
 
         if (filterCourse == 10) {
@@ -385,7 +385,7 @@ export default function InstructorDashboard(props) {
 
             filterData =
                 courseData.filter((course) => {
-                    if (activeDate.isBefore(course.endDate)) {
+                    if (currentDate.isSameOrBefore(course.endDate) && currentDate.isSameOrAfter(course.startDate)) {
                         return course
                     }
                 })
@@ -394,7 +394,7 @@ export default function InstructorDashboard(props) {
 
             filterData =
                 courseData.filter((course) => {
-                    if (activeDate.isAfter(course.endDate)) {
+                    if (currentDate.isAfter(course.endDate) || currentDate.isBefore(course.startDate)) {
                         return course
                     }
                 })

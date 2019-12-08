@@ -200,10 +200,14 @@ export default function AddCourse(props) {
 
     const codewordStudentCount = () => {
         console.log('Calc')
-        var studentCount = students.validRecords.length
+        if(state.values || typeof state.values != 'undefined'){
         var codewordCount = state.values.substring(state.values.indexOf('('), state.values.indexOf(')'))
-        console.log(studentCount)
         console.log(codewordCount)
+        }
+        if(typeof studentCount != 'undefined' && studentCount.validRecords ){
+        var studentCount = students.validRecords.length
+        console.log(studentCount)
+        }
     }
 
     const [codeword, setCodeword] = useState([{
@@ -450,8 +454,8 @@ export default function AddCourse(props) {
                 console.log('error')
                 setState({
                     courseName: state.courseName,
-                    startDate: state.startDate,
-                    endDate: state.endDate,
+                    startDate: state.startDate.toLocaleTimeString(),
+                    endDate: state.endDate.toLocaleTimeString(),
                     status: true,
                     error: true,
                     message: response.data.message,

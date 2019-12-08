@@ -150,17 +150,20 @@ const useStyles = makeStyles(theme => ({
         padding: 5,
         marginTop: 5
 
+    },
+    form:{
+        padding: theme.spacing(2)
     }
 }));
 export default function CodewordSet(props) {
     const classes = useStyles();
     const [state, setState] = useState({
         id: props.match.params.id,
-        codewordSetName: '',
-        newCodeword: ''
+        codewordSetName: ''
 
     })
 
+    const [newCodeword, setNewCodeword] = useState('')
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
     });
@@ -170,13 +173,10 @@ export default function CodewordSet(props) {
         open: false
     })
 
-    const [addCodewordDialog, setAddCodewordDialog] = useState({
-        open: false,
-    })
+    const [addCodewordDialog, setAddCodewordDialog] = useState(false)
     const [table, setTable] = useState({
         columns: [
-            { title: 'Name', field: 'name' },
-            { title: 'Email', field: 'email' }
+            { title: 'Codeword', field: 'codeword' },
         ],
         data: [],
     })
@@ -188,7 +188,7 @@ export default function CodewordSet(props) {
     const [loading, setLoading] = useState(false)
     const [redirect, setRedirect] = useState(false)
     const [pageSize, setPageSize] = useState(5)
-
+    const [finalizeConfirmation, setFinalizeConfirmation] = useState(false)
     useEffect(() => {
         var pageSize = parseInt(sessionStorage.getItem('pageSizeCodewordset', 5))
         setPageSize(pageSize)
@@ -259,6 +259,9 @@ export default function CodewordSet(props) {
         })
     }
 
+    const handleFinalizeClose = () =>{
+        setFinalizeConfirmation(false)
+    }
     const checkCodeword = (codeword) => {
         console.log('check')
         let codewords = table.data.map((item) => {
@@ -310,7 +313,7 @@ export default function CodewordSet(props) {
                     const data = [...table.data];
                     data.push(newData);
                     setTable({ ...table, data });
-                    console.log('render' + render)
+                  //  console.log('render' + render)
                   //  setRender(!render)
                     resolve()
                 } else {
@@ -335,7 +338,7 @@ export default function CodewordSet(props) {
         event.preventDefault()
         var data = {
             id: props.match.params.id,
-            codeword: state.newCodeword.trim().toLowerCase(),
+            codeword: newCodeword.trim().toLowerCase(),
         }
         const headers = {
             'token': sessionStorage.getItem('token')
@@ -346,15 +349,17 @@ export default function CodewordSet(props) {
             API.post('dashboard/addcodeword', data, { headers: headers }).then(response => {
                 console.log(response.data)
                 if (response.data.code == 200) {
+                    console.log(newCodeword)
                     setSnack({
                         message: response.data.message,
                         open: true
                     })
-                    const data = [...table.data];
-                    data.push(state.newCodeword);
-                    setTable({ ...table, data });
-                    console.log('render' + render)
-                  //  setRender(!render)
+                    const data1 = [...table.data];
+                    data1.push(newCodeword);
+                    setTable({ ...table, data1 });
+                  //  console.log('render' + render)
+                   setRender(!render)
+                 // setAddCodewordDialog(false)
                    
                 } else {
                     setSnack({
@@ -459,7 +464,7 @@ export default function CodewordSet(props) {
 
     const handleChange = name => (event) =>{
             if([name] == 'newCodeword'){
-                setState({...state, newCodeword: event.target.value})
+                setNewCodeword(event.target.value)
             }
     }
     const handleFinalize = value => {
@@ -476,6 +481,7 @@ export default function CodewordSet(props) {
                     message: 'Codeword set finalized'
                 })
                 setDisableEdit(true)
+                setFinalizeConfirmation(false)
             } else {
                 setSnack({
                     open: true,
@@ -656,7 +662,7 @@ export default function CodewordSet(props) {
                                             <Fab
                                                 variant="extended"
                                                 className={classes.iconButton}
-                                                onClick={handleFinalize}
+                                                onClick={()=>{  setFinalizeConfirmation(true)}}
                                                 disabled={disableEdit}
                                             >
                                                 <LockIcon style={{ color: grey[800] }} />
@@ -767,8 +773,8 @@ export default function CodewordSet(props) {
                                             exportAllData: true
                                         }}
                                         editable={{
-                                            onRowAdd: !disableEdit ? newData =>
-                                                setAddCodewordDialog(true) : null,
+                                            // onRowAdd: !disableEdit ? newData =>
+                                            //     setAddCodewordDialog(true) : null,
                                             onRowUpdate: !disableEdit ? (newData, oldData) =>
                                                 new Promise(resolve => {
                                                     updateCourseRow(resolve, newData, oldData)
@@ -864,6 +870,28 @@ export default function CodewordSet(props) {
                         </Dialog>
 
                         <Dialog
+                            open={finalizeConfirmation}
+                            onClose={handleFinalizeClose}
+                            aria-labelledby="alert-dialog-slide-title"
+                            aria-describedby="alert-dialog-slide-description"
+                        >
+                            <DialogTitle id="alert-dialog-slide-title">{"Warning"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    Are you sure you want to finalize this codeword set?
+                        </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleFinalizeClose} color="secondary">
+                                    NO
+                         </Button>
+                                <Button onClick={handleFinalize} color="primary">
+                                    YES
+                        </Button>
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog
                         open={addCodewordDialog}
                         onClose={handleDialogClose}
                         aria-labelledby="alert-dialog-title"
@@ -883,7 +911,7 @@ export default function CodewordSet(props) {
                                 label="Codeword"
                                 type="text"
                                 id="newCodeword"
-                                value={state.newCodeword}
+                                value={newCodeword}
                                 onChange={handleChange('newCodeword')}
                             />
 
