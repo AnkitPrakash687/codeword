@@ -117,12 +117,16 @@ export default function EditCourse(props) {
     const [publishedCodewordset,SetPublishedCodewordset] = useState([{
         codewordSetName: ''
     }])
+    var startDate =  new Date(props.data.startDate)
+    var endDate = new Date(props.data.endDate)
+    var locaStartDate = new Date(startDate.getTime() + startDate.getTimezoneOffset()*60000)
+    var localEndDate = new Date(endDate.getTime() + endDate.getTimezoneOffset()*60000)
     const [course, setCourse] = useState({
         courseName: props.data.courseName,
         startSurvey: props.data.startSurvey=='Unpublished'?'':props.data.startSurvey,
         endSurvey: props.data.endSurvey=='Unpublished'?'':props.data.endSurvey,
-        startDate: props.data.startDate,
-        endDate:props.data.endDate,
+        startDate: locaStartDate.toISOString(),
+        endDate:localEndDate.toISOString(),
         codewordSet: props.data.codewordset,
         isAssigned: props.data.isAssigned,
         filename: state.filename
@@ -183,10 +187,11 @@ export default function EditCourse(props) {
 
     const handleDateChange = name => (date) => {
         
-        var formattedDate = date.toISOString().substring(0,10)
-        console.log(date)
-        console.log(formattedDate)
-        setCourse({ ...course, [name]: formattedDate });
+        // var formattedDate = date.toISOString().substring(0,10)
+        // console.log(date)
+        // console.log(formattedDate)
+        //var localDate = new Date(date.getTime() + date.getTimezoneOffset()*60000)
+        setCourse({ ...course, [name]: date });
     }
 
     const handleSubmit = (event) => {

@@ -408,7 +408,8 @@ export default function AddCourse(props) {
         })
     }
     const handleDateChange = name => (date) => {
-        setState({ ...state, [name]: date });
+        var localDate = new Date(date.getTime() + date.getTimezoneOffset()*60000)
+        setState({ ...state, [name]: localDate });
     }
 
 

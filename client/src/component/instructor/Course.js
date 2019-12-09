@@ -263,11 +263,13 @@ export default function Course(props) {
                             return acc + 0
                         }
                     }, 0)
+
+                    console.log('START DATE,,,',course.Startdate)
                     setState({
                         id: course._id,
                         courseName: course.courseNameKey,
-                        startDate: (course.Startdate.toString()).substring(0, 10),
-                        endDate: (course.Enddate.toString()).substring(0, 10),
+                        startDate: (course.Startdate.toString()),
+                        endDate: (course.Enddate.toString()),
                         startSurvey: !course.PreSurveyURL  ? '' : course.PreSurveyURL,
                         endSurvey: !course.PostSurveyURL ? '' : course.PostSurveyURL,
                         isAssigned: course.isAssigned,
@@ -675,11 +677,11 @@ export default function Course(props) {
                                                 <Box display="flex" flexDirection="row" justifyContent="flex-start">
 
                                                     <Typography variant="caption" style={{ marginRight: 15 }}>
-                                                        Start Date: {state.startDate}
+                                                        Start Date: {state.startDate.toString().substring(0,10)}
                                                     </Typography>
 
                                                     <Typography variant="caption">
-                                                        End date: {state.endDate}
+                                                        End date: {state.endDate.toString().substring(0,10)}
                                                     </Typography>
 
                                                 </Box>
