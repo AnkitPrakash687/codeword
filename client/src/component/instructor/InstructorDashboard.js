@@ -431,7 +431,7 @@ export default function InstructorDashboard(props) {
             courseName={course.courseName}
             ack={course.ack}
             startDate={course.startDate ? course.startDate.toString().substring(0, 10) : null}
-            endDate={course.endDate ? course.startDate.toString().substring(0, 10) : null}
+            endDate={course.endDate ? course.endDate.toString().substring(0, 10) : null}
             startSurvey={course.startSurvey}
             endSurvey={course.endSurvey}
             isAssigned={course.isAssigned}
