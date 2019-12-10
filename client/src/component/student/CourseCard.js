@@ -75,16 +75,29 @@ export default function CourseCard(props) {
 
     }
 
+    // const handleCopy = () => {
+    //     navigator.permissions.query({name: "clipboard-write"}).then(result => {
+    //         if (result.state == "granted" || result.state == "prompt") {
+    //           navigator.clipboard.writeText(codeword)
+    //           setTooltip("Copied!")
+    //           setInterval(function(){
+    //             setTooltip("Copy")
+    //           }, 2000)
+    //         }
+    //       });
+    // }
+
     const handleCopy = () => {
-        navigator.permissions.query({name: "clipboard-write"}).then(result => {
-            if (result.state == "granted" || result.state == "prompt") {
-              navigator.clipboard.writeText(codeword)
-              setTooltip("Copied!")
-              setInterval(function(){
-                setTooltip("Copy")
-              }, 2000)
-            }
-          });
+        var textField = document.createElement('textarea')
+        textField.innerText = codeword
+        document.body.appendChild(textField)
+        textField.select()
+        document.execCommand('copy')
+        textField.remove()
+        setTooltip("Copied!")
+        setInterval(function () {
+            setTooltip("Copy")
+        }, 2000)
     }
     return (
 
@@ -122,7 +135,7 @@ export default function CourseCard(props) {
                                 </Typography>
 
                             </Zoom>
-                            <Tooltip title={tooltip}>
+                            <Tooltip title={tooltip} leaveDelay={1000}>
                                 <IconButton className={classes.button} onClick={handleCopy} aria-label="Copy">
                                     <FileCopyIcon />
                                 </IconButton>
