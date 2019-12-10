@@ -1,4 +1,5 @@
-import { CircularProgress, Slide, CssBaseline, Grid, IconButton, Paper, Snackbar, Tooltip } from '@material-ui/core';
+import { CircularProgress, Slide, CssBaseline,
+     Grid, IconButton, Paper, Snackbar, Tooltip, Container } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { green, grey, lightGreen, red } from '@material-ui/core/colors';
@@ -249,8 +250,21 @@ export default function StudentDashboard() {
 
                             <Grid container spacing={3}>
 
-                                {
-                                    listCourses
+                                { listCourses.length > 0?
+                                    listCourses: 
+                                    <Box 
+                                    display="flex"
+                                    justifyContent="center"
+                                   
+                                    style={{ width:'100%', marginTop: '100px' }}>
+                                    
+                                    <Typography fontFamily="-apple-system" component="div">
+                                     <Box fontSize={24} color={grey[800]} fontWeight="fontWeightBold" m={1}>
+                                        You are not registered in any of the courses
+                                    </Box>
+                                    </Typography>
+                                   
+                                    </Box>
                                 }
 
                             </Grid>
