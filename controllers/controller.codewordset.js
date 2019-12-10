@@ -323,16 +323,16 @@ let generateReport = (req, res) => {
     var body = _.pick(req.body, ['id', 'level']);
     console.log('********LEVEL**********')
     console.log(body.level)
-    var similarityLevel = 0.6
+    var similarityLevel = 0.1
     switch (body.level) {
         case 0:
-            similarityLevel = 0.5
+            similarityLevel = 0.1
             break;
         case 1:
-            similarityLevel = 0.6
+            similarityLevel = 0.5
             break;
         case 2:
-            similarityLevel = 0.7
+            similarityLevel = 0.6
             break;
     }
     console.log(similarityLevel)
@@ -364,7 +364,8 @@ let generateReport = (req, res) => {
                 var output = []
                 output.push(result[i].word)
                 for (var i in ratings) {
-                    if (ratings[i].rating > similarityLevel) {
+                  console.log(ratings[i])
+                    if (ratings[i].rating >= similarityLevel) {
                         output.push(ratings[i].target)
                         checkerArray.push(ratings[i].target)
                     }
