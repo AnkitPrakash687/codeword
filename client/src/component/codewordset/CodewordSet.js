@@ -530,7 +530,7 @@ export default function CodewordSet(props) {
         return (
             <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
                 <DialogTitle id="simple-dialog-title">Edit Codeword Set</DialogTitle>
-                <EditCodewordSet data={data} onClose={handleClose}></EditCodewordSet>
+                <EditCodewordSet data={data} oldCodewords={table.data.map((i)=>{ return i.codeword})} onClose={handleClose}></EditCodewordSet>
             </Dialog>
         );
     }

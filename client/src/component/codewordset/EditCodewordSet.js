@@ -180,11 +180,14 @@ export default function EditCodewordSet(props) {
         }
 
         const filterData = (result) => {
-
+            props.oldCodewords.map((item)=>{
+                result.push(item)
+            })
             let lessThanThree = []
             let moreThanThree = []
             var letters = /[/\s/\t/!@#$%^&*(),.?":;'{}|<>0-9\\\\]/
 
+           
             let invalidCodewords = result.filter((item) => {
                 return item.search(letters) != -1
             })
@@ -228,6 +231,8 @@ export default function EditCodewordSet(props) {
         const headers = {
             'token': sessionStorage.getItem('token')
         };
+
+     
         var data = {
             oldCodewordSetName: props.data.codewordSetName,
             newCodewordSetName: codewordSet.codewordSetName,
