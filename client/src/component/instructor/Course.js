@@ -785,7 +785,7 @@ export default function Course(props) {
                                         <Grid item xs={12} >
                                             <Typography component="div">
                                                 <Box fontSize="h6.body" fontWeight="fontWeightBold" m={1}>
-                                                    Codeword Set: {state.codewordset}
+                                                    Codeword Set: {state.codewordset+" ("+state.codewordCount+")"}
                                                 </Box>
                                             </Typography>
                                         </Grid>
