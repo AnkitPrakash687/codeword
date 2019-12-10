@@ -357,6 +357,7 @@ export default function CodewordSet(props) {
                     const data1 = [...table.data];
                     data1.push(newCodeword);
                     setTable({ ...table, data1 });
+                    setNewCodeword('')
                   //  console.log('render' + render)
                    setRender(!render)
                  // setAddCodewordDialog(false)
