@@ -153,7 +153,7 @@ export default function CourseCard(props) {
                         <Box display="flex" justifyContent="space-between">
                         <Box display="flex">
                         { props.startSurvey != 'Unpublished'?
-                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.startSurvey} variant="caption" className={classes.startSurvey}>
+                        <Link  target="_blank"  variant="caption" className={classes.startSurvey}>
                          Start Survey Link
                         </Link>
                         :<Typography className={classes.startSurvey} variant="caption">Start Survey: N/A</Typography>
@@ -161,7 +161,7 @@ export default function CourseCard(props) {
                         </Box>
                         <Box display="flex">
                         { props.endSurvey != 'Unpublished'?
-                        <Link onClick={event => event.stopPropagation()} target="_blank" href={props.endSurvey} variant="caption" className={classes.link}>
+                        <Link  target="_blank"  variant="caption" className={classes.link}>
                          End Survey Link
                         </Link>                       
                         :<Typography className={classes.startSurvey} variant="caption">End Survey: N/A</Typography>
