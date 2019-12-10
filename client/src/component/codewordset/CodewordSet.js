@@ -675,7 +675,7 @@ export default function CodewordSet(props) {
                                                 variant="extended"
                                                 className={classes.iconButton}
                                                 onClick={handleClickOpen}
-                                            // disabled={disableEdit}
+                                                disabled={disableEdit}
                                             >
                                                 <EditIcon style={{ color: grey[800] }} />
                                                 <Typography variant="body2" style={{ fontWeight: 500 }}>Edit</Typography>
