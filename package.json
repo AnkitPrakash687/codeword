@@ -20,7 +20,7 @@
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "express-formidable": "^1.2.0",
-    "fast-csv": "^2.4.1",
+    "fast-csv": "^4.3.6",
     "formidable": "^1.2.1",
     "fs": "0.0.1-security",
     "handlebars": "^4.4.3",
