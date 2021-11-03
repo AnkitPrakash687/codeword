@@ -36,7 +36,7 @@
     "npm": "^6.11.0",
     "path": "^0.12.7",
     "string-similarity": "^3.0.0",
-    "validator": "^10.7.1",
+    "validator": "^13.7.0",
     "winston": "^2.4.4",
     "xlsx": "^0.14.0",
     "xlsx2json": "^1.0.0"
